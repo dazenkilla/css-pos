@@ -47,11 +47,11 @@ export default function SettingsPage() {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="store-name">Nama Toko</Label>
-            <Input id="store-name" defaultValue="Nova POS" />
+            <Input id="store-name" defaultValue="Creative Software Solution" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="address">Alamat</Label>
-            <Input id="address" defaultValue="Jl. Kopi No. 123, Jakarta" />
+            <Input id="address" defaultValue="alamat bandung" />
           </div>
            <Button onClick={handleSaveChanges}>Simpan Perubahan</Button>
         </CardContent>
