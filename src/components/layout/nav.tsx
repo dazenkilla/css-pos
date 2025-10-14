@@ -64,35 +64,6 @@ export function Nav() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarSeparator />
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={pathname.startsWith('/users')}
-              tooltip="Pengguna"
-            >
-              <CustomLink href="/users">
-                <Users />
-                <span>Pengguna</span>
-              </CustomLink>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              isActive={pathname.startsWith('/settings')}
-              tooltip="Pengaturan"
-            >
-              <CustomLink href="/settings">
-                <Settings />
-                <span>Pengaturan</span>
-              </CustomLink>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </>
   );
 }

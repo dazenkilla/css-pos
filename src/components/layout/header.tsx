@@ -42,6 +42,9 @@ export function Header() {
           <DropdownMenuLabel>Akun Saya</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
+            <CustomLink href="/users">Pengguna</CustomLink>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
             <CustomLink href="/settings">Pengaturan</CustomLink>
           </DropdownMenuItem>
           <DropdownMenuItem>Dukungan</DropdownMenuItem>
