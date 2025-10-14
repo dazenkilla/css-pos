@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { inventoryItems } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { PlusCircle, MinusCircle, X, ShoppingCart, Ticket, Printer, Wallet, CreditCard } from 'lucide-react';
+import { PlusCircle, MinusCircle, X, ShoppingCart, Ticket, Printer, Wallet, CreditCard, QrCode, Landmark } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -25,7 +25,7 @@ import { renderToString } from 'react-dom/server';
 
 
 type CartItem = typeof inventoryItems[0] & { quantity: number };
-type Payment = { method: 'Tunai' | 'Kartu'; amount: number };
+type Payment = { method: 'Tunai' | 'Kartu' | 'QR' | 'Transfer Bank'; amount: number };
 
 export default function SalesPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -106,7 +106,7 @@ export default function SalesPage() {
     }
   }
   
-  const handleAddPayment = (method: 'Tunai' | 'Kartu') => {
+  const handleAddPayment = (method: 'Tunai' | 'Kartu' | 'QR' | 'Transfer Bank') => {
     if (remainingAmount > 0) {
         setPayments([...payments, { method, amount: remainingAmount > 0 ? remainingAmount : 0 }]);
     }
@@ -381,14 +381,22 @@ export default function SalesPage() {
                 </div>
 
                 {remainingAmount > 0.001 && (
-                    <div className="flex gap-2 justify-center">
+                    <div className="grid grid-cols-2 gap-2 justify-center">
                         <Button variant="secondary" onClick={() => handleAddPayment('Tunai')}>
                           <Wallet className="mr-2 h-4 w-4" />
-                          Bayar Tunai
+                          Tunai
                         </Button>
                         <Button variant="secondary" onClick={() => handleAddPayment('Kartu')}>
                           <CreditCard className="mr-2 h-4 w-4" />
-                          Bayar Kartu
+                          Kartu
+                        </Button>
+                        <Button variant="secondary" onClick={() => handleAddPayment('QR')}>
+                          <QrCode className="mr-2 h-4 w-4" />
+                          QR
+                        </Button>
+                        <Button variant="secondary" onClick={() => handleAddPayment('Transfer Bank')}>
+                          <Landmark className="mr-2 h-4 w-4" />
+                          Transfer Bank
                         </Button>
                     </div>
                 )}
