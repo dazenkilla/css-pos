@@ -21,10 +21,8 @@ import {
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { Users, FileText, Wallet, CreditCard, QrCode, Landmark, UserPlus, ShoppingBag, TrendingUp, Package } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { salesHistory } from '@/lib/data';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Wallet, CreditCard, QrCode, Landmark, FileText } from 'lucide-react';
+import { topSellingProducts } from '@/lib/data';
 import Image from 'next/image';
 
 const paymentMethodData = [
@@ -36,12 +34,6 @@ const paymentMethodData = [
 
 export default function ReportsPage() {
     const { toast } = useToast();
-    const router = useRouter();
-
-    const getImageUrl = (name: string) => {
-        const image = PlaceHolderImages.find(img => img.description.toLowerCase().includes(name.split(' ')[0].toLowerCase()));
-        return image ? image.imageUrl : 'https://picsum.photos/seed/placeholder/64/64';
-    };
     
     const handleViewReport = (reportName: string) => {
         toast({
@@ -49,33 +41,11 @@ export default function ReportsPage() {
             description: `Ini adalah placeholder untuk menampilkan ${reportName}.`,
         });
     };
-
-    // Calculate product sales analytics
-    const productSales: { [key: string]: { name: string, quantity: number } } = {};
-    salesHistory.forEach(sale => {
-        sale.items.forEach(item => {
-            if (productSales[item.name]) {
-                productSales[item.name].quantity += item.quantity;
-            } else {
-                productSales[item.name] = { name: item.name, quantity: item.quantity };
-            }
-        });
-    });
-
-    const topSellingProducts = Object.values(productSales)
-        .sort((a, b) => {
-            if (b.quantity !== a.quantity) {
-                return b.quantity - a.quantity;
-            }
-            // Add a secondary sort criterion to ensure stable sorting
-            return a.name.localeCompare(b.name);
-        })
-        .slice(0, 5); // Display top 5
     
     return (
         <div className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
-                <Card className="md:col-span-2">
+                <Card>
                     <CardHeader>
                          <div className="flex items-center justify-between">
                             <div>
@@ -178,7 +148,7 @@ export default function ReportsPage() {
                                         alt={product.name}
                                         className="aspect-square rounded-md object-cover"
                                         height="40"
-                                        src={getImageUrl(product.name)}
+                                        src={product.imageUrl}
                                         width="40"
                                     />
                                     <div className="flex-1">

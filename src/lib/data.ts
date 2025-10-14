@@ -1,5 +1,7 @@
 
 
+import { PlaceHolderImages } from './placeholder-images';
+
 export const inventoryItems = [
     { sku: 'coffee-001', name: 'Biji Kopi Artisan', category: 'Minuman', subCategory: 'Kopi', price: 18990, stock: 120, expiryDate: '2025-12-31' },
     { sku: 'pastry-001', name: 'Croissant Almond', category: 'Kue', subCategory: 'Viennoiserie', price: 4500, stock: 15, expiryDate: '2024-07-25' },
@@ -34,7 +36,6 @@ export const users = [
     { id: "USR-004", name: "James", email: "james@example.com", role: "Kasir", lastActive: "Kemarin" },
 ];
 
-// Helper to generate a random transaction
 const createSale = (id: string, date: string, paymentMethods: {method: string, amount?: number}[]) => {
   const itemCount = Math.floor(Math.random() * 3) + 1;
   const items = [];
@@ -69,8 +70,6 @@ const createSale = (id: string, date: string, paymentMethods: {method: string, a
     id,
     date,
     total,
-    status: "Selesai",
-    itemCount,
     items,
     payments: finalPayments,
   };
@@ -102,3 +101,47 @@ const generateSales = () => {
 }
 
 export const salesHistory = generateSales();
+
+
+// --- Pre-calculated Analytics Data ---
+
+const getImageUrlBySku = (sku: string) => {
+    const image = PlaceHolderImages.find(img => img.id === sku);
+    return image ? image.imageUrl : 'https://picsum.photos/seed/placeholder/64/64';
+};
+
+const getSkuByName = (name: string) => {
+    const item = inventoryItems.find(item => item.name === name);
+    return item ? item.sku : null;
+}
+
+const calculateTopSellingProducts = () => {
+    const productSales: { [key: string]: { name: string, quantity: number } } = {};
+    salesHistory.forEach(sale => {
+        sale.items.forEach(item => {
+            if (productSales[item.name]) {
+                productSales[item.name].quantity += item.quantity;
+            } else {
+                productSales[item.name] = { name: item.name, quantity: item.quantity };
+            }
+        });
+    });
+
+    return Object.values(productSales)
+        .map(product => {
+            const sku = getSkuByName(product.name);
+            return {
+                ...product,
+                imageUrl: sku ? getImageUrlBySku(sku) : getImageUrlBySku('placeholder')
+            };
+        })
+        .sort((a, b) => {
+            if (b.quantity !== a.quantity) {
+                return b.quantity - a.quantity;
+            }
+            return a.name.localeCompare(b.name); // Stable sort
+        })
+        .slice(0, 5); // Display top 5
+};
+
+export const topSellingProducts = calculateTopSellingProducts();
