@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -14,13 +15,6 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function SettingsPage() {
   const { toast } = useToast();
-
-  const handleManageRole = (role: string) => {
-    toast({
-      title: "Fitur Dalam Pengembangan",
-      description: `Pengelolaan untuk peran "${role}" akan segera tersedia.`,
-    });
-  }
 
   const handleStartShift = () => {
      toast({
@@ -64,20 +58,15 @@ export default function SettingsPage() {
             Tentukan peran dan kelola apa yang dapat dilihat dan dilakukan pengguna.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-muted rounded-md">
+        <CardContent>
+            <div className="flex items-center justify-between p-4 bg-muted rounded-md">
                 <div>
-                    <h4 className="font-medium">Administrator</h4>
-                    <p className="text-sm text-muted-foreground">Akses penuh ke semua fitur.</p>
+                    <h4 className="font-medium">Manajemen Peran</h4>
+                    <p className="text-sm text-muted-foreground">Buat, ubah, dan hapus peran untuk pengguna Anda.</p>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => handleManageRole('Administrator')}>Kelola</Button>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-muted rounded-md">
-                <div>
-                    <h4 className="font-medium">Kasir</h4>
-                    <p className="text-sm text-muted-foreground">Hanya akses ke modul Penjualan dan Riwayat.</p>
-                </div>
-                <Button variant="outline" size="sm" onClick={() => handleManageRole('Kasir')}>Kelola</Button>
+                <Button asChild>
+                    <Link href="/settings/roles">Kelola Peran</Link>
+                </Button>
             </div>
         </CardContent>
       </Card>
