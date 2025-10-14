@@ -18,7 +18,8 @@ import {
   Settings,
   History,
   Users,
-  FileBarChart
+  FileBarChart,
+  BookText
 } from 'lucide-react';
 import { NovaPosIcon } from '@/components/icons/nova-pos-icon';
 
@@ -29,6 +30,7 @@ const menuItems = [
   { href: '/orders', label: 'Pesanan Pembelian', icon: Truck },
   { href: '/history', label: 'Riwayat', icon: History },
   { href: '/reports', label: 'Laporan', icon: FileBarChart },
+  { href: '/accounting', label: 'Akuntansi', icon: BookText },
 ];
 
 export function Nav() {
