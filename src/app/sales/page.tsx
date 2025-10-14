@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -8,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { inventoryItems } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { PlusCircle, MinusCircle, X, ShoppingCart, Ticket, Printer, Wallet, CreditCard, QrCode, Landmark } from 'lucide-react';
+import { PlusCircle, MinusCircle, X, ShoppingCart, Ticket, Printer, Wallet, CreditCard, QrCode, Landmark, Tag } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -30,6 +31,7 @@ type Payment = { method: 'Tunai' | 'Kartu' | 'QR' | 'Transfer Bank'; amount: num
 export default function SalesPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [discount, setDiscount] = useState(0);
+  const [tableNumber, setTableNumber] = useState("");
   const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [isDiscountDialogOpen, setDiscountDialogOpen] = useState(false);
   const [isQrDialogOpen, setQrDialogOpen] = useState(false);
@@ -203,6 +205,7 @@ export default function SalesPage() {
       payments,
       totalPaid,
       change: totalPaid - total,
+      tableNumber,
     };
     
     toast({
@@ -222,6 +225,7 @@ export default function SalesPage() {
     setCart([]);
     setDiscount(0);
     setPayments([]);
+    setTableNumber("");
     setPaymentDialogOpen(false);
   }
 
@@ -273,9 +277,21 @@ export default function SalesPage() {
         {/* Panel Keranjang */}
         <div className="lg:col-span-2">
           <Card className="flex flex-col h-full">
-            <CardHeader className="flex flex-row items-center justify-between pb-4">
-              <CardTitle>Pesanan Saat Ini</CardTitle>
-              <ShoppingCart className="h-5 w-5 text-muted-foreground" />
+            <CardHeader className="flex flex-col gap-4">
+              <div className="flex flex-row items-center justify-between">
+                <CardTitle>Pesanan Saat Ini</CardTitle>
+                <ShoppingCart className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="table-number" className="whitespace-nowrap">No. Meja:</Label>
+                <Input 
+                  id="table-number" 
+                  placeholder="A1" 
+                  className="h-9" 
+                  value={tableNumber} 
+                  onChange={(e) => setTableNumber(e.target.value)} 
+                />
+              </div>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto p-4">
               {cart.length === 0 ? (
@@ -469,3 +485,5 @@ export default function SalesPage() {
     </>
   );
 }
+
+    

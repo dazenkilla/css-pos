@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -18,6 +19,7 @@ export type SaleData = {
     payments: { method: string; amount: number }[];
     totalPaid: number;
     change: number;
+    tableNumber?: string;
 };
 
 interface ReceiptProps {
@@ -25,7 +27,7 @@ interface ReceiptProps {
 }
 
 export function Receipt({ sale }: ReceiptProps) {
-  const { cart, subtotal, discount, tax, total, totalPaid, change, payments } = sale;
+  const { cart, subtotal, discount, tax, total, totalPaid, change, payments, tableNumber } = sale;
   const printDate = new Date().toLocaleString('id-ID');
 
   return (
@@ -35,6 +37,7 @@ export function Receipt({ sale }: ReceiptProps) {
         <h2 className="text-lg font-bold">Creative Software Solution</h2>
         <p>alamat bandung</p>
         <p>{printDate}</p>
+        {tableNumber && <p>No. Meja: {tableNumber}</p>}
       </div>
       <hr />
       <div className="mb-1">
@@ -91,3 +94,5 @@ export function Receipt({ sale }: ReceiptProps) {
     </div>
   );
 };
+
+    
