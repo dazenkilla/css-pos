@@ -63,13 +63,19 @@ export default function ReportsPage() {
     });
 
     const topSellingProducts = Object.values(productSales)
-        .sort((a, b) => b.quantity - a.quantity)
+        .sort((a, b) => {
+            if (b.quantity !== a.quantity) {
+                return b.quantity - a.quantity;
+            }
+            // Add a secondary sort criterion to ensure stable sorting
+            return a.name.localeCompare(b.name);
+        })
         .slice(0, 5); // Display top 5
     
     return (
         <div className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
-                <Card className="lg:col-span-2">
+                <Card className="md:col-span-2">
                     <CardHeader>
                          <div className="flex items-center justify-between">
                             <div>
