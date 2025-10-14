@@ -22,6 +22,7 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recha
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
 import { Users, FileText, FileDown, Wallet, CreditCard, QrCode, Landmark } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const cashierPerformanceData = [
   { name: "David", sales: 45, transactions: 15 },
@@ -30,14 +31,15 @@ const cashierPerformanceData = [
 ];
 
 const paymentMethodData = [
-    { name: "Tunai", total: 15250000, transactions: 120, icon: Wallet },
-    { name: "Kartu", total: 22500000, transactions: 95, icon: CreditCard },
-    { name: "QR", total: 18750000, transactions: 150, icon: QrCode },
-    { name: "Transfer", total: 8500000, transactions: 30, icon: Landmark },
+    { id: "tunai", name: "Tunai", total: 15250000, transactions: 120, icon: Wallet },
+    { id: "kartu", name: "Kartu", total: 22500000, transactions: 95, icon: CreditCard },
+    { id: "qr", name: "QR", total: 18750000, transactions: 150, icon: QrCode },
+    { id: "transfer", name: "Transfer", total: 8500000, transactions: 30, icon: Landmark },
 ];
 
 export default function ReportsPage() {
     const { toast } = useToast();
+    const router = useRouter();
     
     const handleExport = () => {
       toast({
@@ -53,13 +55,6 @@ export default function ReportsPage() {
         });
     };
     
-    const handleViewPaymentMethodDetails = (methodName: string) => {
-      toast({
-        title: "Fitur Dalam Pengembangan",
-        description: `Halaman detail untuk transaksi via ${methodName} akan segera tersedia.`
-      })
-    }
-
     return (
         <div className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
@@ -206,8 +201,10 @@ export default function ReportsPage() {
                                     <TableCell className="text-right">{method.transactions}</TableCell>
                                     <TableCell className="text-right">Rp{method.total.toLocaleString('id-ID')}</TableCell>
                                     <TableCell className="text-right">
-                                        <Button variant="outline" size="sm" onClick={() => handleViewPaymentMethodDetails(method.name)}>
-                                            Lihat Detail
+                                        <Button variant="outline" size="sm" asChild>
+                                            <CustomLink href={`/reports/payment-methods/${method.id}`}>
+                                                Lihat Detail
+                                            </CustomLink>
                                         </Button>
                                     </TableCell>
                                 </TableRow>
@@ -279,6 +276,8 @@ export default function ReportsPage() {
 
         </div>
     )
+
+    
 
     
 
