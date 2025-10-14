@@ -289,13 +289,6 @@ export default function TransactionPage() {
                 <div className="flex flex-col gap-4">
                   {cart.map((item) => (
                     <div key={item.sku} className="flex items-center gap-4">
-                      <Image
-                        alt={item.name}
-                        className="aspect-square rounded-md object-cover"
-                        height="64"
-                        src={getImageUrl(item.sku)}
-                        width="64"
-                      />
                       <div className="flex-1">
                         <p className="font-medium text-sm">{item.name}</p>
                         <p className="text-xs text-muted-foreground">Rp{item.price.toLocaleString('id-ID')}</p>
