@@ -7,7 +7,7 @@ import { Header } from '@/components/layout/header';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Nova POS',
+  title: 'CSS POS',
   description: 'Sistem Point of Sales (POS) berbasis PWA yang komprehensif untuk usaha kecil.',
 };
 
