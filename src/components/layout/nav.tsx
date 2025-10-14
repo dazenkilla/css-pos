@@ -40,8 +40,8 @@ export function Nav() {
       <SidebarHeader>
         <div className="flex items-center gap-2">
           <NovaPosIcon className="size-8 text-primary" />
-          <h2 className="text-lg font-semibold tracking-tight font-headline">
-            Nova POS
+          <h2 className="text-sm font-semibold tracking-tight font-headline">
+            Creative Software Solution | POS
           </h2>
         </div>
       </SidebarHeader>
