@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { CustomLink } from '@/components/ui/custom-link';
 import {
     Card,
     CardContent,
@@ -28,9 +28,9 @@ export default function AccountingPage() {
                                 <CardDescription>Kelola semua akun keuangan.</CardDescription>
                             </div>
                              <Button variant="outline" size="icon" asChild>
-                                <Link href="/accounting/chart-of-accounts">
+                                <CustomLink href="/accounting/chart-of-accounts">
                                     <ArrowRight className="h-4 w-4" />
-                                </Link>
+                                </CustomLink>
                             </Button>
                         </div>
                     </CardHeader>
@@ -46,9 +46,9 @@ export default function AccountingPage() {
                                 <CardDescription>Catat semua transaksi keuangan.</CardDescription>
                             </div>
                             <Button variant="outline" size="icon" asChild>
-                                <Link href="/accounting/journal-entries">
+                                <CustomLink href="/accounting/journal-entries">
                                     <ArrowRight className="h-4 w-4" />
-                                </Link>
+                                </CustomLink>
                             </Button>
                         </div>
                     </CardHeader>
@@ -64,9 +64,9 @@ export default function AccountingPage() {
                                 <CardDescription>Lacak semua transaksi per akun.</CardDescription>
                             </div>
                             <Button variant="outline" size="icon" asChild>
-                                <Link href="/accounting/general-ledger">
+                                <CustomLink href="/accounting/general-ledger">
                                     <ArrowRight className="h-4 w-4" />
-                                </Link>
+                                </CustomLink>
                             </Button>
                         </div>
                     </CardHeader>
@@ -82,7 +82,7 @@ export default function AccountingPage() {
                                 <CardDescription>Akses laporan laba rugi, neraca, dan lainnya.</CardDescription>
                             </div>
                             <Button variant="default" size="sm" asChild>
-                                <Link href="/reports">Buka Laporan</Link>
+                                <CustomLink href="/reports">Buka Laporan</CustomLink>
                             </Button>
                         </div>
                     </CardHeader>

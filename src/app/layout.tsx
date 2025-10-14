@@ -5,6 +5,7 @@ import { SidebarProvider, Sidebar, SidebarInset } from '@/components/ui/sidebar'
 import { Nav } from '@/components/layout/nav';
 import { Header } from '@/components/layout/header';
 import { Toaster } from '@/components/ui/toaster';
+import { LoadingProvider } from '@/components/ui/loading-provider';
 
 export const metadata: Metadata = {
   title: 'CSS POS',
@@ -27,15 +28,17 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased')}>
-        <SidebarProvider>
-          <Sidebar>
-            <Nav />
-          </Sidebar>
-          <SidebarInset>
-            <Header />
-            <main className="p-4 sm:p-6 lg:p-8">{children}</main>
-          </SidebarInset>
-        </SidebarProvider>
+        <LoadingProvider>
+          <SidebarProvider>
+            <Sidebar>
+              <Nav />
+            </Sidebar>
+            <SidebarInset>
+              <Header />
+              <main className="p-4 sm:p-6 lg:p-8">{children}</main>
+            </SidebarInset>
+          </SidebarProvider>
+        </LoadingProvider>
         <Toaster />
       </body>
     </html>

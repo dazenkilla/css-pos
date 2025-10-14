@@ -1,7 +1,7 @@
 
 "use client";
 
-import Link from 'next/link';
+import { CustomLink } from '@/components/ui/custom-link';
 import {
   Card,
   CardContent,
@@ -42,7 +42,7 @@ export default function SalesFloorPage() {
       <CardContent>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {tables.map((table) => (
-            <Link href={`/sales/${table.id}`} key={table.id}>
+            <CustomLink href={`/sales/${table.id}`} key={table.id}>
               <Card className="hover:border-primary transition-colors cursor-pointer aspect-square flex flex-col justify-between">
                 <CardHeader className="p-3">
                   <div className="flex justify-between items-center">
@@ -60,7 +60,7 @@ export default function SalesFloorPage() {
                   )}
                 </CardContent>
               </Card>
-            </Link>
+            </CustomLink>
           ))}
         </div>
       </CardContent>

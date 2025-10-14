@@ -1,6 +1,5 @@
 "use client";
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
 import Image from 'next/image';
 import {
   SidebarContent,
@@ -22,6 +21,7 @@ import {
   FileBarChart,
   BookText
 } from 'lucide-react';
+import { CustomLink } from '@/components/ui/custom-link';
 
 const menuItems = [
   { href: '/', label: 'Dasbor', icon: LayoutDashboard },
@@ -54,10 +54,10 @@ export function Nav() {
                 isActive={pathname === item.href}
                 tooltip={item.label}
               >
-                <Link href={item.href}>
+                <CustomLink href={item.href}>
                   <item.icon />
                   <span>{item.label}</span>
-                </Link>
+                </CustomLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
@@ -72,10 +72,10 @@ export function Nav() {
               isActive={pathname.startsWith('/users')}
               tooltip="Pengguna"
             >
-              <Link href="/users">
+              <CustomLink href="/users">
                 <Users />
                 <span>Pengguna</span>
-              </Link>
+              </CustomLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
@@ -84,10 +84,10 @@ export function Nav() {
               isActive={pathname.startsWith('/settings')}
               tooltip="Pengaturan"
             >
-              <Link href="/settings">
+              <CustomLink href="/settings">
                 <Settings />
                 <span>Pengaturan</span>
-              </Link>
+              </CustomLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

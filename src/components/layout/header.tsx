@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Search } from 'lucide-react';
 import { Input } from '../ui/input';
-import Link from 'next/link';
+import { CustomLink } from '@/components/ui/custom-link';
 
 export function Header() {
   return (
@@ -42,12 +42,12 @@ export function Header() {
           <DropdownMenuLabel>Akun Saya</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href="/settings">Pengaturan</Link>
+            <CustomLink href="/settings">Pengaturan</CustomLink>
           </DropdownMenuItem>
           <DropdownMenuItem>Dukungan</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href="/login">Keluar</Link>
+            <CustomLink href="/login">Keluar</CustomLink>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

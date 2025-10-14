@@ -38,7 +38,7 @@ import { inventoryItems as initialInventoryItems } from "@/lib/data"
 import { PlusCircle, ArrowRightLeft, Settings } from "lucide-react"
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import Link from "next/link";
+import { CustomLink } from "@/components/ui/custom-link";
 
 type InventoryItem = typeof initialInventoryItems[0];
 
@@ -99,12 +99,12 @@ export default function InventoryPage() {
             </div>
             <div className="flex gap-2">
                <Button size="sm" variant="outline" className="gap-1" asChild>
-                <Link href="/inventory/categories">
+                <CustomLink href="/inventory/categories">
                   <Settings className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                     Kelola Kategori
                   </span>
-                </Link>
+                </CustomLink>
               </Button>
               <Button size="sm" className="gap-1" onClick={() => setAddProductDialogOpen(true)}>
                 <PlusCircle className="h-3.5 w-3.5" />

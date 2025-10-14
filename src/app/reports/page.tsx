@@ -1,6 +1,6 @@
 "use client";
 
-import Link from 'next/link';
+import { CustomLink } from '@/components/ui/custom-link';
 import {
     Card,
     CardContent,
@@ -159,7 +159,7 @@ export default function ReportsPage() {
                                 <CardDescription>Lacak semua aktivitas dan perubahan penting.</CardDescription>
                             </div>
                             <Button variant="outline" size="sm" asChild>
-                                <Link href="/reports/audit-trail">Lihat Semua</Link>
+                                <CustomLink href="/reports/audit-trail">Lihat Semua</CustomLink>
                             </Button>
                         </div>
                     </CardHeader>

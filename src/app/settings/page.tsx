@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { CustomLink } from "@/components/ui/custom-link";
 import {
   Card,
   CardContent,
@@ -65,7 +65,7 @@ export default function SettingsPage() {
                     <p className="text-sm text-muted-foreground">Buat, ubah, dan hapus peran untuk pengguna Anda.</p>
                 </div>
                 <Button asChild>
-                    <Link href="/settings/roles">Kelola Peran</Link>
+                    <CustomLink href="/settings/roles">Kelola Peran</CustomLink>
                 </Button>
             </div>
         </CardContent>
