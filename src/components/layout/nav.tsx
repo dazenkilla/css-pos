@@ -1,6 +1,7 @@
 "use client";
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   SidebarContent,
   SidebarMenu,
@@ -21,7 +22,6 @@ import {
   FileBarChart,
   BookText
 } from 'lucide-react';
-import { NovaPosIcon } from '@/components/icons/nova-pos-icon';
 
 const menuItems = [
   { href: '/', label: 'Dasbor', icon: LayoutDashboard },
@@ -39,7 +39,7 @@ export function Nav() {
     <>
       <SidebarHeader>
         <div className="flex items-center gap-2">
-          <NovaPosIcon className="size-8 text-primary" />
+          <Image src="/logo.png" alt="App Logo" width={32} height={32} className="size-8" />
           <h2 className="text-sm font-semibold tracking-tight font-headline">
             Creative Software Solution | POS
           </h2>
