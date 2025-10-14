@@ -231,7 +231,7 @@ export default function DirectSalePage() {
             </div>
             {categories.map(category => (
               <TabsContent key={category} value={category} className="mt-4">
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                   {inventoryItems.filter(item => item.category === category).map((product) => (
                     <Card 
                       key={product.sku} 
@@ -242,15 +242,15 @@ export default function DirectSalePage() {
                         <Image
                           alt={product.name}
                           className="aspect-square w-full object-cover"
-                          height="200"
+                          height="150"
                           src={getImageUrl(product.sku)}
-                          width="200"
+                          width="150"
                           data-ai-hint={getImageHint(product.sku)}
                         />
                       </CardContent>
-                      <CardFooter className="flex flex-col items-start p-3">
-                        <h3 className="font-semibold text-sm truncate w-full">{product.name}</h3>
-                        <p className="font-bold text-base">Rp{product.price.toLocaleString('id-ID')}</p>
+                      <CardFooter className="flex flex-col items-start p-2">
+                        <h3 className="font-semibold text-xs leading-tight truncate w-full">{product.name}</h3>
+                        <p className="font-bold text-sm">Rp{product.price.toLocaleString('id-ID')}</p>
                       </CardFooter>
                     </Card>
                   ))}
