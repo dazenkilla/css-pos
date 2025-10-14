@@ -26,28 +26,23 @@ export function Receipt({ sale }: ReceiptProps) {
   const printDate = new Date().toLocaleString();
 
   return (
-    <div className="p-8 font-mono text-xs text-black bg-white">
-      <div className="text-center mb-4">
-        <NovaPosIcon className="mx-auto h-12 w-12" />
-        <h2 className="text-xl font-bold">Nova POS</h2>
+    <div className="text-black bg-white">
+      <div className="text-center mb-2">
+        <NovaPosIcon className="mx-auto h-8 w-8" />
+        <h2 className="text-lg font-bold">Nova POS</h2>
         <p>123 Coffee St, Jakarta</p>
-        <p>www.novapos.example</p>
         <p>{printDate}</p>
       </div>
-      <hr className="my-2 border-dashed border-black" />
-      <div className="mb-2">
-        <div className="flex justify-between font-bold">
-          <span>ITEM</span>
-          <span>TOTAL</span>
-        </div>
+      <hr />
+      <div className="mb-1">
         {cart.map((item, index) => (
-          <div key={index} className="flex justify-between">
-            <span>{item.quantity}x {item.name}</span>
-            <span>${(item.price * item.quantity).toFixed(2)}</span>
+          <div key={index} className="item">
+            <div>{item.quantity}x {item.name}</div>
+            <div className="text-right">${(item.price * item.quantity).toFixed(2)}</div>
           </div>
         ))}
       </div>
-      <hr className="my-2 border-dashed border-black" />
+      <hr />
       <div className="space-y-1">
         <div className="flex justify-between">
           <span>SUBTOTAL</span>
@@ -61,14 +56,14 @@ export function Receipt({ sale }: ReceiptProps) {
           <span>TAX (11%)</span>
           <span>${tax.toFixed(2)}</span>
         </div>
-        <hr className="my-2 border-dashed border-black" />
-        <div className="flex justify-between font-bold text-base">
+        <hr />
+        <div className="flex justify-between font-bold">
           <span>TOTAL</span>
           <span>${total.toFixed(2)}</span>
         </div>
       </div>
-      <div className="text-center mt-6">
-        <p>Thank you for your purchase!</p>
+      <div className="text-center mt-4">
+        <p>Thank you!</p>
       </div>
     </div>
   );

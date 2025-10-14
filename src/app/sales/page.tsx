@@ -131,22 +131,36 @@ export default function SalesPage() {
           <head>
             <title>Print Receipt</title>
             <style>
-              body { font-family: monospace; font-size: 10px; margin: 0; }
-              #receipt-print { padding: 20px; }
+              @page {
+                size: 58mm 100mm; /* Standard POS-58 width, height can be adjusted */
+                margin: 0;
+              }
+              body { 
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 8px; 
+                line-height: 1.4;
+                margin: 0;
+                padding: 3mm;
+                width: 52mm; /* 58mm - 3mm padding on each side */
+                color: #000;
+              }
+              #receipt-print {
+                width: 100%;
+              }
               .text-center { text-align: center; }
-              .mb-4 { margin-bottom: 1rem; }
+              .text-right { text-align: right; }
+              .mb-1 { margin-bottom: 0.25rem; }
+              .mb-2 { margin-bottom: 0.5rem; }
+              .mt-4 { margin-top: 1rem; }
               .mx-auto { margin-left: auto; margin-right: auto; }
-              .h-12 { height: 3rem; }
-              .w-12 { width: 3rem; }
-              .text-xl { font-size: 1.25rem; }
+              .h-8 { height: 2rem; }
+              .w-8 { width: 2rem; }
+              .text-lg { font-size: 1.125rem; }
               .font-bold { font-weight: 700; }
               hr { border-top: 1px dashed black; margin: 0.5rem 0; }
-              .mb-2 { margin-bottom: 0.5rem; }
               .flex { display: flex; }
               .justify-between { justify-content: space-between; }
               .space-y-1 > * + * { margin-top: 0.25rem; }
-              .text-base { font-size: 1rem; }
-              .mt-6 { margin-top: 1.5rem; }
             </style>
           </head>
           <body>
