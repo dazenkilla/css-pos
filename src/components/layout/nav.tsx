@@ -7,7 +7,6 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarHeader,
-  SidebarFooter,
   SidebarSeparator,
   useSidebar,
 } from '@/components/ui/sidebar';
@@ -22,7 +21,8 @@ import {
   FileBarChart,
   BookText,
   ChevronDown,
-  Tags
+  Tags,
+  Home
 } from 'lucide-react';
 import { CustomLink } from '@/components/ui/custom-link';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -52,15 +52,24 @@ const analyticsSubItems = [
 const SubMenu = ({ title, icon: Icon, items }: { title: string; icon: React.ElementType; items: typeof productManagementSubItems }) => {
     const pathname = usePathname();
     const { state } = useSidebar();
-    const isOpen = items.some(item => pathname.startsWith(item.href));
+    const isAnyChildActive = items.some(item => pathname.startsWith(item.href) && item.href !== '/');
+    const isRootActive = items.some(item => item.href === pathname);
+    
+    // For nested routes, we want to keep the collapsible open.
+    const [isOpen, setIsOpen] = React.useState(isAnyChildActive || isRootActive);
+    
+    // Update open state when path changes
+    React.useEffect(() => {
+        setIsOpen(isAnyChildActive || isRootActive);
+    }, [pathname, isAnyChildActive, isRootActive]);
 
     return (
-        <Collapsible defaultOpen={isOpen}>
+        <Collapsible open={isOpen} onOpenChange={setIsOpen}>
             <CollapsibleTrigger asChild>
                 <Button variant="ghost" className="w-full justify-start gap-2 px-2 h-8 text-sm group/menu-item relative peer/menu-button">
                      <Icon />
-                     <span>{title}</span>
-                     <ChevronDown className={cn("ml-auto h-4 w-4 shrink-0 transition-transform duration-200", isOpen && "rotate-180")} />
+                     <span className={cn(state === 'collapsed' && 'hidden')}>{title}</span>
+                     <ChevronDown className={cn("ml-auto h-4 w-4 shrink-0 transition-transform duration-200", state === 'collapsed' && 'hidden', isOpen && "rotate-180")} />
                 </Button>
             </CollapsibleTrigger>
             <CollapsibleContent className="pl-4 ml-2 border-l border-muted-foreground/30 data-[state=closed]:hidden data-[state=open]:animate-accordion-down">
@@ -69,7 +78,7 @@ const SubMenu = ({ title, icon: Icon, items }: { title: string; icon: React.Elem
                     <SidebarMenuItem key={item.label}>
                     <SidebarMenuButton
                         asChild
-                        isActive={pathname === item.href}
+                        isActive={pathname.startsWith(item.href)}
                         tooltip={item.label}
                         size="sm"
                         className="w-full justify-start h-8"

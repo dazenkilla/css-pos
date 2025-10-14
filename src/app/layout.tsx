@@ -6,6 +6,7 @@ import { Nav } from '@/components/layout/nav';
 import { Header } from '@/components/layout/header';
 import { Toaster } from '@/components/ui/toaster';
 import { LoadingProvider } from '@/components/ui/loading-provider';
+import { BottomNav } from '@/components/layout/bottom-nav';
 
 export const metadata: Metadata = {
   title: 'CSS POS',
@@ -30,13 +31,16 @@ export default function RootLayout({
       <body className={cn('font-body antialiased')}>
         <LoadingProvider>
           <SidebarProvider>
-            <Sidebar>
-              <Nav />
-            </Sidebar>
-            <SidebarInset>
-              <Header />
-              <main className="p-4 sm:p-6 lg:p-8">{children}</main>
-            </SidebarInset>
+            <div className="relative flex min-h-screen w-full">
+              <Sidebar>
+                <Nav />
+              </Sidebar>
+              <SidebarInset>
+                <Header />
+                <main className="p-4 sm:p-6 lg:p-8 flex-1">{children}</main>
+              </SidebarInset>
+            </div>
+            <BottomNav />
           </SidebarProvider>
         </LoadingProvider>
         <Toaster />
