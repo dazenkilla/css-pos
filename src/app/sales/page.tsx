@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { inventoryItems } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { PlusCircle, MinusCircle, X, ShoppingCart, Ticket, Printer } from 'lucide-react';
+import { PlusCircle, MinusCircle, X, ShoppingCart, Ticket, Printer, Wallet, CreditCard } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -131,12 +131,12 @@ export default function SalesPage() {
             <title>Print Receipt</title>
             <style>
               @page {
-                size: 58mm 100mm; /* Standard POS-58 width, height can be adjusted */
+                size: 58mm auto;
                 margin: 0;
               }
               body { 
                 font-family: 'Courier New', Courier, monospace;
-                font-size: 8px; 
+                font-size: 9px; 
                 line-height: 1.4;
                 margin: 0;
                 padding: 3mm;
@@ -160,7 +160,8 @@ export default function SalesPage() {
               .flex { display: flex; }
               .justify-between { justify-content: space-between; }
               .space-y-1 > * + * { margin-top: 0.25rem; }
-              .item { display: flex; justify-content: space-between; }
+              .item { display: flex; flex-direction: column; }
+              .item-info { display: flex; justify-content: space-between; }
             </style>
           </head>
           <body>
@@ -179,7 +180,16 @@ export default function SalesPage() {
   };
 
   const completeSale = () => {
-    const saleData = { cart, total, discount: totalDiscount, tax, subtotal };
+    const saleData: SaleData = {
+      cart,
+      subtotal,
+      discount: totalDiscount,
+      tax,
+      total,
+      payments,
+      totalPaid,
+      change: totalPaid - total,
+    };
     
     toast({
       title: "Sale Complete!",
@@ -296,7 +306,7 @@ export default function SalesPage() {
                       <Ticket className="mr-2 h-4 w-4"/>
                       Discount
                     </Button>
-                    <Button size="lg" onClick={() => setPaymentDialogOpen(true)}>Charge</Button>
+                    <Button size="lg" onClick={() => setPaymentDialogOpen(true)} disabled={cart.length === 0}>Charge</Button>
                   </div>
                 </CardFooter>
               </>
@@ -367,13 +377,19 @@ export default function SalesPage() {
 
                 <div className="flex justify-between items-center text-lg font-semibold bg-muted p-3 rounded-md">
                     <span>Remaining</span>
-                    <span>${remainingAmount.toFixed(2)}</span>
+                    <span>${remainingAmount > 0 ? remainingAmount.toFixed(2) : '0.00'}</span>
                 </div>
 
                 {remainingAmount > 0.001 && (
                     <div className="flex gap-2 justify-center">
-                        <Button variant="secondary" onClick={() => handleAddPayment('Cash')}>Pay with Cash</Button>
-                        <Button variant="secondary" onClick={() => handleAddPayment('Card')}>Pay with Card</Button>
+                        <Button variant="secondary" onClick={() => handleAddPayment('Cash')}>
+                          <Wallet className="mr-2 h-4 w-4" />
+                          Pay with Cash
+                        </Button>
+                        <Button variant="secondary" onClick={() => handleAddPayment('Card')}>
+                          <CreditCard className="mr-2 h-4 w-4" />
+                          Pay with Card
+                        </Button>
                     </div>
                 )}
             </div>
