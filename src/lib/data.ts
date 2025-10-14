@@ -52,21 +52,30 @@ export const users = [
     { id: "USR-004", name: "James", email: "james@example.com", role: "Kasir", lastActive: "Kemarin" },
 ];
 
-const createSale = (id: string, date: string, paymentMethods: {method: string, amount?: number}[]) => {
-  const itemCount = Math.floor(Math.random() * 3) + 1;
+// Helper function to get a deterministic index based on a seed
+const getDeterministicIndex = (seed: number, max: number) => {
+    // A simple pseudo-random number generator for consistency
+    let x = Math.sin(seed) * 10000;
+    return Math.floor((x - Math.floor(x)) * max);
+};
+
+const createSale = (id: string, date: string, paymentMethods: {method: string, amount?: number}[], seed: number) => {
+  const itemCount = (seed % 3) + 1; // 1, 2, or 3
   const items = [];
   let subtotal = 0;
   const usedIndexes = new Set();
-
+  
   for (let j = 0; j < itemCount; j++) {
     let itemIndex;
+    let currentSeed = seed + j;
     do {
-      itemIndex = Math.floor(Math.random() * inventoryItems.length);
+      itemIndex = getDeterministicIndex(currentSeed, inventoryItems.length);
+      currentSeed++; // Ensure we don't get stuck in a loop
     } while (usedIndexes.has(itemIndex));
     usedIndexes.add(itemIndex);
     
     const product = inventoryItems[itemIndex];
-    const quantity = Math.floor(Math.random() * 2) + 1;
+    const quantity = (currentSeed % 2) + 1; // 1 or 2
     items.push({
       name: product.name,
       price: product.price,
@@ -93,25 +102,26 @@ const createSale = (id: string, date: string, paymentMethods: {method: string, a
 
 const generateSales = () => {
     let sales = [];
+    let seed = 1;
     // Cash sales
     for (let i=1; i<=20; i++) {
-        sales.push(createSale(`SALE-CASH-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'Tunai' }]));
+        sales.push(createSale(`SALE-CASH-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'Tunai' }], seed++));
     }
     // Card sales
     for (let i=1; i<=20; i++) {
-        sales.push(createSale(`SALE-CARD-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'Kartu' }]));
+        sales.push(createSale(`SALE-CARD-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'Kartu' }], seed++));
     }
     // QR sales
     for (let i=1; i<=20; i++) {
-        sales.push(createSale(`SALE-QR-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'QR' }]));
+        sales.push(createSale(`SALE-QR-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'QR' }], seed++));
     }
     // Bank Transfer sales
     for (let i=1; i<=20; i++) {
-        sales.push(createSale(`SALE-BANK-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'Transfer Bank' }]));
+        sales.push(createSale(`SALE-BANK-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'Transfer Bank' }], seed++));
     }
     // Split payment
-    sales.push(createSale(`SALE-SPLIT-1`, `2023-11-21`, [{ method: 'Tunai' }, { method: 'Kartu' }]));
-    sales.push(createSale(`SALE-SPLIT-2`, `2023-11-22`, [{ method: 'QR' }, { method: 'Tunai' }]));
+    sales.push(createSale(`SALE-SPLIT-1`, `2023-11-21`, [{ method: 'Tunai' }, { method: 'Kartu' }], seed++));
+    sales.push(createSale(`SALE-SPLIT-2`, `2023-11-22`, [{ method: 'QR' }, { method: 'Tunai' }], seed++));
 
     return sales.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
