@@ -193,6 +193,7 @@ export default function SalesPage() {
   };
 
   const completeSale = () => {
+    const saleId = `SALE-${Date.now().toString().slice(-6)}`;
     const saleData: SaleData = {
       cart,
       subtotal,
@@ -206,9 +207,17 @@ export default function SalesPage() {
     
     toast({
       title: "Penjualan Selesai!",
-      description: `Total: Rp${total.toFixed(0)}`,
+      description: `Total: Rp${total.toLocaleString('id-ID')}`,
       action: <Button variant="outline" size="sm" onClick={() => handlePrint(saleData)}><Printer className="mr-2 h-4 w-4" />Cetak Struk</Button>
     });
+
+    // Simulasi jurnal otomatis
+    setTimeout(() => {
+        toast({
+            title: "Jurnal Otomatis Dibuat",
+            description: `Entri Jurnal JE-${Date.now().toString().slice(-4)} untuk ${saleId} telah dibuat.`
+        })
+    }, 1000);
 
     setCart([]);
     setDiscount(0);
@@ -251,7 +260,7 @@ export default function SalesPage() {
                       </CardContent>
                       <CardFooter className="flex flex-col items-start p-3">
                         <h3 className="font-semibold text-sm truncate w-full">{product.name}</h3>
-                        <p className="font-bold text-base">Rp{product.price.toFixed(0)}</p>
+                        <p className="font-bold text-base">Rp{product.price.toLocaleString('id-ID')}</p>
                       </CardFooter>
                     </Card>
                   ))}
@@ -288,14 +297,14 @@ export default function SalesPage() {
                       />
                       <div className="flex-1">
                         <p className="font-medium text-sm">{item.name}</p>
-                        <p className="text-xs text-muted-foreground">Rp{item.price.toFixed(0)}</p>
+                        <p className="text-xs text-muted-foreground">Rp{item.price.toLocaleString('id-ID')}</p>
                         <div className="flex items-center gap-2 mt-1">
                           <Button size="icon" variant="outline" className="h-6 w-6" onClick={() => updateQuantity(item.sku, -1)}><MinusCircle className="h-3.5 w-3.5" /></Button>
                           <span className="font-bold text-sm w-4 text-center">{item.quantity}</span>
                           <Button size="icon" variant="outline" className="h-6 w-6" onClick={() => updateQuantity(item.sku, 1)}><PlusCircle className="h-3.5 w-3.5" /></Button>
                         </div>
                       </div>
-                      <p className="font-semibold w-16 text-right">Rp{(item.price * item.quantity).toFixed(0)}</p>
+                      <p className="font-semibold w-24 text-right">Rp{(item.price * item.quantity).toLocaleString('id-ID')}</p>
                       <Button size="icon" variant="ghost" className="text-muted-foreground hover:text-destructive h-8 w-8" onClick={() => removeFromCart(item.sku)}><X className="h-4 w-4"/></Button>
                     </div>
                   ))}
@@ -306,14 +315,14 @@ export default function SalesPage() {
               <>
                 <Separator />
                 <CardFooter className="flex flex-col gap-2 items-stretch p-4">
-                  <div className="flex justify-between w-full text-muted-foreground"><span>Subtotal</span><span>Rp{subtotal.toFixed(0)}</span></div>
+                  <div className="flex justify-between w-full text-muted-foreground"><span>Subtotal</span><span>Rp{subtotal.toLocaleString('id-ID')}</span></div>
                   <div className="flex justify-between w-full text-muted-foreground">
                     <span>Diskon ({discount}%)</span>
-                    <span>-Rp{totalDiscount.toFixed(0)}</span>
+                    <span>-Rp{totalDiscount.toLocaleString('id-ID')}</span>
                   </div>
-                  <div className="flex justify-between w-full text-muted-foreground"><span>Pajak (11%)</span><span>Rp{tax.toFixed(0)}</span></div>
+                  <div className="flex justify-between w-full text-muted-foreground"><span>Pajak (11%)</span><span>Rp{tax.toLocaleString('id-ID')}</span></div>
                   <Separator className="my-2" />
-                  <div className="flex justify-between w-full font-semibold text-lg"><span>Total</span><span>Rp{total.toFixed(0)}</span></div>
+                  <div className="flex justify-between w-full font-semibold text-lg"><span>Total</span><span>Rp{total.toLocaleString('id-ID')}</span></div>
                   <div className="grid grid-cols-2 gap-2 mt-4">
                     <Button variant="outline" size="lg" onClick={() => setDiscountDialogOpen(true)}>
                       <Ticket className="mr-2 h-4 w-4"/>
@@ -367,7 +376,7 @@ export default function SalesPage() {
             <div className="py-4 space-y-4">
                 <div className="text-center">
                     <p className="text-sm text-muted-foreground">Jumlah Total</p>
-                    <p className="text-4xl font-bold">Rp{total.toFixed(0)}</p>
+                    <p className="text-4xl font-bold">Rp{total.toLocaleString('id-ID')}</p>
                 </div>
                 <div className="space-y-2">
                   <p className="font-medium">Pembayaran</p>
@@ -390,7 +399,7 @@ export default function SalesPage() {
 
                 <div className="flex justify-between items-center text-lg font-semibold bg-muted p-3 rounded-md">
                     <span>Sisa</span>
-                    <span>Rp{remainingAmount > 0 ? remainingAmount.toFixed(0) : '0'}</span>
+                    <span>Rp{remainingAmount > 0 ? remainingAmount.toLocaleString('id-ID') : '0'}</span>
                 </div>
 
                 {remainingAmount > 0.001 && (
@@ -438,14 +447,14 @@ export default function SalesPage() {
             </DialogHeader>
             <div className="flex flex-col items-center justify-center py-4">
                 <Image
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=pay-Rp${(remainingAmount > 0 ? remainingAmount : 0).toFixed(0)}`}
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=pay-Rp${(remainingAmount > 0 ? remainingAmount : 0).toLocaleString('id-ID')}`}
                     alt="QR Code Pembayaran"
                     width={200}
                     height={200}
                 />
                 <div className="mt-4 text-center">
                     <p className="text-sm text-muted-foreground">Total Tagihan</p>
-                    <p className="text-2xl font-bold">Rp{(remainingAmount > 0 ? remainingAmount : 0).toFixed(0)}</p>
+                    <p className="text-2xl font-bold">Rp{(remainingAmount > 0 ? remainingAmount : 0).toLocaleString('id-ID')}</p>
                 </div>
             </div>
             <DialogFooter>

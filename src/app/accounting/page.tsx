@@ -7,7 +7,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookText, FileText, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function AccountingPage() {
     return (
@@ -19,13 +19,13 @@ export default function AccountingPage() {
                 </CardHeader>
             </Card>
 
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <Card>
                     <CardHeader>
                         <div className="flex items-center justify-between">
                             <div>
-                                <CardTitle>Bagan Akun (Chart of Accounts)</CardTitle>
-                                <CardDescription>Kelola semua akun keuangan Anda.</CardDescription>
+                                <CardTitle>Bagan Akun</CardTitle>
+                                <CardDescription>Kelola semua akun keuangan.</CardDescription>
                             </div>
                              <Button variant="outline" size="icon" asChild>
                                 <Link href="/accounting/chart-of-accounts">
@@ -53,10 +53,28 @@ export default function AccountingPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                       <p className="text-sm text-muted-foreground">Buat dan kelola entri jurnal manual untuk mencatat transaksi yang tidak otomatis diposting dari modul lain.</p>
+                       <p className="text-sm text-muted-foreground">Buat dan kelola entri jurnal manual untuk mencatat transaksi yang tidak otomatis diposting.</p>
                     </CardContent>
                 </Card>
-                 <Card className="md:col-span-2">
+                 <Card>
+                    <CardHeader>
+                         <div className="flex items-center justify-between">
+                            <div>
+                                <CardTitle>Buku Besar</CardTitle>
+                                <CardDescription>Lacak semua transaksi per akun.</CardDescription>
+                            </div>
+                            <Button variant="outline" size="icon" asChild>
+                                <Link href="/accounting/general-ledger">
+                                    <ArrowRight className="h-4 w-4" />
+                                </Link>
+                            </Button>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                       <p className="text-sm text-muted-foreground">Lihat riwayat transaksi terperinci untuk setiap akun dalam bagan akun Anda.</p>
+                    </CardContent>
+                </Card>
+                 <Card className="lg:col-span-3">
                     <CardHeader>
                         <div className="flex items-center justify-between">
                             <div>
