@@ -218,14 +218,6 @@ export default function TransactionPage() {
       description: `Total: Rp${total.toLocaleString('id-ID')}`,
     });
 
-    // Simulasi jurnal otomatis
-    setTimeout(() => {
-        toast({
-            title: "Jurnal Otomatis Dibuat",
-            description: `Entri Jurnal JE-${Date.now().toString().slice(-4)} untuk ${saleId} telah dibuat.`
-        })
-    }, 1000);
-
     setCart([]);
     setDiscount(0);
     setPayments([]);
