@@ -1,7 +1,9 @@
+
 "use client";
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -27,7 +29,9 @@ import { renderToString } from 'react-dom/server';
 type CartItem = typeof inventoryItems[0] & { quantity: number };
 type Payment = { method: 'Tunai' | 'Kartu' | 'QR' | 'Transfer Bank'; amount: number };
 
-export default function TransactionPage({ params: { tableId } }: { params: { tableId: string } }) {
+export default function TransactionPage() {
+  const params = useParams();
+  const tableId = params.tableId as string;
   const [cart, setCart] = useState<CartItem[]>([]);
   const [discount, setDiscount] = useState(0);
   const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false);
