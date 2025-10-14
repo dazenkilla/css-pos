@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -16,17 +18,21 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { FileDown } from "lucide-react"
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 // Di aplikasi nyata, data ini akan berasal dari database.
-const salesHistory = [
+const initialSalesHistory = [
   { id: "SALE-001", date: "2023-11-20", customer: "Olivia Martin", total: 199990, status: "Selesai", items: 3 },
   { id: "SALE-002", date: "2023-11-21", customer: "Jackson Lee", total: 39000, status: "Selesai", items: 1 },
-  { id: "SALE-003", date: "2023-11-22", customer: "William Kim", total: 99000, status: "Dikembalikan", items: 1 },
+  { id: "SALE-003", date: "2023-11-22", customer: "William Kim", total: 99000, status: "Selesai", items: 1 },
   { id: "SALE-004", date: "2023-11-23", customer: "Sofia Davis", total: 299000, status: "Selesai", items: 2 },
 ];
 
 export default function HistoryPage() {
-  
+  const [salesHistory, setSalesHistory] = useState(initialSalesHistory);
+  const { toast } = useToast();
+
   const getStatusVariant = (status: string) => {
     switch (status) {
       case "Selesai": return "secondary";
@@ -36,6 +42,23 @@ export default function HistoryPage() {
     }
   };
 
+  const handleReturn = (saleId: string) => {
+    setSalesHistory(salesHistory.map(sale => 
+        sale.id === saleId ? { ...sale, status: "Dikembalikan" } : sale
+    ));
+    toast({
+        title: "Transaksi Dikembalikan",
+        description: `Transaksi ${saleId} telah ditandai sebagai dikembalikan.`,
+    });
+  };
+  
+  const handleExport = () => {
+    toast({
+      title: "Ekspor Data (Simulasi)",
+      description: "Fitur ini akan mengekspor data penjualan ke file Excel atau PDF."
+    })
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -44,7 +67,7 @@ export default function HistoryPage() {
             <CardTitle>Riwayat Penjualan</CardTitle>
             <CardDescription>Lihat dan kelola semua transaksi yang sudah lewat.</CardDescription>
           </div>
-          <Button variant="outline" size="sm" onClick={() => alert('Fitur ekspor belum tersedia.')}>
+          <Button variant="outline" size="sm" onClick={handleExport}>
             <FileDown className="mr-2 h-4 w-4" />
             Ekspor Data
           </Button>
@@ -75,8 +98,13 @@ export default function HistoryPage() {
                 <TableCell className="hidden md:table-cell text-right">{sale.items}</TableCell>
                 <TableCell className="text-right">Rp{sale.total.toFixed(0)}</TableCell>
                 <TableCell className="text-right">
-                    <Button variant="outline" size="sm" disabled={sale.status === 'Dikembalikan'}>
-                        {sale.status === 'Dikembalikan' ? 'Dibatalkan' : 'Batalkan/Kembalikan'}
+                    <Button 
+                        variant="outline" 
+                        size="sm" 
+                        disabled={sale.status === 'Dikembalikan'}
+                        onClick={() => handleReturn(sale.id)}
+                    >
+                        {sale.status === 'Dikembalikan' ? 'Dikembalikan' : 'Batalkan/Kembalikan'}
                     </Button>
                 </TableCell>
               </TableRow>

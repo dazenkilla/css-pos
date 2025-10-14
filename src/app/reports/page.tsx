@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/table"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { Button } from '@/components/ui/button';
+import { useToast } from "@/hooks/use-toast";
 import { Users, FileText, FileDown } from 'lucide-react';
 
 const cashierPerformanceData = [
@@ -27,6 +28,22 @@ const cashierPerformanceData = [
 ];
 
 export default function ReportsPage() {
+    const { toast } = useToast();
+    
+    const handleExport = () => {
+      toast({
+        title: "Ekspor Data (Simulasi)",
+        description: "Fitur ini akan mengekspor data ke file Excel atau PDF."
+      })
+    }
+
+    const handleViewReport = (reportName: string) => {
+        toast({
+            title: `Laporan ${reportName}`,
+            description: `Ini adalah placeholder untuk menampilkan ${reportName}.`,
+        });
+    };
+
     return (
         <div className="space-y-6">
             <Card>
@@ -36,7 +53,7 @@ export default function ReportsPage() {
                             <CardTitle>Laporan Kinerja Kasir</CardTitle>
                             <CardDescription>Analisis penjualan dan transaksi per kasir.</CardDescription>
                         </div>
-                        <Button variant="outline" size="sm" onClick={() => alert('Fitur ekspor belum tersedia.')}>
+                        <Button variant="outline" size="sm" onClick={handleExport}>
                             <FileDown className="mr-2 h-4 w-4"/>
                             Ekspor
                         </Button>
@@ -100,7 +117,7 @@ export default function ReportsPage() {
                             <CardTitle>Analitik Pelanggan</CardTitle>
                             <CardDescription>Pahami perilaku dan demografi pelanggan Anda.</CardDescription>
                         </div>
-                         <Button variant="outline" size="sm">Lihat Detail</Button>
+                         <Button variant="outline" size="sm" onClick={() => handleViewReport('Analitik Pelanggan')}>Lihat Detail</Button>
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -124,11 +141,11 @@ export default function ReportsPage() {
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                        <Button variant="outline" className="w-full justify-start gap-2">
+                        <Button variant="outline" className="w-full justify-start gap-2" onClick={() => handleViewReport('Laba & Rugi')}>
                             <FileText className="h-4 w-4"/>
                             Laporan Laba & Rugi
                         </Button>
-                        <Button variant="outline" className="w-full justify-start gap-2">
+                        <Button variant="outline" className="w-full justify-start gap-2" onClick={() => handleViewReport('Pajak')}>
                             <FileText className="h-4 w-4"/>
                             Laporan Pajak
                         </Button>

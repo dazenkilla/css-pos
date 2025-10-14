@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -14,8 +17,20 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { PlusCircle } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { useToast } from "@/hooks/use-toast";
 
 // Data placeholder untuk entri jurnal
 const journalEntriesData = [
@@ -30,6 +45,21 @@ const journalEntryDetails = [
 ]
 
 export default function JournalEntriesPage() {
+    const [isJournalEntryOpen, setJournalEntryOpen] = useState(false);
+    const { toast } = useToast();
+
+    const handleCreateEntry = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const description = formData.get('description');
+
+        setJournalEntryOpen(false);
+        toast({
+            title: "Entri Jurnal Dibuat (Simulasi)",
+            description: `Entri jurnal untuk "${description}" telah dibuat sebagai draf.`
+        });
+    }
+
     return (
         <div className="space-y-6">
             <Card>
@@ -39,7 +69,7 @@ export default function JournalEntriesPage() {
                             <CardTitle>Entri Jurnal</CardTitle>
                             <CardDescription>Kelola dan lacak semua entri jurnal akuntansi.</CardDescription>
                         </div>
-                        <Button size="sm" className="gap-1">
+                        <Button size="sm" className="gap-1" onClick={() => setJournalEntryOpen(true)}>
                             <PlusCircle className="h-3.5 w-3.5" />
                             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                                 Buat Entri Jurnal
@@ -106,6 +136,52 @@ export default function JournalEntriesPage() {
                     </Table>
                 </CardContent>
             </Card>
+
+            <Dialog open={isJournalEntryOpen} onOpenChange={setJournalEntryOpen}>
+                <DialogContent className="sm:max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle>Buat Entri Jurnal Baru</DialogTitle>
+                        <DialogDescription>Masukkan detail transaksi manual.</DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleCreateEntry}>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="entry-date">Tanggal</Label>
+                            <Input id="entry-date" name="date" type="date" defaultValue={new Date().toISOString().substring(0, 10)} />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="entry-description">Deskripsi</Label>
+                            <Textarea id="entry-description" name="description" placeholder="Contoh: Pembelian aset kantor" required/>
+                        </div>
+                        <div className="border rounded-lg p-2">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Akun</TableHead>
+                                        <TableHead className="text-right">Debit</TableHead>
+                                        <TableHead className="text-right">Kredit</TableHead>
+                                        <TableHead />
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {/* Placeholder row */}
+                                    <TableRow>
+                                        <TableCell><Input placeholder="Pilih Akun" /></TableCell>
+                                        <TableCell><Input type="number" placeholder="0" className="text-right" /></TableCell>
+                                        <TableCell><Input type="number" placeholder="0" className="text-right" /></TableCell>
+                                        <TableCell />
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                             <Button variant="outline" size="sm" className="mt-2 w-full">Tambah Baris</Button>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button type="submit">Simpan Draf</Button>
+                    </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }

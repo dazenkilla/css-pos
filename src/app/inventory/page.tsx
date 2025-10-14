@@ -25,17 +25,28 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { inventoryItems } from "@/lib/data"
+import { inventoryItems as initialInventoryItems } from "@/lib/data"
 import { PlusCircle, ArrowRightLeft, Settings } from "lucide-react"
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 
+type InventoryItem = typeof initialInventoryItems[0];
+
 export default function InventoryPage() {
+  const [inventoryItems, setInventoryItems] = useState(initialInventoryItems);
   const [isTransferDialogOpen, setTransferDialogOpen] = useState(false);
-  const [transferItem, setTransferItem] = useState<typeof inventoryItems[0] | null>(null);
+  const [isAddProductDialogOpen, setAddProductDialogOpen] = useState(false);
+  const [transferItem, setTransferItem] = useState<InventoryItem | null>(null);
   const { toast } = useToast();
 
   const getStatus = (stock: number) => {
@@ -44,7 +55,7 @@ export default function InventoryPage() {
     return { text: "Stok Habis", variant: "destructive" as const };
   };
 
-  const handleOpenTransferDialog = (item: typeof inventoryItems[0]) => {
+  const handleOpenTransferDialog = (item: InventoryItem) => {
     setTransferItem(item);
     setTransferDialogOpen(true);
   };
@@ -56,6 +67,26 @@ export default function InventoryPage() {
     });
     setTransferDialogOpen(false);
   };
+  
+  const handleAddProduct = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const newProduct: InventoryItem = {
+      sku: `prod-${Math.random().toString(36).substr(2, 9)}`,
+      name: formData.get('name') as string,
+      category: formData.get('category') as string,
+      subCategory: 'Baru', // Placeholder
+      price: parseFloat(formData.get('price') as string),
+      stock: parseInt(formData.get('stock') as string, 10),
+      expiryDate: null,
+    };
+    setInventoryItems(prev => [newProduct, ...prev]);
+    setAddProductDialogOpen(false);
+    toast({
+      title: "Produk Ditambahkan",
+      description: `${newProduct.name} telah berhasil ditambahkan ke inventaris.`,
+    });
+  }
 
   return (
     <>
@@ -75,7 +106,7 @@ export default function InventoryPage() {
                   </span>
                 </Link>
               </Button>
-              <Button size="sm" className="gap-1">
+              <Button size="sm" className="gap-1" onClick={() => setAddProductDialogOpen(true)}>
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                   Tambah Produk
@@ -168,6 +199,52 @@ export default function InventoryPage() {
           <DialogFooter>
             <Button onClick={handleTransfer}>Konfirmasi Transfer</Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Dialog Tambah Produk */}
+      <Dialog open={isAddProductDialogOpen} onOpenChange={setAddProductDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Tambah Produk Baru</DialogTitle>
+            <DialogDescription>
+              Isi detail produk baru yang akan ditambahkan ke inventaris.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleAddProduct}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="add-name" className="text-right">Nama Produk</Label>
+                <Input id="add-name" name="name" className="col-span-3" required />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="add-category" className="text-right">Kategori</Label>
+                <div className="col-span-3">
+                  <Select name="category" required>
+                      <SelectTrigger>
+                          <SelectValue placeholder="Pilih kategori" />
+                      </SelectTrigger>
+                      <SelectContent>
+                          <SelectItem value="Minuman">Minuman</SelectItem>
+                          <SelectItem value="Kue">Kue</SelectItem>
+                          <SelectItem value="Merchandise">Merchandise</SelectItem>
+                      </SelectContent>
+                  </Select>
+                </div>
+              </div>
+               <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="add-price" className="text-right">Harga</Label>
+                <Input id="add-price" name="price" type="number" className="col-span-3" required />
+              </div>
+               <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="add-stock" className="text-right">Stok Awal</Label>
+                <Input id="add-stock" name="stock" type="number" className="col-span-3" required />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Tambah Produk</Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </>
