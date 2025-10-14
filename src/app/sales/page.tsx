@@ -34,7 +34,6 @@ export default function SalesPage() {
   const [isDiscountDialogOpen, setDiscountDialogOpen] = useState(false);
   const [discountInput, setDiscountInput] = useState("");
   const [payments, setPayments] = useState<Payment[]>([]);
-  const [lastSale, setLastSale] = useState<SaleData | null>(null);
 
   const { toast } = useToast();
 
@@ -119,10 +118,10 @@ export default function SalesPage() {
     setPayments(newPayments);
   };
   
-  const handlePrint = () => {
-    if (!lastSale) return;
+  const handlePrint = (saleData: SaleData) => {
+    if (!saleData) return;
   
-    const receiptString = renderToString(<Receipt sale={lastSale} />);
+    const receiptString = renderToString(<Receipt sale={saleData} />);
     
     const printWindow = window.open('', '_blank');
     if (printWindow) {
@@ -161,6 +160,7 @@ export default function SalesPage() {
               .flex { display: flex; }
               .justify-between { justify-content: space-between; }
               .space-y-1 > * + * { margin-top: 0.25rem; }
+              .item { display: flex; justify-content: space-between; }
             </style>
           </head>
           <body>
@@ -180,12 +180,11 @@ export default function SalesPage() {
 
   const completeSale = () => {
     const saleData = { cart, total, discount: totalDiscount, tax, subtotal };
-    setLastSale(saleData);
     
     toast({
       title: "Sale Complete!",
       description: `Total: $${total.toFixed(2)}`,
-      action: <Button variant="outline" size="sm" onClick={() => handlePrint()}><Printer className="mr-2 h-4 w-4" />Print Receipt</Button>
+      action: <Button variant="outline" size="sm" onClick={() => handlePrint(saleData)}><Printer className="mr-2 h-4 w-4" />Print Receipt</Button>
     });
 
     setCart([]);
