@@ -17,7 +17,6 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -130,7 +129,7 @@ export default function SalesPage() {
     toast({
       title: "Sale Complete!",
       description: `Total: $${total.toFixed(2)}`,
-      action: <Button variant="outline" size="sm" onClick={handlePrint}><Printer className="mr-2 h-4 w-4" />Print Receipt</Button>
+      action: <Button variant="outline" size="sm" onClick={() => setTimeout(handlePrint, 200)}><Printer className="mr-2 h-4 w-4" />Print Receipt</Button>
     });
     // Reset state for next sale
     setCart([]);

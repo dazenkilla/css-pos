@@ -1,0 +1,86 @@
+diff --git a/node_modules/@radix-ui/react-slot/dist/index.mjs b/node_modules/@radix-ui/react-slot/dist/index.mjs
+index e364741..6d859e9 100644
+--- a/node_modules/@radix-ui/react-slot/dist/index.mjs
++++ b/node_modules/@radix-ui/react-slot/dist/index.mjs
+@@ -1,7 +1,6 @@
+ // packages/react/slot/src/Slot.tsx
+ import * as React from "react";
+ import {
+-  findDOMNode
+-} from "react-dom";
+ 
+ // packages/react/compose-refs/src/composeRefs.tsx
+ function composeRefs(...refs) {
+@@ -32,10 +31,6 @@
+     const childrens = childrenAsArray.map(
+       (child) => {
+         if (isSlottable(child)) {
+-          const newChild = child.props.children;
+-          if (React.Children.count(newChild) > 1)
+-            React.Children.only(null);
+-          return newChild;
+         } else {
+           return child;
+         }
+@@ -62,25 +57,6 @@
+       [ref, ...childRefs]
+     );
+     return /* @__PURE__ */ React.cloneElement(child, { ...mergedProps, ref: composedRefs });
+-  } else if (React.Children.count(children) > 1) {
+-    React.Children.only(null);
+   }
+   return null;
+ });
+ Slot.displayName = "Slot";
+-function isSlottable(child) {
+-  return React.isValidElement(child) && child.type === Slottable;
+-}
+-const Slottable = ({ children }) => {
+-  return /* @__PURE__ */ React.createElement(React.Fragment, null, children);
+-};
+-
+-export {
+-  Slot,
+-  Slottable
+-};
+-//# sourceMappingURL=index.mjs.map
+-
+-
+-React.findDOMNode = findDOMNode;
+-
+diff --git a/node_modules/@radix-ui/react-slot/dist/index.mjs b/node_modules/@radix-ui/react-slot/dist/index.mjs
+index 6d859e9..a731da8 100644
+--- a/node_modules/@radix-ui/react-slot/dist/index.mjs
++++ b/node_modules/@radix-ui/react-slot/dist/index.mjs
+@@ -21,11 +21,13 @@
+   if (React.isValidElement(children)) {
+     const childrenAsArray = React.Children.toArray(children);
+     const slottable = childrenAsArray.find(isSlottable);
+-    if (slottable) {
++    if (slottable) {      
+       const newChildren = slottable.props.children;
+-      const newChildrenArray = React.Children.toArray(newChildren);
++      const newChildrenArray = React.Children.toArray(newChildren);      
+       const [firstNewChild, ...rest] = newChildrenArray;
+-      if (React.isValidElement(firstNewChild)) {
++      if (React.isValidElement(firstNewChild)) {        
++        if (newChildrenArray.length > 1)
++          return newChildrenArray;
+         const newChildProps = {
+           ...slotProps,
+           ...firstNewChild.props
+@@ -64,7 +66,13 @@
+     }
+     return /* @__PURE__ */ React.cloneElement(child, { ...mergedProps, ref: composedRefs });
+   }
+-  return null;
++  if (React.Children.count(children) > 1) {
++    const childrenAsArray = React.Children.toArray(children);
++    if (childrenAsArray.every((child) => React.isValidElement(child))) {
++      return childrenAsArray;
++    }
++  }
++  return children;
+ });
+ Slot.displayName = "Slot";
+ function isSlottable(child) {
