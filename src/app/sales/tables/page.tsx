@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState, useEffect } from 'react';
 import { CustomLink } from '@/components/ui/custom-link';
 import {
   Card,
@@ -11,15 +12,48 @@ import {
 } from "@/components/ui/card";
 import { Armchair, Coffee } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 
-// Data placeholder untuk status meja
-const tables = Array.from({ length: 12 }, (_, i) => ({
-  id: `T${String(i + 1).padStart(2, '0')}`,
-  status: i % 4 === 0 ? 'Terisi' : i === 7 ? 'Dipesan' : 'Kosong',
-  orderCount: i % 4 === 0 ? (i / 4) + 1 : 0, // Menggunakan nilai statis, bukan Math.random()
-}));
+
+type TableStatus = 'Terisi' | 'Dipesan' | 'Kosong';
+type Table = {
+  id: string;
+  status: TableStatus;
+  orderCount: number;
+};
 
 export default function SalesFloorPage() {
+  const [tables, setTables] = useState<Table[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // This effect runs only on the client side
+    const savedTableCount = localStorage.getItem('tableCount');
+    const count = savedTableCount ? parseInt(savedTableCount, 10) : 12;
+    
+    // Using a deterministic way to generate status to avoid hydration issues
+    const generateTables = (tableCount: number): Table[] => {
+      return Array.from({ length: tableCount }, (_, i) => {
+        let status: TableStatus;
+        if (i % 4 === 0) {
+          status = 'Terisi';
+        } else if (i === 7) {
+          status = 'Dipesan';
+        } else {
+          status = 'Kosong';
+        }
+
+        return {
+          id: `T${String(i + 1).padStart(2, '0')}`,
+          status,
+          orderCount: status === 'Terisi' ? (i % 3) + 1 : 0,
+        };
+      });
+    };
+
+    setTables(generateTables(count));
+    setIsLoading(false);
+  }, []);
 
   const getStatusVariant = (status: string) => {
     switch (status) {
@@ -41,27 +75,33 @@ export default function SalesFloorPage() {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {tables.map((table) => (
-            <CustomLink href={`/sales/${table.id}`} key={table.id}>
-              <Card className="hover:border-primary transition-colors cursor-pointer aspect-square flex flex-col justify-between">
-                <CardHeader className="p-3">
-                  <div className="flex justify-between items-center">
-                    <CardTitle className="text-lg">{table.id}</CardTitle>
-                    <Badge className={getStatusVariant(table.status)}>{table.status}</Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-3 flex-1 flex flex-col items-center justify-center">
-                  <Armchair className="h-12 w-12 text-muted-foreground" />
-                  {table.status === 'Terisi' && (
-                    <div className="flex items-center text-sm text-muted-foreground mt-2">
-                       <Coffee className="h-4 w-4 mr-1" />
-                       <span>{table.orderCount} pesanan</span>
+          {isLoading ? (
+            Array.from({ length: 12 }).map((_, i) => (
+              <Skeleton key={i} className="aspect-square w-full" />
+            ))
+          ) : (
+            tables.map((table) => (
+              <CustomLink href={`/sales/${table.id}`} key={table.id}>
+                <Card className="hover:border-primary transition-colors cursor-pointer aspect-square flex flex-col justify-between">
+                  <CardHeader className="p-3">
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="text-lg">{table.id}</CardTitle>
+                      <Badge className={getStatusVariant(table.status)}>{table.status}</Badge>
                     </div>
-                  )}
-                </CardContent>
-              </Card>
-            </CustomLink>
-          ))}
+                  </CardHeader>
+                  <CardContent className="p-3 flex-1 flex flex-col items-center justify-center">
+                    <Armchair className="h-12 w-12 text-muted-foreground" />
+                    {table.status === 'Terisi' && (
+                      <div className="flex items-center text-sm text-muted-foreground mt-2">
+                         <Coffee className="h-4 w-4 mr-1" />
+                         <span>{table.orderCount} pesanan</span>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </CustomLink>
+            ))
+          )}
         </div>
       </CardContent>
     </Card>
