@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "coffee-001",
+      "description": "A bag of artisan coffee beans.",
+      "imageUrl": "https://picsum.photos/seed/coffee-001/300/200",
+      "imageHint": "coffee beans"
+    },
+    {
+      "id": "pastry-001",
+      "description": "A freshly baked almond croissant.",
+      "imageUrl": "https://picsum.photos/seed/pastry-001/300/200",
+      "imageHint": "croissant"
+    },
+    {
+      "id": "gadget-001",
+      "description": "A sleek digital coffee scale.",
+      "imageUrl": "https://picsum.photos/seed/gadget-001/300/200",
+      "imageHint": "coffee scale"
+    },
+    {
+      "id": "tea-001",
+      "description": "A box of organic Earl Grey tea.",
+      "imageUrl": "https://picsum.photos/seed/tea-001/300/200",
+      "imageHint": "tea box"
+    },
+    {
+      "id": "pastry-002",
+      "description": "A blueberry muffin with a crumble topping.",
+      "imageUrl": "https://picsum.photos/seed/pastry-002/300/200",
+      "imageHint": "muffin"
+    },
+    {
+      "id": "gadget-002",
+      "description": "A white ceramic pour-over coffee maker.",
+      "imageUrl": "https://picsum.photos/seed/gadget-002/300/200",
+      "imageHint": "pour-over coffee"
+    },
+    {
+      "id": "coffee-002",
+      "description": "A bag of single-origin espresso beans.",
+      "imageUrl": "https://picsum.photos/seed/coffee-002/300/200",
+      "imageHint": "espresso beans"
+    },
+    {
+      "id": "pastry-003",
+      "description": "A classic chocolate chip cookie.",
+      "imageUrl": "https://picsum.photos/seed/pastry-003/300/200",
+      "imageHint": "cookie"
+    }
+  ]
 }
