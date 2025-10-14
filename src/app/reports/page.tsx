@@ -21,8 +21,11 @@ import {
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { Users, FileText, Wallet, CreditCard, QrCode, Landmark, UserPlus, ShoppingBag, TrendingUp } from 'lucide-react';
+import { Users, FileText, Wallet, CreditCard, QrCode, Landmark, UserPlus, ShoppingBag, TrendingUp, Package } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { salesHistory } from '@/lib/data';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import Image from 'next/image';
 
 const paymentMethodData = [
     { id: "tunai", name: "Tunai", total: 15250000, transactions: 120, icon: Wallet },
@@ -34,6 +37,11 @@ const paymentMethodData = [
 export default function ReportsPage() {
     const { toast } = useToast();
     const router = useRouter();
+
+    const getImageUrl = (name: string) => {
+        const image = PlaceHolderImages.find(img => img.description.toLowerCase().includes(name.split(' ')[0].toLowerCase()));
+        return image ? image.imageUrl : 'https://picsum.photos/seed/placeholder/64/64';
+    };
     
     const handleViewReport = (reportName: string) => {
         toast({
@@ -41,10 +49,26 @@ export default function ReportsPage() {
             description: `Ini adalah placeholder untuk menampilkan ${reportName}.`,
         });
     };
+
+    // Calculate product sales analytics
+    const productSales: { [key: string]: { name: string, quantity: number } } = {};
+    salesHistory.forEach(sale => {
+        sale.items.forEach(item => {
+            if (productSales[item.name]) {
+                productSales[item.name].quantity += item.quantity;
+            } else {
+                productSales[item.name] = { name: item.name, quantity: item.quantity };
+            }
+        });
+    });
+
+    const topSellingProducts = Object.values(productSales)
+        .sort((a, b) => b.quantity - a.quantity)
+        .slice(0, 5); // Display top 5
     
     return (
         <div className="space-y-6">
-            <div className="grid gap-6">
+            <div className="grid gap-6 md:grid-cols-2">
                 <Card className="lg:col-span-2">
                     <CardHeader>
                          <div className="flex items-center justify-between">
@@ -126,6 +150,41 @@ export default function ReportsPage() {
                                 ))}
                             </TableBody>
                         </Table>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <CardTitle>Analitik Produk Terlaris</CardTitle>
+                                <CardDescription>Produk yang paling banyak terjual bulan ini.</CardDescription>
+                            </div>
+                            <Button variant="outline" size="sm" onClick={() => toast({title: "Fitur Belum Tersedia"})}>
+                                Lihat Semua Produk
+                            </Button>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-4">
+                            {topSellingProducts.map((product) => (
+                                <div key={product.name} className="flex items-center gap-4">
+                                    <Image
+                                        alt={product.name}
+                                        className="aspect-square rounded-md object-cover"
+                                        height="40"
+                                        src={getImageUrl(product.name)}
+                                        width="40"
+                                    />
+                                    <div className="flex-1">
+                                        <p className="font-medium text-sm">{product.name}</p>
+                                    </div>
+                                    <div className="font-medium text-right">
+                                        <p>{product.quantity}</p>
+                                        <p className="text-xs text-muted-foreground">terjual</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </CardContent>
                 </Card>
             </div>
