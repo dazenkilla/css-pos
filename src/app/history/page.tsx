@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { FileDown } from "lucide-react"
+import { FileDown, Eye } from "lucide-react"
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -42,13 +42,10 @@ export default function HistoryPage() {
     }
   };
 
-  const handleReturn = (saleId: string) => {
-    setSalesHistory(salesHistory.map(sale => 
-        sale.id === saleId ? { ...sale, status: "Dikembalikan" } : sale
-    ));
+  const handleViewDetails = (saleId: string) => {
     toast({
-        title: "Transaksi Dikembalikan",
-        description: `Transaksi ${saleId} telah ditandai sebagai dikembalikan.`,
+        title: `Detail Transaksi ${saleId}`,
+        description: `Ini adalah placeholder untuk menampilkan item dari transaksi ${saleId}.`,
     });
   };
   
@@ -98,11 +95,11 @@ export default function HistoryPage() {
                 <TableCell className="text-right">
                     <Button 
                         variant="outline" 
-                        size="sm" 
-                        disabled={sale.status === 'Dikembalikan'}
-                        onClick={() => handleReturn(sale.id)}
+                        size="sm"
+                        onClick={() => handleViewDetails(sale.id)}
                     >
-                        {sale.status === 'Dikembalikan' ? 'Dikembalikan' : 'Batalkan/Kembalikan'}
+                        <Eye className="mr-2 h-3.5 w-3.5" />
+                        Lihat Detail
                     </Button>
                 </TableCell>
               </TableRow>
