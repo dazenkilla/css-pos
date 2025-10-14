@@ -8,7 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { inventoryItems } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { PlusCircle, MinusCircle, X, ShoppingCart } from 'lucide-react';
+import { PlusCircle, MinusCircle, X, ShoppingCart, ScanLine } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -17,12 +18,15 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import QrScanner from 'react-qr-scanner';
 
 type CartItem = typeof inventoryItems[0] & { quantity: number };
 
 export default function SalesPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [isScannerOpen, setScannerOpen] = useState(false);
+  const { toast } = useToast();
 
   const addToCart = (product: typeof inventoryItems[0]) => {
     setCart((prevCart) => {
@@ -33,6 +37,10 @@ export default function SalesPage() {
         );
       }
       return [...prevCart, { ...product, quantity: 1 }];
+    });
+    toast({
+      title: "Item Added",
+      description: `${product.name} has been added to the cart.`,
     });
   };
 
@@ -50,8 +58,38 @@ export default function SalesPage() {
     );
   };
 
+  const handleScan = (data: { text: string } | null) => {
+    if (data) {
+      setScannerOpen(false);
+      const product = inventoryItems.find(item => item.sku === data.text);
+      if (product) {
+        addToCart(product);
+        toast({
+          title: "Product Scanned",
+          description: `${product.name} added to cart.`,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Scan Error",
+          description: `Product with SKU "${data.text}" not found.`,
+        });
+      }
+    }
+  };
+
+  const handleScanError = (err: any) => {
+    console.error(err);
+    setScannerOpen(false);
+    toast({
+      variant: "destructive",
+      title: "Scan Error",
+      description: "Could not access the camera. Please check permissions and try again.",
+    });
+  };
+
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const tax = subtotal * 0.08;
+  const tax = subtotal * 0.11; // PPN 11%
   const total = subtotal + tax;
 
   const categories = [...new Set(inventoryItems.map(item => item.category))];
@@ -65,17 +103,34 @@ export default function SalesPage() {
     const image = PlaceHolderImages.find(img => img.id === id);
     return image ? image.imageHint : 'product';
   };
+  
+  const completeSale = () => {
+    toast({
+      title: "Sale Complete!",
+      description: `Total: $${total.toFixed(2)}`,
+    });
+    setCart([]);
+    setPaymentDialogOpen(false);
+  }
 
   return (
     <div className="grid flex-1 items-start gap-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
+        <div className="flex items-center justify-between">
+            <Tabs defaultValue={categories[0] || 'all'}>
+              <TabsList>
+                {categories.map(category => (
+                  <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+             <Button variant="outline" onClick={() => setScannerOpen(true)}>
+                <ScanLine className="h-4 w-4 mr-2" />
+                Scan Product
+            </Button>
+        </div>
         <Tabs defaultValue={categories[0] || 'all'}>
-          <TabsList className="grid w-full grid-cols-3">
             {categories.map(category => (
-              <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
-            ))}
-          </TabsList>
-          {categories.map(category => (
             <TabsContent key={category} value={category}>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {inventoryItems.filter(item => item.category === category).map((product) => (
@@ -137,9 +192,9 @@ export default function SalesPage() {
           {cart.length > 0 && (
             <>
               <Separator className="my-4" />
-              <CardFooter className="flex flex-col gap-2">
+              <CardFooter className="flex flex-col gap-2 items-stretch">
                 <div className="flex justify-between w-full text-muted-foreground"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
-                <div className="flex justify-between w-full text-muted-foreground"><span>Tax (8%)</span><span>${tax.toFixed(2)}</span></div>
+                <div className="flex justify-between w-full text-muted-foreground"><span>Tax (11%)</span><span>${tax.toFixed(2)}</span></div>
                 <Separator className="my-2" />
                 <div className="flex justify-between w-full font-semibold text-lg"><span>Total</span><span>${total.toFixed(2)}</span></div>
                 <Button className="w-full mt-4" onClick={() => setPaymentDialogOpen(true)}>Charge</Button>
@@ -155,13 +210,28 @@ export default function SalesPage() {
             <DialogDescription>Total amount: <span className="font-bold text-foreground">${total.toFixed(2)}</span></DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-4 py-4">
-            <Button variant="default" size="lg">Pay with Card</Button>
-            <Button variant="secondary" size="lg">Pay with Cash</Button>
-            <Button variant="secondary" size="lg">Other Payment Method</Button>
+            <Button variant="default" size="lg" onClick={completeSale}>Pay with Card</Button>
+            <Button variant="secondary" size="lg" onClick={completeSale}>Pay with Cash</Button>
+            <Button variant="secondary" size="lg" onClick={completeSale}>Other Payment Method</Button>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => { setPaymentDialogOpen(false); setCart([]); }}>Complete Sale</Button>
-          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={isScannerOpen} onOpenChange={setScannerOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Scan Barcode/QR Code</DialogTitle>
+            <DialogDescription>Point the camera at a barcode or QR code.</DialogDescription>
+          </DialogHeader>
+          <div className="p-4 bg-muted rounded-lg">
+              {isScannerOpen && (
+                <QrScanner
+                    delay={300}
+                    onError={handleScanError}
+                    onScan={handleScan}
+                    style={{ width: '100%' }}
+                />
+              )}
+          </div>
         </DialogContent>
       </Dialog>
     </div>
