@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { inventoryItems } from '@/lib/data';
@@ -16,9 +16,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
 } from "@/components/ui/dialog";
-import QrScanner from 'react-qr-scanner';
+import { QrScanner } from '@yudiel/react-qr-scanner';
 
 type CartItem = typeof inventoryItems[0] & { quantity: number };
 
@@ -58,10 +57,9 @@ export default function SalesPage() {
     );
   };
 
-  const handleScan = (data: { text: string } | null) => {
-    if (data) {
+  const handleScan = (result: string) => {
       setScannerOpen(false);
-      const product = inventoryItems.find(item => item.sku === data.text);
+      const product = inventoryItems.find(item => item.sku === result);
       if (product) {
         addToCart(product);
         toast({
@@ -72,10 +70,9 @@ export default function SalesPage() {
         toast({
           variant: "destructive",
           title: "Scan Error",
-          description: `Product with SKU "${data.text}" not found.`,
+          description: `Product with SKU "${result}" not found.`,
         });
       }
-    }
   };
 
   const handleScanError = (err: any) => {
@@ -225,10 +222,8 @@ export default function SalesPage() {
           <div className="p-4 bg-muted rounded-lg">
               {isScannerOpen && (
                 <QrScanner
-                    delay={300}
+                    onDecode={handleScan}
                     onError={handleScanError}
-                    onScan={handleScan}
-                    style={{ width: '100%' }}
                 />
               )}
           </div>
