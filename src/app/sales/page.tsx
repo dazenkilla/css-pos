@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/badge';
 const tables = Array.from({ length: 12 }, (_, i) => ({
   id: `T${String(i + 1).padStart(2, '0')}`,
   status: i % 4 === 0 ? 'Terisi' : i === 7 ? 'Dipesan' : 'Kosong',
-  orderCount: i % 4 === 0 ? Math.floor(Math.random() * 5) + 1 : 0,
+  orderCount: i % 4 === 0 ? (i / 4) + 1 : 0, // Menggunakan nilai statis, bukan Math.random()
 }));
 
 export default function SalesFloorPage() {
