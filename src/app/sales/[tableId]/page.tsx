@@ -37,8 +37,6 @@ export default function TransactionPage({ params }: { params: { tableId: string 
   const [isQrDialogOpen, setQrDialogOpen] = useState(false);
   const [discountInput, setDiscountInput] = useState("");
   const [payments, setPayments] = useState<Payment[]>([]);
-  const { tableId } = params;
-
   const { toast } = useToast();
 
   const addToCart = (product: typeof inventoryItems[0]) => {
@@ -206,7 +204,7 @@ export default function TransactionPage({ params }: { params: { tableId: string 
       payments,
       totalPaid,
       change: totalPaid - total,
-      tableNumber: tableId,
+      tableNumber: params.tableId,
     };
     
     toast({
@@ -284,7 +282,7 @@ export default function TransactionPage({ params }: { params: { tableId: string 
               </div>
               <div className="flex items-center gap-2 text-lg font-semibold bg-muted p-2 rounded-md">
                 <Armchair className="h-5 w-5"/>
-                <span>Meja: {tableId}</span>
+                <span>Meja: {params.tableId}</span>
               </div>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto p-4">
