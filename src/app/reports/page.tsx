@@ -21,14 +21,8 @@ import {
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
-import { Users, FileText, FileDown, Wallet, CreditCard, QrCode, Landmark } from 'lucide-react';
+import { Users, FileText, Wallet, CreditCard, QrCode, Landmark } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
-const cashierPerformanceData = [
-  { name: "David", sales: 45, transactions: 15 },
-  { name: "Brenda", sales: 38, transactions: 12 },
-  { name: "James", sales: 52, transactions: 20 },
-];
 
 const paymentMethodData = [
     { id: "tunai", name: "Tunai", total: 15250000, transactions: 120, icon: Wallet },
@@ -41,13 +35,6 @@ export default function ReportsPage() {
     const { toast } = useToast();
     const router = useRouter();
     
-    const handleExport = () => {
-      toast({
-        title: "Ekspor Data (Simulasi)",
-        description: "Fitur ini akan mengekspor data ke file Excel atau PDF."
-      })
-    }
-
     const handleViewReport = (reportName: string) => {
         toast({
             title: `Laporan ${reportName}`,
@@ -57,79 +44,7 @@ export default function ReportsPage() {
     
     return (
         <div className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2">
-                <Card>
-                    <CardHeader>
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <CardTitle>Laporan Kinerja Kasir</CardTitle>
-                                <CardDescription>Analisis penjualan dan transaksi per kasir.</CardDescription>
-                            </div>
-                            <Button variant="outline" size="sm" onClick={handleExport}>
-                                <FileDown className="mr-2 h-4 w-4"/>
-                                Ekspor
-                            </Button>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div>
-                            <h3 className="text-lg font-medium mb-4">Total Penjualan per Kasir</h3>
-                            <ResponsiveContainer width="100%" height={300}>
-                                <BarChart data={cashierPerformanceData}>
-                                    <XAxis
-                                    dataKey="name"
-                                    stroke="hsl(var(--muted-foreground))"
-                                    fontSize={12}
-                                    tickLine={false}
-                                    axisLine={false}
-                                    />
-                                    <YAxis
-                                    stroke="hsl(var(--muted-foreground))"
-                                    fontSize={12}
-                                    tickLine={false}
-                                    axisLine={false}
-                                    tickFormatter={(value) => `Rp${value} Jt`}
-                                    />
-                                     <Tooltip
-                                        cursor={{ fill: 'hsl(var(--muted))' }}
-                                        content={({ active, payload, label }) => {
-                                            if (active && payload && payload.length) {
-                                                return (
-                                                <div className="rounded-lg border bg-background p-2 shadow-sm">
-                                                    <div className="grid grid-cols-2 gap-2">
-                                                    <div className="flex flex-col">
-                                                        <span className="text-[0.70rem] uppercase text-muted-foreground">
-                                                        Kasir
-                                                        </span>
-                                                        <span className="font-bold text-muted-foreground">
-                                                        {label}
-                                                        </span>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <span className="text-[0.70rem] uppercase text-muted-foreground">
-                                                        Penjualan
-                                                        </span>
-                                                        <span className="font-bold">
-                                                        Rp{payload[0].value} Jt
-                                                        </span>
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                                )
-                                            }
-                                            return null
-                                        }}
-                                    />
-                                    <Bar
-                                    dataKey="sales"
-                                    fill="hsl(var(--primary))"
-                                    radius={[4, 4, 0, 0]}
-                                    />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </CardContent>
-                </Card>
+            <div className="grid gap-6">
                 <Card>
                     <CardHeader>
                          <div className="flex items-center justify-between">
@@ -282,3 +197,5 @@ export default function ReportsPage() {
     
 
     
+
+}
