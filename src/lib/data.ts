@@ -1,12 +1,12 @@
 export const inventoryItems = [
-    { sku: 'coffee-001', name: 'Artisan Coffee Beans', category: 'Beverages', price: 18.99, stock: 120 },
-    { sku: 'pastry-001', name: 'Almond Croissant', category: 'Pastries', price: 4.50, stock: 15 },
-    { sku: 'gadget-001', name: 'Digital Coffee Scale', category: 'Merchandise', price: 45.00, stock: 30 },
-    { sku: 'tea-001', name: 'Organic Earl Grey Tea', category: 'Beverages', price: 12.50, stock: 80 },
-    { sku: 'pastry-002', name: 'Blueberry Muffin', category: 'Pastries', price: 3.75, stock: 55 },
-    { sku: 'gadget-002', name: 'Ceramic Pour-Over', category: 'Merchandise', price: 32.00, stock: 18 },
-    { sku: 'coffee-002', name: 'Single-Origin Espresso', category: 'Beverages', price: 22.00, stock: 65 },
-    { sku: 'pastry-003', name: 'Chocolate Chip Cookie', category: 'Pastries', price: 2.50, stock: 90 },
+    { sku: 'coffee-001', name: 'Artisan Coffee Beans', category: 'Beverages', subCategory: 'Coffee', price: 18.99, stock: 120, expiryDate: '2025-12-31' },
+    { sku: 'pastry-001', name: 'Almond Croissant', category: 'Pastries', subCategory: 'Viennoiserie', price: 4.50, stock: 15, expiryDate: '2024-07-25' },
+    { sku: 'gadget-001', name: 'Digital Coffee Scale', category: 'Merchandise', subCategory: 'Equipment', price: 45.00, stock: 30, expiryDate: null },
+    { sku: 'tea-001', name: 'Organic Earl Grey Tea', category: 'Beverages', subCategory: 'Tea', price: 12.50, stock: 80, expiryDate: '2026-05-20' },
+    { sku: 'pastry-002', name: 'Blueberry Muffin', category: 'Pastries', subCategory: 'Muffins', price: 3.75, stock: 55, expiryDate: '2024-07-26' },
+    { sku: 'gadget-002', name: 'Ceramic Pour-Over', category: 'Merchandise', subCategory: 'Equipment', price: 32.00, stock: 18, expiryDate: null },
+    { sku: 'coffee-002', name: 'Single-Origin Espresso', category: 'Beverages', subCategory: 'Coffee', price: 22.00, stock: 8, expiryDate: '2025-10-15' },
+    { sku: 'pastry-003', name: 'Chocolate Chip Cookie', category: 'Pastries', subCategory: 'Cookies', price: 2.50, stock: 0, expiryDate: '2024-08-01' },
 ];
 
 export const purchaseOrders = [
