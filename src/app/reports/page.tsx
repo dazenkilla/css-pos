@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 import {
     Card,
@@ -14,7 +16,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { Button } from '@/components/ui/button';
 
