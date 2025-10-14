@@ -51,10 +51,10 @@ export default function TransactionPage() {
       }
       return [...prevCart, { ...product, quantity: 1 }];
     });
-    toast({
-      title: "Produk Ditambahkan",
-      description: `${product.name} telah ditambahkan ke keranjang.`,
-    });
+    // toast({
+    //   title: "Produk Ditambahkan",
+    //   description: `${product.name} telah ditambahkan ke keranjang.`,
+    // });
   };
 
   const removeFromCart = (sku: string) => {
