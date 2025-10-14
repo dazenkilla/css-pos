@@ -37,15 +37,6 @@ export default function HistoryPage() {
   const [isDetailOpen, setDetailOpen] = useState(false);
   const { toast } = useToast();
 
-  const getStatusVariant = (status: string) => {
-    switch (status) {
-      case "Selesai": return "secondary";
-      case "Tertunda": return "outline";
-      case "Dikembalikan": return "destructive";
-      default: return "default";
-    }
-  };
-
   const handleViewDetails = (sale: Sale) => {
     setSelectedSale(sale);
     setDetailOpen(true);
@@ -67,6 +58,16 @@ export default function HistoryPage() {
     }
     return `Split (${payments.map(p => p.method).join(', ')})`;
   };
+  
+  const formatItems = (items: Sale['items']) => {
+    if (!items || items.length === 0) return 'N/A';
+    const maxItems = 2;
+    const itemNames = items.map(item => item.name);
+    if (itemNames.length > maxItems) {
+      return `${itemNames.slice(0, maxItems).join(', ')}... (+${itemNames.length - maxItems} lagi)`;
+    }
+    return itemNames.join(', ');
+  }
 
   const detailSubtotal = selectedSale?.items.reduce((sum, item) => sum + item.price * item.quantity, 0) ?? 0;
 
@@ -91,9 +92,8 @@ export default function HistoryPage() {
               <TableRow>
                 <TableHead>ID Penjualan</TableHead>
                 <TableHead>Tanggal</TableHead>
-                <TableHead className="hidden sm:table-cell">Status</TableHead>
+                <TableHead className="hidden md:table-cell">Item</TableHead>
                 <TableHead>Metode Pembayaran</TableHead>
-                <TableHead className="hidden md:table-cell text-right">Produk</TableHead>
                 <TableHead className="text-right">Total</TableHead>
                 <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
@@ -103,13 +103,10 @@ export default function HistoryPage() {
                 <TableRow key={sale.id}>
                   <TableCell className="font-medium">{sale.id}</TableCell>
                   <TableCell>{sale.date}</TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <Badge variant={getStatusVariant(sale.status) as any}>{sale.status}</Badge>
-                  </TableCell>
+                   <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{formatItems(sale.items)}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{formatPaymentMethods(sale.payments)}</Badge>
                   </TableCell>
-                  <TableCell className="hidden md:table-cell text-right">{sale.itemCount}</TableCell>
                   <TableCell className="text-right">Rp{sale.total.toLocaleString('id-ID')}</TableCell>
                   <TableCell className="text-right">
                       <Button 

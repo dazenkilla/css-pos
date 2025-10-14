@@ -34,7 +34,7 @@ const paymentMethodData = [
     { id: "tunai", name: "Tunai", total: 15250000, transactions: 120, icon: Wallet },
     { id: "kartu", name: "Kartu", total: 22500000, transactions: 95, icon: CreditCard },
     { id: "qr", name: "QR", total: 18750000, transactions: 150, icon: QrCode },
-    { id: "transfer", name: "Transfer", total: 8500000, transactions: 30, icon: Landmark },
+    { id: "transfer", name: "Transfer Bank", total: 8500000, transactions: 30, icon: Landmark },
 ];
 
 export default function ReportsPage() {
@@ -202,7 +202,7 @@ export default function ReportsPage() {
                                     <TableCell className="text-right">Rp{method.total.toLocaleString('id-ID')}</TableCell>
                                     <TableCell className="text-right">
                                         <Button variant="outline" size="sm" asChild>
-                                            <CustomLink href={`/reports/payment-methods/${method.id}`}>
+                                            <CustomLink href={`/reports/payment-methods/${method.id.toLowerCase().replace(' ', '-')}`}>
                                                 Lihat Detail
                                             </CustomLink>
                                         </Button>

@@ -25,78 +25,36 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog"
-import { inventoryItems } from '@/lib/data';
+import { salesHistory } from '@/lib/data';
 
-// Helper function to create mock transactions
-const createMockTransactions = (prefix: string, count: number) => {
-  const transactions = [];
-  for (let i = 1; i <= count; i++) {
-    const itemCount = Math.floor(Math.random() * 3) + 1;
-    const items = [];
-    let totalAmount = 0;
-    const usedIndexes = new Set();
+type Sale = typeof salesHistory[0];
 
-    for (let j = 0; j < itemCount; j++) {
-      let itemIndex;
-      do {
-        itemIndex = Math.floor(Math.random() * inventoryItems.length);
-      } while (usedIndexes.has(itemIndex));
-      usedIndexes.add(itemIndex);
-      
-      const product = inventoryItems[itemIndex];
-      const quantity = Math.floor(Math.random() * 2) + 1;
-      items.push({
-        name: product.name,
-        price: product.price,
-        quantity: quantity
-      });
-      totalAmount += product.price * quantity;
-    }
-
-    transactions.push({
-      id: `${prefix}-${String(i).padStart(3, '0')}`,
-      date: `2023-11-${String(Math.floor(Math.random() * 15) + 1).padStart(2, '0')}`,
-      amount: totalAmount,
-      items: items,
-    });
-  }
-  return transactions;
+const paymentMethodMap: { [key: string]: string } = {
+  tunai: 'Tunai',
+  kartu: 'Kartu',
+  qr: 'QR',
+  transfer: 'Transfer Bank',
 };
-
-type TransactionDetail = {
-    id: string;
-    date: string;
-    amount: number;
-    items: { name: string; price: number; quantity: number }[];
-}
 
 export default function PaymentMethodDetailPage() {
   const params = useParams();
-  const method = params.method as string;
-  const [transactions, setTransactions] = useState<TransactionDetail[]>([]);
-  const [selectedSale, setSelectedSale] = useState<TransactionDetail | null>(null);
+  const methodKey = params.method as string;
+  const [transactions, setTransactions] = useState<Sale[]>([]);
+  const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
   const [isDetailOpen, setDetailOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false);
+  
+  const methodName = paymentMethodMap[methodKey] || methodKey.charAt(0).toUpperCase() + methodKey.slice(1);
 
   useEffect(() => {
-    const methodKey = method as keyof typeof transactionDetailsData;
-    if (transactionDetailsData[methodKey]) {
-      setTransactions(transactionDetailsData[methodKey]);
-    }
-    setIsClient(true);
-  }, [method]);
-
-  // Generate data on the client side to avoid hydration mismatch
-  const transactionDetailsData = {
-    tunai: createMockTransactions('SALE-T', 20),
-    kartu: createMockTransactions('SALE-K', 20),
-    qr: createMockTransactions('SALE-Q', 20),
-    transfer: createMockTransactions('SALE-B', 20)
-  };
-
-  const methodName = method.charAt(0).toUpperCase() + method.slice(1);
+    // Filter transactions based on the payment method in the URL
+    // This also handles split payments correctly by checking if the method is in the payments array
+    const filteredTransactions = salesHistory.filter(sale => 
+        sale.payments.some(p => p.method.toLowerCase().replace(' ', '-') === methodName.toLowerCase().replace(' ', '-'))
+    );
+    setTransactions(filteredTransactions);
+  }, [methodKey, methodName]);
   
-  const handleViewDetails = (sale: TransactionDetail) => {
+  const handleViewDetails = (sale: Sale) => {
     setSelectedSale(sale);
     setDetailOpen(true);
   };
@@ -122,18 +80,12 @@ export default function PaymentMethodDetailPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {!isClient ? (
-                <TableRow>
-                  <TableCell colSpan={3} className="text-center h-24">
-                      Memuat transaksi...
-                  </TableCell>
-                </TableRow>
-              ) : transactions.length > 0 ? (
-                  transactions.map((tx: TransactionDetail) => (
+              {transactions.length > 0 ? (
+                  transactions.map((tx) => (
                   <TableRow key={tx.id} onClick={() => handleViewDetails(tx)} className="cursor-pointer hover:bg-muted/50">
                       <TableCell className="font-medium">{tx.id}</TableCell>
                       <TableCell>{tx.date}</TableCell>
-                      <TableCell className="text-right">Rp{tx.amount.toLocaleString('id-ID')}</TableCell>
+                      <TableCell className="text-right">Rp{tx.total.toLocaleString('id-ID')}</TableCell>
                   </TableRow>
                   ))
               ) : (

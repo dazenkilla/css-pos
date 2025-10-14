@@ -34,60 +34,71 @@ export const users = [
     { id: "USR-004", name: "James", email: "james@example.com", role: "Kasir", lastActive: "Kemarin" },
 ];
 
-export const salesHistory = [
-  { 
-    id: "SALE-001", 
-    date: "2023-11-20", 
-    total: 67480,
-    status: "Selesai", 
-    itemCount: 2,
-    items: [
-      { name: "Biji Kopi Artisan", quantity: 2, price: 18990 },
-      { name: "Croissant Almond", quantity: 1, price: 4500 },
-    ],
-    payments: [
-      { method: 'Tunai', amount: 67480 }
-    ]
-  },
-  { 
-    id: "SALE-002", 
-    date: "2023-11-21", 
-    total: 7500,
-    status: "Selesai", 
-    itemCount: 2,
-    items: [
-      { name: "Muffin Blueberry", quantity: 2, price: 3750 },
-    ],
-    payments: [
-      { method: 'QR', amount: 7500 }
-    ]
-  },
-  { 
-    id: "SALE-003", 
-    date: "2023-11-22", 
-    total: 54000,
-    status: "Selesai", 
-    itemCount: 2,
-    items: [
-        { name: "Keramik Pour-Over", quantity: 1, price: 32000 },
-        { name: "Espresso Single-Origin", quantity: 1, price: 22000 },
-    ],
-    payments: [
-      { method: 'Kartu', amount: 54000 }
-    ]
-  },
-  { 
-    id: "SALE-004", 
-    date: "2023-11-23", 
-    total: 37500,
-    status: "Selesai", 
-    itemCount: 3,
-    items: [
-        { name: "Teh Earl Grey Organik", quantity: 3, price: 12500 },
-    ],
-    payments: [
-      { method: 'Tunai', amount: 20000 },
-      { method: 'Kartu', amount: 17500 }
-    ]
-  },
-];
+// Helper to generate a random transaction
+const createSale = (id: string, date: string, paymentMethods: {method: string, amount?: number}[]) => {
+  const itemCount = Math.floor(Math.random() * 3) + 1;
+  const items = [];
+  let subtotal = 0;
+  const usedIndexes = new Set();
+
+  for (let j = 0; j < itemCount; j++) {
+    let itemIndex;
+    do {
+      itemIndex = Math.floor(Math.random() * inventoryItems.length);
+    } while (usedIndexes.has(itemIndex));
+    usedIndexes.add(itemIndex);
+    
+    const product = inventoryItems[itemIndex];
+    const quantity = Math.floor(Math.random() * 2) + 1;
+    items.push({
+      name: product.name,
+      price: product.price,
+      quantity: quantity
+    });
+    subtotal += product.price * quantity;
+  }
+  
+  const total = subtotal; // Simplified total for mock data
+  
+  const finalPayments = paymentMethods.map(p => ({
+      method: p.method,
+      amount: p.amount || total / paymentMethods.length
+  }));
+
+  return {
+    id,
+    date,
+    total,
+    status: "Selesai",
+    itemCount,
+    items,
+    payments: finalPayments,
+  };
+};
+
+const generateSales = () => {
+    let sales = [];
+    // Cash sales
+    for (let i=1; i<=20; i++) {
+        sales.push(createSale(`SALE-CASH-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'Tunai' }]));
+    }
+    // Card sales
+    for (let i=1; i<=20; i++) {
+        sales.push(createSale(`SALE-CARD-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'Kartu' }]));
+    }
+    // QR sales
+    for (let i=1; i<=20; i++) {
+        sales.push(createSale(`SALE-QR-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'QR' }]));
+    }
+    // Bank Transfer sales
+    for (let i=1; i<=20; i++) {
+        sales.push(createSale(`SALE-BANK-${i}`, `2023-11-${String(i).padStart(2,'0')}`, [{ method: 'Transfer Bank' }]));
+    }
+    // Split payment
+    sales.push(createSale(`SALE-SPLIT-1`, `2023-11-21`, [{ method: 'Tunai' }, { method: 'Kartu' }]));
+    sales.push(createSale(`SALE-SPLIT-2`, `2023-11-22`, [{ method: 'QR' }, { method: 'Tunai' }]));
+
+    return sales.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+export const salesHistory = generateSales();
