@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/table"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { Button } from '@/components/ui/button';
+import { Users, FileText, FileDown } from 'lucide-react';
 
 const cashierPerformanceData = [
   { name: "David", sales: 45, transactions: 15 },
@@ -35,7 +36,10 @@ export default function ReportsPage() {
                             <CardTitle>Laporan Kinerja Kasir</CardTitle>
                             <CardDescription>Analisis penjualan dan transaksi per kasir.</CardDescription>
                         </div>
-                        <Button variant="outline" size="sm">Lihat Detail</Button>
+                        <Button variant="outline" size="sm" onClick={() => alert('Fitur ekspor belum tersedia.')}>
+                            <FileDown className="mr-2 h-4 w-4"/>
+                            Ekspor
+                        </Button>
                     </div>
                 </CardHeader>
                 <CardContent className="grid gap-6 md:grid-cols-2">
@@ -55,7 +59,7 @@ export default function ReportsPage() {
                                 fontSize={12}
                                 tickLine={false}
                                 axisLine={false}
-                                tickFormatter={(value) => `${value}`}
+                                tickFormatter={(value) => `Rp${value} Jt`}
                                 />
                                 <Bar
                                 dataKey="sales"
@@ -80,7 +84,7 @@ export default function ReportsPage() {
                                     <TableRow key={cashier.name}>
                                         <TableCell className="font-medium">{cashier.name}</TableCell>
                                         <TableCell className="text-right">{cashier.transactions}</TableCell>
-                                        <TableCell className="text-right">Rp{cashier.sales * 10000}</TableCell>
+                                        <TableCell className="text-right">Rp{(cashier.sales * 1000000).toLocaleString('id-ID')}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -89,22 +93,64 @@ export default function ReportsPage() {
                 </CardContent>
             </Card>
 
-             <Card>
+            <Card>
                 <CardHeader>
-                    <div className="flex items-center justify-between">
+                     <div className="flex items-center justify-between">
                         <div>
-                            <CardTitle>Jejak Audit</CardTitle>
-                            <CardDescription>Lacak semua aktivitas dan perubahan penting dalam sistem.</CardDescription>
+                            <CardTitle>Analitik Pelanggan</CardTitle>
+                            <CardDescription>Pahami perilaku dan demografi pelanggan Anda.</CardDescription>
                         </div>
-                        <Button variant="outline" size="sm" asChild>
-                            <Link href="/reports/audit-trail">Lihat Semua Aktivitas</Link>
-                        </Button>
+                         <Button variant="outline" size="sm">Lihat Detail</Button>
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-muted-foreground">Pratinjau jejak audit akan ditampilkan di sini...</p>
+                   <div className="flex items-center justify-center h-40 border-2 border-dashed rounded-lg">
+                        <div className="text-center text-muted-foreground">
+                            <Users className="mx-auto h-8 w-8 mb-2" />
+                            <p>Komponen Analitik Pelanggan akan ditampilkan di sini.</p>
+                        </div>
+                   </div>
                 </CardContent>
             </Card>
+            
+            <div className="grid gap-6 md:grid-cols-2">
+                 <Card>
+                    <CardHeader>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <CardTitle>Laporan Keuangan</CardTitle>
+                                <CardDescription>Laporan laba rugi dan pajak.</CardDescription>
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                        <Button variant="outline" className="w-full justify-start gap-2">
+                            <FileText className="h-4 w-4"/>
+                            Laporan Laba & Rugi
+                        </Button>
+                        <Button variant="outline" className="w-full justify-start gap-2">
+                            <FileText className="h-4 w-4"/>
+                            Laporan Pajak
+                        </Button>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <CardTitle>Jejak Audit</CardTitle>
+                                <CardDescription>Lacak semua aktivitas dan perubahan penting.</CardDescription>
+                            </div>
+                            <Button variant="outline" size="sm" asChild>
+                                <Link href="/reports/audit-trail">Lihat Semua</Link>
+                            </Button>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground text-sm">Lihat log terperinci dari semua aktivitas pengguna untuk keamanan dan akuntabilitas.</p>
+                    </CardContent>
+                </Card>
+            </div>
 
         </div>
     )

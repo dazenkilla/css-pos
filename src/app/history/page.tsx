@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { FileDown } from "lucide-react"
 
 // Di aplikasi nyata, data ini akan berasal dari database.
 const salesHistory = [
@@ -38,8 +39,16 @@ export default function HistoryPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Riwayat Penjualan</CardTitle>
-        <CardDescription>Lihat dan kelola semua transaksi yang sudah lewat.</CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Riwayat Penjualan</CardTitle>
+            <CardDescription>Lihat dan kelola semua transaksi yang sudah lewat.</CardDescription>
+          </div>
+          <Button variant="outline" size="sm" onClick={() => alert('Fitur ekspor belum tersedia.')}>
+            <FileDown className="mr-2 h-4 w-4" />
+            Ekspor Data
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <Table>

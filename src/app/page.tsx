@@ -35,12 +35,12 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Pelanggan
+              Pelanggan Baru
             </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+2350</div>
+            <div className="text-2xl font-bold">+2.350</div>
             <p className="text-xs text-muted-foreground">
               +180.1% dari bulan lalu
             </p>
@@ -48,11 +48,11 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Penjualan</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Penjualan</CardTitle>
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+12,234</div>
+            <div className="text-2xl font-bold">+12.234</div>
             <p className="text-xs text-muted-foreground">
               +19% dari bulan lalu
             </p>
@@ -61,7 +61,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Aktif Sekarang
+              Transaksi Aktif
             </CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -76,7 +76,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-7">
         <Card className="lg:col-span-4">
           <CardHeader>
-            <CardTitle>Ringkasan</CardTitle>
+            <CardTitle>Ringkasan Pendapatan</CardTitle>
           </CardHeader>
           <CardContent className="pl-2">
             <Overview />
