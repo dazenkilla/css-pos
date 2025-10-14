@@ -1,18 +1,15 @@
 
-
-
 "use client";
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { inventoryItems } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { PlusCircle, MinusCircle, X, ShoppingCart, Ticket, Printer, Wallet, CreditCard, QrCode, Landmark, Tag, Armchair } from 'lucide-react';
+import { PlusCircle, MinusCircle, X, ShoppingCart, Ticket, Printer, Wallet, CreditCard, QrCode, Landmark, Tag, ShoppingBag } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -31,9 +28,7 @@ import { renderToString } from 'react-dom/server';
 type CartItem = typeof inventoryItems[0] & { quantity: number };
 type Payment = { method: 'Tunai' | 'Kartu' | 'QR' | 'Transfer Bank'; amount: number };
 
-export default function TransactionPage() {
-  const params = useParams();
-  const tableId = params.tableId as string;
+export default function DirectSalePage() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [discount, setDiscount] = useState(0);
   const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false);
@@ -204,7 +199,6 @@ export default function TransactionPage() {
       payments,
       totalPaid,
       change: totalPaid - total,
-      tableNumber: tableId,
     };
     
     // Langsung panggil fungsi print
@@ -275,8 +269,8 @@ export default function TransactionPage() {
                 <ShoppingCart className="h-5 w-5 text-muted-foreground" />
               </div>
               <div className="flex items-center gap-2 text-lg font-semibold bg-muted p-2 rounded-md">
-                <Armchair className="h-5 w-5"/>
-                <span>Meja: {tableId}</span>
+                <ShoppingBag className="h-5 w-5"/>
+                <span>Penjualan Langsung</span>
               </div>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto p-4">
