@@ -1,4 +1,5 @@
 
+
 export const inventoryItems = [
     { sku: 'coffee-001', name: 'Biji Kopi Artisan', category: 'Minuman', subCategory: 'Kopi', price: 18990, stock: 120, expiryDate: '2025-12-31' },
     { sku: 'pastry-001', name: 'Croissant Almond', category: 'Kue', subCategory: 'Viennoiserie', price: 4500, stock: 15, expiryDate: '2024-07-25' },
@@ -31,4 +32,50 @@ export const users = [
     { id: "USR-002", name: "David", email: "david@example.com", role: "Kasir", lastActive: "15 menit lalu" },
     { id: "USR-003", name: "Brenda", email: "brenda@example.com", role: "Kasir", lastActive: "8 jam lalu" },
     { id: "USR-004", name: "James", email: "james@example.com", role: "Kasir", lastActive: "Kemarin" },
+];
+
+export const salesHistory = [
+  { 
+    id: "SALE-001", 
+    date: "2023-11-20", 
+    total: 199990, 
+    status: "Selesai", 
+    itemCount: 3,
+    items: [
+      { name: "Biji Kopi Artisan", quantity: 2, price: 18990 },
+      { name: "Croissant Almond", quantity: 1, price: 4500 },
+      { name: "Timbangan Kopi Digital", quantity: 1, price: 45000 },
+    ]
+  },
+  { 
+    id: "SALE-002", 
+    date: "2023-11-21", 
+    total: 39000, 
+    status: "Selesai", 
+    itemCount: 1,
+    items: [
+      { name: "Muffin Blueberry", quantity: 2, price: 3750 },
+    ]
+  },
+  { 
+    id: "SALE-003", 
+    date: "2023-11-22", 
+    total: 99000, 
+    status: "Selesai", 
+    itemCount: 1,
+    items: [
+        { name: "Keramik Pour-Over", quantity: 1, price: 32000 },
+        { name: "Espresso Single-Origin", quantity: 1, price: 22000 },
+    ]
+  },
+  { 
+    id: "SALE-004", 
+    date: "2023-11-23", 
+    total: 299000, 
+    status: "Selesai", 
+    itemCount: 2,
+    items: [
+        { name: "Teh Earl Grey Organik", quantity: 3, price: 12500 },
+    ]
+  },
 ];

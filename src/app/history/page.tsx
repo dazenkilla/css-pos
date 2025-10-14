@@ -15,22 +15,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { FileDown, Eye } from "lucide-react"
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { salesHistory as initialSalesHistory } from "@/lib/data";
 
-// Di aplikasi nyata, data ini akan berasal dari database.
-const initialSalesHistory = [
-  { id: "SALE-001", date: "2023-11-20", total: 199990, status: "Selesai", items: 3 },
-  { id: "SALE-002", date: "2023-11-21", total: 39000, status: "Selesai", items: 1 },
-  { id: "SALE-003", date: "2023-11-22", total: 99000, status: "Selesai", items: 1 },
-  { id: "SALE-004", date: "2023-11-23", total: 299000, status: "Selesai", items: 2 },
-];
+type SaleItem = { name: string; quantity: number; price: number; };
+type Sale = typeof initialSalesHistory[0];
 
 export default function HistoryPage() {
   const [salesHistory, setSalesHistory] = useState(initialSalesHistory);
+  const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
+  const [isDetailOpen, setDetailOpen] = useState(false);
   const { toast } = useToast();
 
   const getStatusVariant = (status: string) => {
@@ -42,11 +47,9 @@ export default function HistoryPage() {
     }
   };
 
-  const handleViewDetails = (saleId: string) => {
-    toast({
-        title: `Detail Transaksi ${saleId}`,
-        description: `Ini adalah placeholder untuk menampilkan item dari transaksi ${saleId}.`,
-    });
+  const handleViewDetails = (sale: Sale) => {
+    setSelectedSale(sale);
+    setDetailOpen(true);
   };
   
   const handleExport = () => {
@@ -56,57 +59,98 @@ export default function HistoryPage() {
     })
   }
 
+  const detailSubtotal = selectedSale?.items.reduce((sum, item) => sum + item.price * item.quantity, 0) ?? 0;
+
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Riwayat Penjualan</CardTitle>
-            <CardDescription>Lihat dan kelola semua transaksi yang sudah lewat.</CardDescription>
+    <>
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Riwayat Penjualan</CardTitle>
+              <CardDescription>Lihat dan kelola semua transaksi yang sudah lewat.</CardDescription>
+            </div>
+            <Button variant="outline" size="sm" onClick={handleExport}>
+              <FileDown className="mr-2 h-4 w-4" />
+              Ekspor Data
+            </Button>
           </div>
-          <Button variant="outline" size="sm" onClick={handleExport}>
-            <FileDown className="mr-2 h-4 w-4" />
-            Ekspor Data
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>ID Penjualan</TableHead>
-              <TableHead>Tanggal</TableHead>
-              <TableHead className="hidden sm:table-cell">Status</TableHead>
-              <TableHead className="hidden md:table-cell text-right">Produk</TableHead>
-              <TableHead className="text-right">Total</TableHead>
-              <TableHead className="text-right">Aksi</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {salesHistory.map((sale) => (
-              <TableRow key={sale.id}>
-                <TableCell className="font-medium">{sale.id}</TableCell>
-                <TableCell>{sale.date}</TableCell>
-                <TableCell className="hidden sm:table-cell">
-                  <Badge variant={getStatusVariant(sale.status) as any}>{sale.status}</Badge>
-                </TableCell>
-                <TableCell className="hidden md:table-cell text-right">{sale.items}</TableCell>
-                <TableCell className="text-right">Rp{sale.total.toFixed(0)}</TableCell>
-                <TableCell className="text-right">
-                    <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => handleViewDetails(sale.id)}
-                    >
-                        <Eye className="mr-2 h-3.5 w-3.5" />
-                        Lihat Detail
-                    </Button>
-                </TableCell>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>ID Penjualan</TableHead>
+                <TableHead>Tanggal</TableHead>
+                <TableHead className="hidden sm:table-cell">Status</TableHead>
+                <TableHead className="hidden md:table-cell text-right">Produk</TableHead>
+                <TableHead className="text-right">Total</TableHead>
+                <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+            </TableHeader>
+            <TableBody>
+              {salesHistory.map((sale) => (
+                <TableRow key={sale.id}>
+                  <TableCell className="font-medium">{sale.id}</TableCell>
+                  <TableCell>{sale.date}</TableCell>
+                  <TableCell className="hidden sm:table-cell">
+                    <Badge variant={getStatusVariant(sale.status) as any}>{sale.status}</Badge>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell text-right">{sale.itemCount}</TableCell>
+                  <TableCell className="text-right">Rp{sale.total.toLocaleString('id-ID')}</TableCell>
+                  <TableCell className="text-right">
+                      <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleViewDetails(sale)}
+                      >
+                          <Eye className="mr-2 h-3.5 w-3.5" />
+                          Lihat Detail
+                      </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      <Dialog open={isDetailOpen} onOpenChange={setDetailOpen}>
+        <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Detail Transaksi: {selectedSale?.id}</DialogTitle>
+              <DialogDescription>
+                Tanggal: {selectedSale?.date}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="max-h-[60vh] overflow-y-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Produk</TableHead>
+                    <TableHead>Jumlah</TableHead>
+                    <TableHead className="text-right">Harga Satuan</TableHead>
+                    <TableHead className="text-right">Subtotal</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {selectedSale?.items.map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{item.name}</TableCell>
+                      <TableCell>{item.quantity}</TableCell>
+                      <TableCell className="text-right">Rp{item.price.toLocaleString('id-ID')}</TableCell>
+                      <TableCell className="text-right">Rp{(item.price * item.quantity).toLocaleString('id-ID')}</TableCell>
+                    </TableRow>
+                  ))}
+                   <TableRow className="font-bold bg-muted/50">
+                      <TableCell colSpan={3}>Total</TableCell>
+                      <TableCell className="text-right">Rp{detailSubtotal.toLocaleString('id-ID')}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
