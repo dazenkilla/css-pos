@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { NovaPosIcon } from '@/components/icons/nova-pos-icon';
+import Image from 'next/image';
 
 type CartItem = {
     name: string;
@@ -31,9 +31,9 @@ export function Receipt({ sale }: ReceiptProps) {
   return (
     <div className="text-black bg-white">
       <div className="text-center mb-2">
-        <NovaPosIcon className="mx-auto h-8 w-8" />
-        <h2 className="text-lg font-bold">Nova POS</h2>
-        <p>Jl. Kopi No. 123, Jakarta</p>
+        <Image src="/logo.png" alt="Logo" width={32} height={32} className="mx-auto h-8 w-8" />
+        <h2 className="text-lg font-bold">Creative Software Solution</h2>
+        <p>alamat bandung</p>
         <p>{printDate}</p>
       </div>
       <hr />
