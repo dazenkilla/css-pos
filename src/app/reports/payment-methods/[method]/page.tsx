@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import {
   Card,
@@ -63,14 +63,6 @@ const createMockTransactions = (prefix: string, count: number) => {
   return transactions;
 };
 
-
-const transactionDetailsData = {
-  tunai: createMockTransactions('SALE-T', 20),
-  kartu: createMockTransactions('SALE-K', 20),
-  qr: createMockTransactions('SALE-Q', 20),
-  transfer: createMockTransactions('SALE-B', 20)
-};
-
 type TransactionDetail = {
     id: string;
     date: string;
@@ -80,11 +72,28 @@ type TransactionDetail = {
 
 export default function PaymentMethodDetailPage() {
   const params = useParams();
-  const method = params.method as keyof typeof transactionDetailsData;
+  const method = params.method as string;
+  const [transactions, setTransactions] = useState<TransactionDetail[]>([]);
   const [selectedSale, setSelectedSale] = useState<TransactionDetail | null>(null);
   const [isDetailOpen, setDetailOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
-  const transactions = transactionDetailsData[method] || [];
+  useEffect(() => {
+    const methodKey = method as keyof typeof transactionDetailsData;
+    if (transactionDetailsData[methodKey]) {
+      setTransactions(transactionDetailsData[methodKey]);
+    }
+    setIsClient(true);
+  }, [method]);
+
+  // Generate data on the client side to avoid hydration mismatch
+  const transactionDetailsData = {
+    tunai: createMockTransactions('SALE-T', 20),
+    kartu: createMockTransactions('SALE-K', 20),
+    qr: createMockTransactions('SALE-Q', 20),
+    transfer: createMockTransactions('SALE-B', 20)
+  };
+
   const methodName = method.charAt(0).toUpperCase() + method.slice(1);
   
   const handleViewDetails = (sale: TransactionDetail) => {
@@ -113,7 +122,13 @@ export default function PaymentMethodDetailPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {transactions.length > 0 ? (
+              {!isClient ? (
+                <TableRow>
+                  <TableCell colSpan={3} className="text-center h-24">
+                      Memuat transaksi...
+                  </TableCell>
+                </TableRow>
+              ) : transactions.length > 0 ? (
                   transactions.map((tx: TransactionDetail) => (
                   <TableRow key={tx.id} onClick={() => handleViewDetails(tx)} className="cursor-pointer hover:bg-muted/50">
                       <TableCell className="font-medium">{tx.id}</TableCell>
