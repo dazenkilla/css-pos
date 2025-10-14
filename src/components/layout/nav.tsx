@@ -26,7 +26,7 @@ const menuItems = [
   { href: '/', label: 'Dasbor', icon: LayoutDashboard },
   { href: '/sales', label: 'Penjualan', icon: ShoppingCart },
   { href: '/inventory', label: 'Inventaris', icon: Boxes },
-  { href: '/orders', label: 'Pesanan', icon: Truck },
+  { href: '/orders', label: 'Pesanan Pembelian', icon: Truck },
   { href: '/history', label: 'Riwayat', icon: History },
   { href: '/reports', label: 'Laporan', icon: FileBarChart },
 ];
