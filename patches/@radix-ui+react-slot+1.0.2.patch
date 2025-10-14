@@ -1,0 +1,112 @@
+diff --git a/node_modules/@radix-ui/react-slot/dist/index.js b/node_modules/@radix-ui/react-slot/dist/index.js
+index 2351be8..a852a48 100644
+--- a/node_modules/@radix-ui/react-slot/dist/index.js
++++ b/node_modules/@radix-ui/react-slot/dist/index.js
+@@ -3,13 +3,13 @@
+ var import_react = require("react");
+ var import_react_dom = require("react-dom");
+ 
+//
+var $e42e1063c40fb3ef$export$99c2b779aa4e8b8b = (0, import_react.forwardRef)(
+  (props, forwardedRef) => {
+    const { children, ...slotProps } = props;
+    const childrenArray = import_react.Children.toArray(children);
+    const slottable = childrenArray.find($c79f8976949b4631$var$isSlottable);
+    if (slottable) {
+      const newElement = slottable.props.children;
+      const newChildren = childrenArray.map((child) => {
+        if (child === slottable) {
+          if (import_react.Children.count(newElement) > 1)
+            return import_react.Children.only(null);
+          return (0, import_react.isValidElement)(newElement) ? newElement.props.children : null;
+        } else
+          return child;
+      });
+      return /* @__PURE__ */ (0, import_react.createElement)(
+//
+        $232355605833e2f4$export$d7b1d6f140a8a7a,
+        {
+          ...slotProps,
+          ref: forwardedRef
+        },
+        (0, import_react.isValidElement)(newElement) ? (0, import_react.cloneElement)(newElement, void 0, newChildren) : null
+      );
+    }
+    return /* @__PURE__ */ (0, import_react.createElement)(
+      $232355605833e2f4$export$d7b1d6f140a8a7a,
+      {
+        ...props,
+        ref: forwardedRef
+      }
+    );
+  }
+);
+$e42e1063c40fb3ef$export$99c2b779aa4e8b8b.displayName = "Slot";
+var $232355605833e2f4$export$d7b1d6f140a8a7a = (0, import_react.forwardRef)(
+  (props, forwardedRef) => {
+    const { children, ...slotProps } = props;
+    if ((0, import_react.isValidElement)(children))
+      return (0, import_react.cloneElement)(children, {
+        ...$5e46e3428f576f75$var$mergeProps(slotProps, children.props),
+        ref: forwardedRef ? $5e46e3428f576f75$var$composeRefs(forwardedRef, children.ref) : children.ref
+      });
+    return import_react.Children.count(children) > 1 ? import_react.Children.only(null) : null;
+  }
+);
+$232355605833e2f4$export$d7b1d6f140a8a7a.displayName = "Slottable";
+var $c79f8976949b4631$export$196f8a846c439592 = ({ children }) => {
+  return /* @__PURE__ */ (0, import_react.createElement)(import_react.Fragment, null, children);
+};
+function $c79f8976949b4631$var$isSlottable(child) {
+  return (0, import_react.isValidElement)(child) && child.type === $c79f8976949b4631$export$196f8a846c439592;
+}
+function $5e46e3428f576f75$var$composeRefs(...refs) {
+  return (node) => refs.forEach(
+    (ref) => $5e46e3428f576f75$var$dispatchRef(ref, node)
+  );
+}
+function $5e46e3428f576f75$var$dispatchRef(ref, node) {
+  if (typeof ref === "function")
+    ref(node);
+  else if (ref != null)
+    ref.current = node;
+}
+function $5e46e3428f576f75$var$mergeProps(slotProps, childProps) {
+  const overrideProps = { ...childProps };
+  for (const propName in childProps) {
+    const slotPropValue = slotProps[propName];
+    const childPropValue = childProps[propName];
+    const isHandler = /^on[A-Z]/.test(propName);
+    if (isHandler) {
+      if (slotPropValue && childPropValue)
+        overrideProps[propName] = (...args) => {
+          childPropValue(...args);
+          slotPropValue(...args);
+        };
+      else if (slotPropValue)
+        overrideProps[propName] = slotPropValue;
+    } else if (propName === "style")
+      overrideProps[propName] = { ...slotPropValue, ...childPropValue };
+    else if (propName === "className")
+      overrideProps[propName] = [
+        slotPropValue,
+        childPropValue
+      ].filter(Boolean).join(" ");
+  }
+  return { ...slotProps, ...overrideProps };
+}
+var $db6c3485150b8e66$export$be92b6f5f03c0fe9 = $e42e1063c40fb3ef$export$99c2b779aa4e8b8b;
+var $db6c3485150b8e66$export$602eac185826482c = $c79f8976949b4631$export$196f8a846c439592;
+var $db6c3485150b8e66$export$d9f1ccf0bdb05d45 = (element) => {
+  return /* @__PURE__ */ (0, import_react.cloneElement)(element, { "data-radix-slot": "" });
+};
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  Slot,
+  Slottable,
+  Root: $db6c3485150b8e66$export$be92b6f5f03c0fe9,
+  Unstyled: $db6c3485150b8e66$export$602eac185826482c,
+  //
+  markAsUnstyled: $db6c3485150b8e66$export$d9f1ccf0bdb05d45
+});
+//# sourceMappingURL=index.js.map

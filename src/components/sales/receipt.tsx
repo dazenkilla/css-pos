@@ -9,7 +9,7 @@ type CartItem = {
     quantity: number;
 };
 
-type SaleData = {
+export type SaleData = {
     cart: CartItem[];
     subtotal: number;
     discount: number;
@@ -21,12 +21,12 @@ interface ReceiptProps {
   sale: SaleData;
 }
 
-export const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ sale }, ref) => {
+export function Receipt({ sale }: ReceiptProps) {
   const { cart, subtotal, discount, tax, total } = sale;
   const printDate = new Date().toLocaleString();
 
   return (
-    <div ref={ref} className="p-8 font-mono text-xs text-black bg-white">
+    <div className="p-8 font-mono text-xs text-black bg-white">
       <div className="text-center mb-4">
         <NovaPosIcon className="mx-auto h-12 w-12" />
         <h2 className="text-xl font-bold">Nova POS</h2>
@@ -72,8 +72,4 @@ export const Receipt = React.forwardRef<HTMLDivElement, ReceiptProps>(({ sale },
       </div>
     </div>
   );
-});
-
-Receipt.displayName = 'Receipt';
-
-    
+};

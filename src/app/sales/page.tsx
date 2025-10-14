@@ -20,8 +20,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useReactToPrint } from 'react-to-print';
-import { Receipt } from '@/components/sales/receipt';
+import { Receipt, SaleData } from '@/components/sales/receipt';
+import { renderToString } from 'react-dom/server';
+
 
 type CartItem = typeof inventoryItems[0] & { quantity: number };
 type Payment = { method: 'Cash' | 'Card'; amount: number };
@@ -33,10 +34,9 @@ export default function SalesPage() {
   const [isDiscountDialogOpen, setDiscountDialogOpen] = useState(false);
   const [discountInput, setDiscountInput] = useState("");
   const [payments, setPayments] = useState<Payment[]>([]);
-  const [lastSale, setLastSale] = useState<{ cart: CartItem[], total: number, discount: number, tax: number, subtotal: number } | null>(null);
+  const [lastSale, setLastSale] = useState<SaleData | null>(null);
 
   const { toast } = useToast();
-  const receiptRef = useRef<HTMLDivElement>(null);
 
   const addToCart = (product: typeof inventoryItems[0]) => {
     setCart((prevCart) => {
@@ -119,19 +119,61 @@ export default function SalesPage() {
     setPayments(newPayments);
   };
   
-  const handlePrint = useReactToPrint({
-    content: () => receiptRef.current,
-  });
+  const handlePrint = () => {
+    if (!lastSale) return;
+  
+    const receiptString = renderToString(<Receipt sale={lastSale} />);
+    
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Print Receipt</title>
+            <style>
+              body { font-family: monospace; font-size: 10px; margin: 0; }
+              #receipt-print { padding: 20px; }
+              .text-center { text-align: center; }
+              .mb-4 { margin-bottom: 1rem; }
+              .mx-auto { margin-left: auto; margin-right: auto; }
+              .h-12 { height: 3rem; }
+              .w-12 { width: 3rem; }
+              .text-xl { font-size: 1.25rem; }
+              .font-bold { font-weight: 700; }
+              hr { border-top: 1px dashed black; margin: 0.5rem 0; }
+              .mb-2 { margin-bottom: 0.5rem; }
+              .flex { display: flex; }
+              .justify-between { justify-content: space-between; }
+              .space-y-1 > * + * { margin-top: 0.25rem; }
+              .text-base { font-size: 1rem; }
+              .mt-6 { margin-top: 1.5rem; }
+            </style>
+          </head>
+          <body>
+            <div id="receipt-print">${receiptString}</div>
+            <script>
+              window.onload = function() {
+                window.print();
+                window.close();
+              }
+            </script>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+  };
 
   const completeSale = () => {
-    // Here you would typically save the sale to a database
-    setLastSale({ cart, total, discount: totalDiscount, tax, subtotal });
+    const saleData = { cart, total, discount: totalDiscount, tax, subtotal };
+    setLastSale(saleData);
+    
     toast({
       title: "Sale Complete!",
       description: `Total: $${total.toFixed(2)}`,
-      action: <Button variant="outline" size="sm" onClick={() => setTimeout(handlePrint, 200)}><Printer className="mr-2 h-4 w-4" />Print Receipt</Button>
+      action: <Button variant="outline" size="sm" onClick={() => handlePrint()}><Printer className="mr-2 h-4 w-4" />Print Receipt</Button>
     });
-    // Reset state for next sale
+
     setCart([]);
     setDiscount(0);
     setPayments([]);
@@ -140,9 +182,6 @@ export default function SalesPage() {
 
   return (
     <>
-      <div className="hidden">
-        {lastSale && <Receipt ref={receiptRef} sale={lastSale} />}
-      </div>
       <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-5">
         
         {/* Product Selection Panel */}
