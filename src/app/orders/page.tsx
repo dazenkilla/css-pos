@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -41,6 +42,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 
 export default function OrdersPage() {
+  const [isSheetOpen, setSheetOpen] = useState(false);
   const { toast } = useToast();
 
   const getStatusVariant = (status: string) => {
@@ -54,17 +56,18 @@ export default function OrdersPage() {
   
   const handleReceiveGoods = (orderId: string) => {
     toast({
-      title: "Penerimaan Barang Diproses",
+      title: "Penerimaan Barang Diproses (Simulasi)",
       description: `Barang untuk pesanan ${orderId} telah diterima dan stok diperbarui.`
     })
   }
   
-  const handleCreateOrder = () => {
-     toast({
-      title: "Pesanan Dibuat",
+  const handleCreateOrder = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSheetOpen(false);
+    toast({
+      title: "Pesanan Dibuat (Simulasi)",
       description: `Pesanan pembelian baru telah berhasil dibuat.`
     });
-    // Di aplikasi nyata, Anda akan menutup sheet di sini
   }
 
   return (
@@ -75,7 +78,7 @@ export default function OrdersPage() {
             <CardTitle>Pesanan Pembelian</CardTitle>
             <CardDescription>Buat dan lacak pesanan pembelian untuk inventaris Anda.</CardDescription>
           </div>
-          <Sheet>
+          <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
               <Button size="sm" className="gap-1">
                 <PlusCircle className="h-3.5 w-3.5" />
@@ -89,39 +92,41 @@ export default function OrdersPage() {
                 <SheetTitle>Buat Pesanan Pembelian Baru</SheetTitle>
                 <SheetDescription>Isi detail untuk membuat pesanan pembelian baru.</SheetDescription>
               </SheetHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="supplier">Pemasok</Label>
-                   <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Pilih pemasok" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {suppliers.map(supplier => (
-                        <SelectItem key={supplier.id} value={supplier.id}>{supplier.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+              <form onSubmit={handleCreateOrder}>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="supplier">Pemasok</Label>
+                    <Select name="supplier" required>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih pemasok" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {suppliers.map(supplier => (
+                          <SelectItem key={supplier.id} value={supplier.id}>{supplier.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                      <Label>Produk</Label>
+                      <div className="border rounded-lg p-4 space-y-2">
+                          <div className="flex gap-2">
+                              <Input placeholder="Nama Produk atau SKU" className="flex-1"/>
+                              <Input type="number" placeholder="Jumlah" className="w-24"/>
+                          </div>
+                          <Button variant="outline" size="sm" className="w-full" type="button">Tambah Produk</Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">Daftar produk yang dipesan akan muncul di sini.</p>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="notes">Catatan</Label>
+                    <Textarea id="notes" placeholder="Tinggalkan catatan untuk pemasok..." />
+                  </div>
                 </div>
-                <div className="grid gap-2">
-                    <Label>Produk</Label>
-                     <div className="border rounded-lg p-4 space-y-2">
-                        <div className="flex gap-2">
-                            <Input placeholder="Nama Produk atau SKU" className="flex-1"/>
-                            <Input type="number" placeholder="Jumlah" className="w-24"/>
-                        </div>
-                        <Button variant="outline" size="sm" className="w-full">Tambah Produk</Button>
-                     </div>
-                     <p className="text-xs text-muted-foreground">Daftar produk yang dipesan akan muncul di sini.</p>
-                </div>
-                 <div className="grid gap-2">
-                  <Label htmlFor="notes">Catatan</Label>
-                  <Textarea id="notes" placeholder="Tinggalkan catatan untuk pemasok..." />
-                </div>
-              </div>
-              <SheetFooter>
-                <Button onClick={handleCreateOrder}>Buat Pesanan</Button>
-              </SheetFooter>
+                <SheetFooter>
+                  <Button type="submit">Buat Pesanan</Button>
+                </SheetFooter>
+              </form>
             </SheetContent>
           </Sheet>
         </div>
@@ -149,7 +154,7 @@ export default function OrdersPage() {
                   <Badge variant={getStatusVariant(order.status) as any}>{order.status}</Badge>
                 </TableCell>
                 <TableCell className="hidden sm:table-cell text-right">{order.items}</TableCell>
-                <TableCell className="text-right">Rp{order.total.toFixed(0)}</TableCell>
+                <TableCell className="text-right">Rp{order.total.toLocaleString('id-ID')}</TableCell>
                 <TableCell className="text-center">
                     <Button 
                         variant="outline" 

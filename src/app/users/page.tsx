@@ -30,6 +30,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription
 } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -116,6 +117,13 @@ export default function UsersPage() {
           toast({ title: "Pengguna Dihapus", description: `Pengguna ${userToDelete?.name} telah dihapus.` });
       }
   };
+  
+  const handleViewActivity = (userName: string) => {
+      toast({ 
+          title: "Fitur Dalam Pengembangan",
+          description: `Tampilan aktivitas untuk pengguna ${userName} akan segera tersedia.`
+      });
+  }
 
   return (
     <>
@@ -164,7 +172,7 @@ export default function UsersPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                               <DropdownMenuItem onClick={() => handleOpenDialog(user)}>Ubah</DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => toast({ title: "Fitur Belum Tersedia" })}>Lihat Aktivitas</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleViewActivity(user.name)}>Lihat Aktivitas</DropdownMenuItem>
                               <DropdownMenuItem className="text-destructive" onClick={() => handleOpenDeleteDialog(user.id)}>Hapus</DropdownMenuItem>
                           </DropdownMenuContent>
                       </DropdownMenu>
@@ -177,10 +185,16 @@ export default function UsersPage() {
       </Card>
       
       {/* Dialog Tambah/Ubah Pengguna */}
-      <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={(isOpen) => {
+        if (!isOpen) setEditingUser(null);
+        setDialogOpen(isOpen);
+      }}>
           <DialogContent>
               <DialogHeader>
                   <DialogTitle>{editingUser ? 'Ubah Pengguna' : 'Tambah Pengguna Baru'}</DialogTitle>
+                  <DialogDescription>
+                    {editingUser ? 'Ubah detail pengguna di bawah ini.' : 'Isi detail untuk pengguna baru.'}
+                  </DialogDescription>
               </DialogHeader>
               <form onSubmit={handleSave}>
                   <div className="grid gap-4 py-4">
@@ -220,7 +234,7 @@ export default function UsersPage() {
               <AlertDialogHeader>
                   <AlertDialogTitle>Apakah Anda Yakin?</AlertDialogTitle>
                   <AlertDialogDescription>
-                      Tindakan ini akan menghapus pengguna. Aksi ini tidak dapat dibatalkan.
+                      Tindakan ini akan menghapus pengguna secara permanen. Aksi ini tidak dapat dibatalkan.
                   </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

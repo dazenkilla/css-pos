@@ -46,6 +46,7 @@ const journalEntryDetails = [
 
 export default function JournalEntriesPage() {
     const [isJournalEntryOpen, setJournalEntryOpen] = useState(false);
+    const [detailRows, setDetailRows] = useState(1);
     const { toast } = useToast();
 
     const handleCreateEntry = (event: React.FormEvent<HTMLFormElement>) => {
@@ -54,11 +55,23 @@ export default function JournalEntriesPage() {
         const description = formData.get('description');
 
         setJournalEntryOpen(false);
+        setDetailRows(1); // Reset rows
         toast({
             title: "Entri Jurnal Dibuat (Simulasi)",
             description: `Entri jurnal untuk "${description}" telah dibuat sebagai draf.`
         });
     }
+    
+    const handleAddRow = () => {
+        setDetailRows(prev => prev + 1);
+    }
+
+    const handleViewDetails = () => {
+        toast({
+            title: "Tampilan Detail",
+            description: "Detail untuk entri jurnal ini akan ditampilkan di bawah. (Simulasi)"
+        });
+    };
 
     return (
         <div className="space-y-6">
@@ -96,7 +109,7 @@ export default function JournalEntriesPage() {
                                 <TableCell>{entry.description}</TableCell>
                                 <TableCell><Badge variant={entry.status === 'Posted' ? 'secondary' : 'outline'}>{entry.status}</Badge></TableCell>
                                 <TableCell className="text-right">
-                                    <Button variant="outline" size="sm">Lihat Detail</Button>
+                                    <Button variant="outline" size="sm" onClick={handleViewDetails}>Lihat Detail</Button>
                                 </TableCell>
                             </TableRow>
                             ))}
@@ -164,16 +177,17 @@ export default function JournalEntriesPage() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {/* Placeholder row */}
-                                    <TableRow>
+                                    {Array.from({ length: detailRows }).map((_, index) => (
+                                    <TableRow key={index}>
                                         <TableCell><Input placeholder="Pilih Akun" /></TableCell>
                                         <TableCell><Input type="number" placeholder="0" className="text-right" /></TableCell>
                                         <TableCell><Input type="number" placeholder="0" className="text-right" /></TableCell>
                                         <TableCell />
                                     </TableRow>
+                                    ))}
                                 </TableBody>
                             </Table>
-                             <Button variant="outline" size="sm" className="mt-2 w-full">Tambah Baris</Button>
+                             <Button variant="outline" size="sm" className="mt-2 w-full" type="button" onClick={handleAddRow}>Tambah Baris</Button>
                         </div>
                     </div>
                     <DialogFooter>
