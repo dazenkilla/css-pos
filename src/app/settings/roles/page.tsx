@@ -40,17 +40,61 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
-const allPermissions = [
-  { id: "sales:create", label: "Buat Penjualan" },
-  { id: "sales:read", label: "Lihat Riwayat Penjualan" },
-  { id: "inventory:manage", label: "Kelola Inventaris" },
-  { id: "reports:view", label: "Lihat Laporan" },
-  { id: "users:manage", label: "Kelola Pengguna" },
-  { id: "settings:manage", label: "Kelola Pengaturan Toko" },
-  { id: "accounting:view", label: "Lihat Data Akuntansi" },
-  { id: "accounting:manage", label: "Kelola Data Akuntansi" },
+const permissionModules = [
+  {
+    module: "Penjualan",
+    permissions: [
+      { id: "sales:create", label: "Membuat Penjualan & Pembayaran" },
+      { id: "sales:read", label: "Melihat Riwayat Penjualan" },
+      { id: "sales:cancel", label: "Membatalkan/Mengembalikan Penjualan" },
+    ],
+  },
+  {
+    module: "Inventaris",
+    permissions: [
+      { id: "inventory:create", label: "Menambah Produk Baru" },
+      { id: "inventory:read", label: "Melihat Daftar Produk & Stok" },
+      { id: "inventory:update", label: "Mengubah Detail Produk" },
+      { id: "inventory:delete", label: "Menghapus Produk" },
+      { id: "inventory:categories", label: "Mengelola Kategori & Sub-Kategori" },
+    ],
+  },
+  {
+    module: "Pesanan Pembelian",
+    permissions: [
+      { id: "purchase_orders:create", label: "Membuat Pesanan Pembelian" },
+      { id: "purchase_orders:read", label: "Melihat Daftar Pesanan Pembelian" },
+      { id: "purchase_orders:receive", label: "Menerima Barang dari Pemasok" },
+    ],
+  },
+  {
+    module: "Laporan & Analitik",
+    permissions: [
+      { id: "reports:sales", label: "Melihat Laporan Penjualan" },
+      { id: "reports:inventory", label: "Melihat Laporan Inventaris" },
+      { id: "reports:financial", label: "Melihat Laporan Keuangan" },
+      { id: "reports:audit_trail", label: "Melihat Jejak Audit" },
+    ],
+  },
+  {
+    module: "Akuntansi",
+    permissions: [
+      { id: "accounting:read", label: "Melihat Data Akuntansi (Buku Besar, Jurnal)" },
+      { id: "accounting:manage", label: "Mengelola Akun & Entri Jurnal Manual" },
+    ],
+  },
+  {
+    module: "Pengguna & Pengaturan",
+    permissions: [
+      { id: "users:manage", label: "Mengelola Pengguna & Peran" },
+      { id: "settings:manage", label: "Mengelola Pengaturan Toko" },
+    ],
+  },
 ];
+
+const allPermissions = permissionModules.flatMap(m => m.permissions);
 
 const initialRoles = [
   {
@@ -68,7 +112,6 @@ const initialRoles = [
 ];
 
 type Role = typeof initialRoles[0];
-type Permission = typeof allPermissions[0];
 
 export default function RolesPage() {
   const [roles, setRoles] = useState(initialRoles);
@@ -185,7 +228,7 @@ export default function RolesPage() {
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSaveRole}>
-            <div className="grid gap-6 py-4">
+            <div className="space-y-6 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="role-name" className="text-right">Nama</Label>
                 <Input id="role-name" name="name" defaultValue={editingRole?.name} className="col-span-3" required />
@@ -196,18 +239,27 @@ export default function RolesPage() {
               </div>
               <div>
                 <Label className="font-medium">Izin (Permissions)</Label>
-                <div className="mt-2 grid grid-cols-2 gap-4 rounded-lg border p-4">
-                  {allPermissions.map((permission) => (
-                    <div key={permission.id} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={permission.id}
-                        name={permission.id}
-                        defaultChecked={editingRole?.permissions.includes(permission.id)}
-                      />
-                      <Label htmlFor={permission.id} className="font-normal text-sm">{permission.label}</Label>
-                    </div>
+                <Accordion type="multiple" className="w-full mt-2 border rounded-md px-4">
+                  {permissionModules.map((module) => (
+                    <AccordionItem key={module.module} value={module.module}>
+                      <AccordionTrigger className="hover:no-underline">{module.module}</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-3 pl-2">
+                          {module.permissions.map((permission) => (
+                             <div key={permission.id} className="flex items-center space-x-2">
+                                <Checkbox 
+                                  id={permission.id}
+                                  name={permission.id}
+                                  defaultChecked={editingRole?.permissions.includes(permission.id)}
+                                />
+                                <Label htmlFor={permission.id} className="font-normal text-sm">{permission.label}</Label>
+                              </div>
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
                   ))}
-                </div>
+                </Accordion>
               </div>
             </div>
             <DialogFooter>
