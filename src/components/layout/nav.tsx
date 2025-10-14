@@ -17,7 +17,8 @@ import {
   Truck,
   Settings,
   History,
-  Users
+  Users,
+  FileBarChart
 } from 'lucide-react';
 import { NovaPosIcon } from '@/components/icons/nova-pos-icon';
 
@@ -27,6 +28,7 @@ const menuItems = [
   { href: '/inventory', label: 'Inventaris', icon: Boxes },
   { href: '/orders', label: 'Pesanan', icon: Truck },
   { href: '/history', label: 'Riwayat', icon: History },
+  { href: '/reports', label: 'Laporan', icon: FileBarChart },
 ];
 
 export function Nav() {
