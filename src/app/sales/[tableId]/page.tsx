@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React, { useState } from 'react';
@@ -139,7 +140,7 @@ export default function TransactionPage({ params }: { params: { tableId: string 
     
     const printWindow = window.open('', '_blank');
     if (printWindow) {
-      printWindow.document.write(\`
+      printWindow.document.write(`
         <html>
           <head>
             <title>Cetak Struk</title>
@@ -179,7 +180,7 @@ export default function TransactionPage({ params }: { params: { tableId: string 
             </style>
           </head>
           <body>
-            <div id="receipt-print">\${receiptString}</div>
+            <div id="receipt-print">${receiptString}</div>
             <script>
               window.onload = function() {
                 window.print();
@@ -188,13 +189,13 @@ export default function TransactionPage({ params }: { params: { tableId: string 
             </script>
           </body>
         </html>
-      \`);
+      `);
       printWindow.document.close();
     }
   };
 
   const completeSale = () => {
-    const saleId = \`SALE-\${Date.now().toString().slice(-6)}\`;
+    const saleId = `SALE-${Date.now().toString().slice(-6)}`;
     const saleData: SaleData = {
       cart,
       subtotal,
@@ -209,7 +210,7 @@ export default function TransactionPage({ params }: { params: { tableId: string 
     
     toast({
       title: "Penjualan Selesai!",
-      description: \`Total: Rp\${total.toLocaleString('id-ID')}\`,
+      description: `Total: Rp${total.toLocaleString('id-ID')}`,
       action: <Button variant="outline" size="sm" onClick={() => handlePrint(saleData)}><Printer className="mr-2 h-4 w-4" />Cetak Struk</Button>
     });
 
@@ -217,7 +218,7 @@ export default function TransactionPage({ params }: { params: { tableId: string 
     setTimeout(() => {
         toast({
             title: "Jurnal Otomatis Dibuat",
-            description: \`Entri Jurnal JE-\${Date.now().toString().slice(-4)} untuk \${saleId} telah dibuat.\`
+            description: `Entri Jurnal JE-${Date.now().toString().slice(-4)} untuk ${saleId} telah dibuat.`
         })
     }, 1000);
 
@@ -455,7 +456,7 @@ export default function TransactionPage({ params }: { params: { tableId: string 
             </DialogHeader>
             <div className="flex flex-col items-center justify-center py-4">
                 <Image
-                    src={\`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=pay-Rp\${(remainingAmount > 0 ? remainingAmount : 0).toLocaleString('id-ID')}\`}
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=pay-Rp${(remainingAmount > 0 ? remainingAmount : 0).toLocaleString('id-ID')}`}
                     alt="QR Code Pembayaran"
                     width={200}
                     height={200}
@@ -477,3 +478,5 @@ export default function TransactionPage({ params }: { params: { tableId: string 
     </>
   );
 }
+
+    
