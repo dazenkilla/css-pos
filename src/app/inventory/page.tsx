@@ -28,9 +28,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { inventoryItems } from "@/lib/data"
-import { PlusCircle, ArrowRightLeft } from "lucide-react"
+import { PlusCircle, ArrowRightLeft, Settings } from "lucide-react"
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
 
 export default function InventoryPage() {
   const [isTransferDialogOpen, setTransferDialogOpen] = useState(false);
@@ -66,8 +67,13 @@ export default function InventoryPage() {
               <CardDescription>Kelola produk dan lihat tingkat stok Anda.</CardDescription>
             </div>
             <div className="flex gap-2">
-              <Button size="sm" variant="outline" className="gap-1" onClick={() => alert('Proses stok opname dimulai. (Ini adalah placeholder)')}>
-                Stok Opname
+               <Button size="sm" variant="outline" className="gap-1" asChild>
+                <Link href="/inventory/categories">
+                  <Settings className="h-3.5 w-3.5" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Kelola Kategori
+                  </span>
+                </Link>
               </Button>
               <Button size="sm" className="gap-1">
                 <PlusCircle className="h-3.5 w-3.5" />
