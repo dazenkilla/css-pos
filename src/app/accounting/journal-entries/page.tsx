@@ -32,21 +32,54 @@ import { PlusCircle } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast";
 
+type JournalDetail = { account: string; debit: number; credit: number };
+type JournalEntry = {
+    id: string;
+    date: string;
+    description: string;
+    status: "Posted" | "Draft";
+    details: JournalDetail[];
+};
+
 // Data placeholder untuk entri jurnal
-const journalEntriesData = [
-    { id: "JE-001", date: "2023-11-28", description: "Mencatat penjualan harian", status: "Posted" },
-    { id: "JE-002", date: "2023-11-28", description: "Pembayaran gaji staf November", status: "Posted" },
-    { id: "JE-003", date: "2023-11-29", description: "Pembelian bahan baku dari Pemasok A", status: "Draft" },
+const journalEntriesData: JournalEntry[] = [
+    { 
+        id: "JE-001", 
+        date: "2023-11-28", 
+        description: "Mencatat penjualan harian", 
+        status: "Posted",
+        details: [
+            { account: "1010 - Kas", debit: 45231890, credit: 0 },
+            { account: "4010 - Pendapatan Penjualan", debit: 0, credit: 45231890 },
+        ] 
+    },
+    { 
+        id: "JE-002", 
+        date: "2023-11-28", 
+        description: "Pembayaran gaji staf November", 
+        status: "Posted",
+        details: [
+             { account: "6010 - Biaya Gaji", debit: 15000000, credit: 0 },
+             { account: "1010 - Kas", debit: 0, credit: 15000000 },
+        ]
+    },
+    { 
+        id: "JE-003", 
+        date: "2023-11-29", 
+        description: "Pembelian bahan baku dari Pemasok A", 
+        status: "Draft",
+        details: [
+            { account: "1110 - Persediaan Bahan Baku", debit: 5000000, credit: 0 },
+            { account: "2010 - Utang Usaha", debit: 0, credit: 5000000 },
+        ]
+    },
 ];
 
-const journalEntryDetails = [
-    { account: "1010 - Kas", debit: 45231890, credit: 0 },
-    { account: "4010 - Pendapatan Penjualan", debit: 0, credit: 45231890 },
-]
 
 export default function JournalEntriesPage() {
     const [isJournalEntryOpen, setJournalEntryOpen] = useState(false);
     const [detailRows, setDetailRows] = useState(1);
+    const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(journalEntriesData[0]);
     const { toast } = useToast();
 
     const handleCreateEntry = (event: React.FormEvent<HTMLFormElement>) => {
@@ -66,12 +99,13 @@ export default function JournalEntriesPage() {
         setDetailRows(prev => prev + 1);
     }
 
-    const handleViewDetails = () => {
-        toast({
-            title: "Tampilan Detail",
-            description: "Detail untuk entri jurnal ini akan ditampilkan di bawah. (Simulasi)"
-        });
+    const handleViewDetails = (entry: JournalEntry) => {
+        setSelectedEntry(entry);
     };
+
+    const totalDebit = selectedEntry?.details.reduce((sum, item) => sum + item.debit, 0) || 0;
+    const totalCredit = selectedEntry?.details.reduce((sum, item) => sum + item.credit, 0) || 0;
+
 
     return (
         <div className="space-y-6">
@@ -103,13 +137,13 @@ export default function JournalEntriesPage() {
                         </TableHeader>
                         <TableBody>
                             {journalEntriesData.map((entry) => (
-                            <TableRow key={entry.id}>
+                            <TableRow key={entry.id} className={selectedEntry?.id === entry.id ? "bg-muted/50" : ""}>
                                 <TableCell className="font-medium">{entry.id}</TableCell>
                                 <TableCell>{entry.date}</TableCell>
                                 <TableCell>{entry.description}</TableCell>
                                 <TableCell><Badge variant={entry.status === 'Posted' ? 'secondary' : 'outline'}>{entry.status}</Badge></TableCell>
                                 <TableCell className="text-right">
-                                    <Button variant="outline" size="sm" onClick={handleViewDetails}>Lihat Detail</Button>
+                                    <Button variant="outline" size="sm" onClick={() => handleViewDetails(entry)}>Lihat Detail</Button>
                                 </TableCell>
                             </TableRow>
                             ))}
@@ -118,37 +152,40 @@ export default function JournalEntriesPage() {
                 </CardContent>
             </Card>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Detail Entri Jurnal: JE-001</CardTitle>
-                    <CardDescription>Detail transaksi untuk jurnal yang dipilih.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Akun</TableHead>
-                                <TableHead className="text-right">Debit</TableHead>
-                                <TableHead className="text-right">Kredit</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {journalEntryDetails.map((detail, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>{detail.account}</TableCell>
-                                    <TableCell className="text-right font-mono">Rp{detail.debit.toLocaleString('id-ID')}</TableCell>
-                                    <TableCell className="text-right font-mono">Rp{detail.credit.toLocaleString('id-ID')}</TableCell>
+            {selectedEntry && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Detail Entri Jurnal: {selectedEntry.id}</CardTitle>
+                        <CardDescription>Detail transaksi untuk jurnal "{selectedEntry.description}".</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Akun</TableHead>
+                                    <TableHead className="text-right">Debit</TableHead>
+                                    <TableHead className="text-right">Kredit</TableHead>
                                 </TableRow>
-                            ))}
-                             <TableRow className="font-bold bg-muted/50">
-                                <TableCell>Total</TableCell>
-                                <TableCell className="text-right font-mono">Rp45.231.890</TableCell>
-                                <TableCell className="text-right font-mono">Rp45.231.890</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
+                            </TableHeader>
+                            <TableBody>
+                                {selectedEntry.details.map((detail, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{detail.account}</TableCell>
+                                        <TableCell className="text-right font-mono">Rp{detail.debit.toLocaleString('id-ID')}</TableCell>
+                                        <TableCell className="text-right font-mono">Rp{detail.credit.toLocaleString('id-ID')}</TableCell>
+                                    </TableRow>
+                                ))}
+                                <TableRow className="font-bold bg-muted/50">
+                                    <TableCell>Total</TableCell>
+                                    <TableCell className="text-right font-mono">Rp{totalDebit.toLocaleString('id-ID')}</TableCell>
+                                    <TableCell className="text-right font-mono">Rp{totalCredit.toLocaleString('id-ID')}</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+            )}
+
 
             <Dialog open={isJournalEntryOpen} onOpenChange={setJournalEntryOpen}>
                 <DialogContent className="sm:max-w-2xl">

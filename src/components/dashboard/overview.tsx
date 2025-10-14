@@ -22,12 +22,15 @@ const generateData = () => [
 
 export function Overview() {
   const [data, setData] = useState<any[]>([]);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    // This will only run on the client, after initial hydration
     setData(generateData());
+    setIsClient(true);
   }, []);
   
-  if (!data.length) {
+  if (!isClient) {
     return <Skeleton className="h-[350px] w-full" />;
   }
 
