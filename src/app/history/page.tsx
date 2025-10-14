@@ -23,10 +23,10 @@ import { useToast } from "@/hooks/use-toast";
 
 // Di aplikasi nyata, data ini akan berasal dari database.
 const initialSalesHistory = [
-  { id: "SALE-001", date: "2023-11-20", customer: "Olivia Martin", total: 199990, status: "Selesai", items: 3 },
-  { id: "SALE-002", date: "2023-11-21", customer: "Jackson Lee", total: 39000, status: "Selesai", items: 1 },
-  { id: "SALE-003", date: "2023-11-22", customer: "William Kim", total: 99000, status: "Selesai", items: 1 },
-  { id: "SALE-004", date: "2023-11-23", customer: "Sofia Davis", total: 299000, status: "Selesai", items: 2 },
+  { id: "SALE-001", date: "2023-11-20", total: 199990, status: "Selesai", items: 3 },
+  { id: "SALE-002", date: "2023-11-21", total: 39000, status: "Selesai", items: 1 },
+  { id: "SALE-003", date: "2023-11-22", total: 99000, status: "Selesai", items: 1 },
+  { id: "SALE-004", date: "2023-11-23", total: 299000, status: "Selesai", items: 2 },
 ];
 
 export default function HistoryPage() {
@@ -78,8 +78,7 @@ export default function HistoryPage() {
           <TableHeader>
             <TableRow>
               <TableHead>ID Penjualan</TableHead>
-              <TableHead className="hidden sm:table-cell">Tanggal</TableHead>
-              <TableHead>Pelanggan</TableHead>
+              <TableHead>Tanggal</TableHead>
               <TableHead className="hidden sm:table-cell">Status</TableHead>
               <TableHead className="hidden md:table-cell text-right">Produk</TableHead>
               <TableHead className="text-right">Total</TableHead>
@@ -90,8 +89,7 @@ export default function HistoryPage() {
             {salesHistory.map((sale) => (
               <TableRow key={sale.id}>
                 <TableCell className="font-medium">{sale.id}</TableCell>
-                <TableCell className="hidden sm:table-cell">{sale.date}</TableCell>
-                <TableCell>{sale.customer}</TableCell>
+                <TableCell>{sale.date}</TableCell>
                 <TableCell className="hidden sm:table-cell">
                   <Badge variant={getStatusVariant(sale.status) as any}>{sale.status}</Badge>
                 </TableCell>
