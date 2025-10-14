@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { CustomLink } from '@/components/ui/custom-link';
 
 // Data placeholder untuk rincian transaksi
 const transactionDetailsData = {
@@ -73,10 +74,22 @@ export default function PaymentMethodDetailPage() {
           <TableBody>
             {transactions.length > 0 ? (
                 transactions.map((tx: TransactionDetail) => (
-                <TableRow key={tx.id}>
-                    <TableCell className="font-medium">{tx.id}</TableCell>
-                    <TableCell>{tx.date}</TableCell>
-                    <TableCell className="text-right">Rp{tx.amount.toLocaleString('id-ID')}</TableCell>
+                <TableRow key={tx.id} className="cursor-pointer hover:bg-muted/50">
+                    <TableCell className="font-medium">
+                        <CustomLink href="/history" className="block w-full h-full">
+                            {tx.id}
+                        </CustomLink>
+                    </TableCell>
+                    <TableCell>
+                        <CustomLink href="/history" className="block w-full h-full">
+                            {tx.date}
+                        </CustomLink>
+                    </TableCell>
+                    <TableCell className="text-right">
+                        <CustomLink href="/history" className="block w-full h-full">
+                            Rp{tx.amount.toLocaleString('id-ID')}
+                        </CustomLink>
+                    </TableCell>
                 </TableRow>
                 ))
             ) : (
@@ -92,5 +105,3 @@ export default function PaymentMethodDetailPage() {
     </Card>
   )
 }
-
-    
