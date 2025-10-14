@@ -16,6 +16,7 @@ import {
   Boxes,
   Truck,
   Settings,
+  History
 } from 'lucide-react';
 import { NovaPosIcon } from '@/components/icons/nova-pos-icon';
 
@@ -24,6 +25,7 @@ const menuItems = [
   { href: '/sales', label: 'Sales', icon: ShoppingCart },
   { href: '/inventory', label: 'Inventory', icon: Boxes },
   { href: '/orders', label: 'Purchase Orders', icon: Truck },
+  { href: '/history', label: 'History', icon: History },
 ];
 
 export function Nav() {
@@ -76,3 +78,5 @@ export function Nav() {
     </>
   );
 }
+
+    
