@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { inventoryItems } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { PlusCircle, MinusCircle, X, ShoppingCart, ScanLine } from 'lucide-react';
+import { PlusCircle, MinusCircle, X, ShoppingCart } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -17,14 +17,12 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { QrScanner } from '@yudiel/react-qr-scanner';
 
 type CartItem = typeof inventoryItems[0] & { quantity: number };
 
 export default function SalesPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false);
-  const [isScannerOpen, setScannerOpen] = useState(false);
   const { toast } = useToast();
 
   const addToCart = (product: typeof inventoryItems[0]) => {
@@ -55,34 +53,6 @@ export default function SalesPage() {
         )
         .filter((item) => item.quantity > 0)
     );
-  };
-
-  const handleScan = (result: string) => {
-      setScannerOpen(false);
-      const product = inventoryItems.find(item => item.sku === result);
-      if (product) {
-        addToCart(product);
-        toast({
-          title: "Product Scanned",
-          description: `${product.name} added to cart.`,
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Scan Error",
-          description: `Product with SKU "${result}" not found.`,
-        });
-      }
-  };
-
-  const handleScanError = (err: any) => {
-    console.error(err);
-    setScannerOpen(false);
-    toast({
-      variant: "destructive",
-      title: "Scan Error",
-      description: "Could not access the camera. Please check permissions and try again.",
-    });
   };
 
   const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -121,10 +91,6 @@ export default function SalesPage() {
                 ))}
               </TabsList>
             </Tabs>
-             <Button variant="outline" onClick={() => setScannerOpen(true)}>
-                <ScanLine className="h-4 w-4 mr-2" />
-                Scan Product
-            </Button>
         </div>
         <Tabs defaultValue={categories[0] || 'all'}>
             {categories.map(category => (
@@ -210,22 +176,6 @@ export default function SalesPage() {
             <Button variant="default" size="lg" onClick={completeSale}>Pay with Card</Button>
             <Button variant="secondary" size="lg" onClick={completeSale}>Pay with Cash</Button>
             <Button variant="secondary" size="lg" onClick={completeSale}>Other Payment Method</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={isScannerOpen} onOpenChange={setScannerOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Scan Barcode/QR Code</DialogTitle>
-            <DialogDescription>Point the camera at a barcode or QR code.</DialogDescription>
-          </DialogHeader>
-          <div className="p-4 bg-muted rounded-lg">
-              {isScannerOpen && (
-                <QrScanner
-                    onDecode={handleScan}
-                    onError={handleScanError}
-                />
-              )}
           </div>
         </DialogContent>
       </Dialog>
