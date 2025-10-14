@@ -15,6 +15,9 @@ export type SaleData = {
     discount: number;
     tax: number;
     total: number;
+    payments: { method: string; amount: number }[];
+    totalPaid: number;
+    change: number;
 };
 
 interface ReceiptProps {
@@ -22,15 +25,15 @@ interface ReceiptProps {
 }
 
 export function Receipt({ sale }: ReceiptProps) {
-  const { cart, subtotal, discount, tax, total } = sale;
-  const printDate = new Date().toLocaleString();
+  const { cart, subtotal, discount, tax, total, totalPaid, change, payments } = sale;
+  const printDate = new Date().toLocaleString('id-ID');
 
   return (
     <div className="text-black bg-white">
       <div className="text-center mb-2">
         <NovaPosIcon className="mx-auto h-8 w-8" />
         <h2 className="text-lg font-bold">Nova POS</h2>
-        <p>123 Coffee St, Jakarta</p>
+        <p>Jl. Kopi No. 123, Jakarta</p>
         <p>{printDate}</p>
       </div>
       <hr />
@@ -38,7 +41,10 @@ export function Receipt({ sale }: ReceiptProps) {
         {cart.map((item, index) => (
           <div key={index} className="item">
             <div>{item.quantity}x {item.name}</div>
-            <div className="text-right">${(item.price * item.quantity).toFixed(2)}</div>
+            <div className="item-info">
+                <span>@{item.price.toFixed(0)}</span>
+                <span>Rp{(item.price * item.quantity).toFixed(0)}</span>
+            </div>
           </div>
         ))}
       </div>
@@ -46,24 +52,41 @@ export function Receipt({ sale }: ReceiptProps) {
       <div className="space-y-1">
         <div className="flex justify-between">
           <span>SUBTOTAL</span>
-          <span>${subtotal.toFixed(2)}</span>
+          <span>Rp{subtotal.toFixed(0)}</span>
         </div>
         <div className="flex justify-between">
-          <span>DISCOUNT</span>
-          <span>-${discount.toFixed(2)}</span>
+          <span>DISKON</span>
+          <span>-Rp{discount.toFixed(0)}</span>
         </div>
         <div className="flex justify-between">
-          <span>TAX (11%)</span>
-          <span>${tax.toFixed(2)}</span>
+          <span>PAJAK (11%)</span>
+          <span>Rp{tax.toFixed(0)}</span>
         </div>
         <hr />
         <div className="flex justify-between font-bold">
           <span>TOTAL</span>
-          <span>${total.toFixed(2)}</span>
+          <span>Rp{total.toFixed(0)}</span>
+        </div>
+      </div>
+       <hr />
+      <div className="space-y-1">
+        {payments.map((p, i) => (
+             <div className="flex justify-between" key={i}>
+                <span>{p.method}</span>
+                <span>Rp{p.amount.toFixed(0)}</span>
+            </div>
+        ))}
+        <div className="flex justify-between">
+          <span>TOTAL BAYAR</span>
+          <span>Rp{totalPaid.toFixed(0)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>KEMBALI</span>
+          <span>Rp{(change > 0 ? change : 0).toFixed(0)}</span>
         </div>
       </div>
       <div className="text-center mt-4">
-        <p>Thank you!</p>
+        <p>Terima kasih!</p>
       </div>
     </div>
   );

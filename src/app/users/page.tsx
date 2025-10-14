@@ -30,7 +30,7 @@ export default function UsersPage() {
   const getRoleVariant = (role: string) => {
     switch (role) {
       case "Admin": return "default";
-      case "Cashier": return "secondary";
+      case "Kasir": return "secondary";
       default: return "outline";
     }
   };
@@ -40,13 +40,13 @@ export default function UsersPage() {
       <CardHeader>
         <div className="flex items-center justify-between gap-4">
           <div>
-            <CardTitle>Users</CardTitle>
-            <CardDescription>Manage staff accounts and their roles.</CardDescription>
+            <CardTitle>Pengguna</CardTitle>
+            <CardDescription>Kelola akun staf dan peran mereka.</CardDescription>
           </div>
           <Button size="sm" className="gap-1">
             <PlusCircle className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Add User
+              Tambah Pengguna
             </span>
           </Button>
         </div>
@@ -55,10 +55,10 @@ export default function UsersPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead className="hidden sm:table-cell">Last Active</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>Nama</TableHead>
+              <TableHead>Peran</TableHead>
+              <TableHead className="hidden sm:table-cell">Terakhir Aktif</TableHead>
+              <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -80,9 +80,9 @@ export default function UsersPage() {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>View Activity</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                            <DropdownMenuItem>Ubah</DropdownMenuItem>
+                            <DropdownMenuItem>Lihat Aktivitas</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">Hapus</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </TableCell>

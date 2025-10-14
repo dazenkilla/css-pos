@@ -15,18 +15,18 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Settings</CardTitle>
-          <CardDescription>Manage your store settings and preferences.</CardDescription>
+          <CardTitle>Pengaturan</CardTitle>
+          <CardDescription>Kelola pengaturan dan preferensi toko Anda.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="store-name">Store Name</Label>
+              <Label htmlFor="store-name">Nama Toko</Label>
               <Input id="store-name" defaultValue="Nova POS" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="address">Address</Label>
-              <Input id="address" defaultValue="123 Coffee St, Jakarta" />
+              <Label htmlFor="address">Alamat</Label>
+              <Input id="address" defaultValue="Jl. Kopi No. 123, Jakarta" />
             </div>
           </div>
         </CardContent>
@@ -34,39 +34,39 @@ export default function SettingsPage() {
       
       <Card>
         <CardHeader>
-          <CardTitle>Roles & Permissions</CardTitle>
+          <CardTitle>Peran & Izin</CardTitle>
           <CardDescription>
-            Define roles and manage what users can see and do. (UI Placeholder)
+            Tentukan peran dan kelola apa yang dapat dilihat dan dilakukan pengguna. (UI Placeholder)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
             <div className="flex items-center justify-between p-3 bg-muted rounded-md">
                 <div>
                     <h4 className="font-medium">Administrator</h4>
-                    <p className="text-sm text-muted-foreground">Full access to all features.</p>
+                    <p className="text-sm text-muted-foreground">Akses penuh ke semua fitur.</p>
                 </div>
-                <Button variant="outline" size="sm">Manage</Button>
+                <Button variant="outline" size="sm">Kelola</Button>
             </div>
             <div className="flex items-center justify-between p-3 bg-muted rounded-md">
                 <div>
-                    <h4 className="font-medium">Cashier</h4>
-                    <p className="text-sm text-muted-foreground">Access to Sales and History modules only.</p>
+                    <h4 className="font-medium">Kasir</h4>
+                    <p className="text-sm text-muted-foreground">Hanya akses ke modul Penjualan dan Riwayat.</p>
                 </div>
-                <Button variant="outline" size="sm">Manage</Button>
+                <Button variant="outline" size="sm">Kelola</Button>
             </div>
         </CardContent>
       </Card>
       
       <Card>
         <CardHeader>
-          <CardTitle>Shift Management</CardTitle>
+          <CardTitle>Manajemen Shift</CardTitle>
           <CardDescription>
-            Manage cashier shifts. (UI Placeholder)
+            Kelola shift kasir. (UI Placeholder)
           </CardDescription>
         </CardHeader>
         <CardContent>
-           <p className="text-muted-foreground">Shift management interface will be here.</p>
-           <Button className="mt-4">Start New Shift</Button>
+           <p className="text-muted-foreground">Antarmuka manajemen shift akan ada di sini.</p>
+           <Button className="mt-4">Mulai Shift Baru</Button>
         </CardContent>
       </Card>
 

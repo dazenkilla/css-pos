@@ -22,11 +22,11 @@ import {
 import { NovaPosIcon } from '@/components/icons/nova-pos-icon';
 
 const menuItems = [
-  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/sales', label: 'Sales', icon: ShoppingCart },
-  { href: '/inventory', label: 'Inventory', icon: Boxes },
-  { href: '/orders', label: 'Purchase Orders', icon: Truck },
-  { href: '/history', label: 'History', icon: History },
+  { href: '/', label: 'Dasbor', icon: LayoutDashboard },
+  { href: '/sales', label: 'Penjualan', icon: ShoppingCart },
+  { href: '/inventory', label: 'Inventaris', icon: Boxes },
+  { href: '/orders', label: 'Pesanan', icon: Truck },
+  { href: '/history', label: 'Riwayat', icon: History },
 ];
 
 export function Nav() {
@@ -66,11 +66,11 @@ export function Nav() {
             <SidebarMenuButton
               asChild
               isActive={pathname.startsWith('/users')}
-              tooltip="Users"
+              tooltip="Pengguna"
             >
               <Link href="/users">
                 <Users />
-                <span>Users</span>
+                <span>Pengguna</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -78,11 +78,11 @@ export function Nav() {
             <SidebarMenuButton
               asChild
               isActive={pathname.startsWith('/settings')}
-              tooltip="Settings"
+              tooltip="Pengaturan"
             >
               <Link href="/settings">
                 <Settings />
-                <span>Settings</span>
+                <span>Pengaturan</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

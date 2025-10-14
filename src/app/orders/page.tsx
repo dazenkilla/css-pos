@@ -33,9 +33,9 @@ import { Textarea } from "@/components/ui/textarea"
 export default function OrdersPage() {
   const getStatusVariant = (status: string) => {
     switch (status) {
-      case "Fulfilled": return "secondary";
-      case "Pending": return "outline";
-      case "Cancelled": return "destructive";
+      case "Selesai": return "secondary";
+      case "Tertunda": return "outline";
+      case "Dibatalkan": return "destructive";
       default: return "default";
     }
   };
@@ -45,35 +45,35 @@ export default function OrdersPage() {
       <CardHeader>
         <div className="flex items-center justify-between gap-4">
           <div>
-            <CardTitle>Purchase Orders</CardTitle>
-            <CardDescription>Create and track purchase orders for your inventory.</CardDescription>
+            <CardTitle>Pesanan Pembelian</CardTitle>
+            <CardDescription>Buat dan lacak pesanan pembelian untuk inventaris Anda.</CardDescription>
           </div>
           <Sheet>
             <SheetTrigger asChild>
               <Button size="sm" className="gap-1">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Create Order
+                  Buat Pesanan
                 </span>
               </Button>
             </SheetTrigger>
             <SheetContent>
               <SheetHeader>
-                <SheetTitle>Create Purchase Order</SheetTitle>
-                <SheetDescription>Fill in the details to create a new purchase order.</SheetDescription>
+                <SheetTitle>Buat Pesanan Pembelian</SheetTitle>
+                <SheetDescription>Isi detail untuk membuat pesanan pembelian baru.</SheetDescription>
               </SheetHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="supplier">Supplier</Label>
-                  <Input id="supplier" placeholder="e.g. Acme Inc." />
+                  <Label htmlFor="supplier">Pemasok</Label>
+                  <Input id="supplier" placeholder="cth. PT Pemasok Jaya" />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="items">Items</Label>
-                  <Textarea id="items" placeholder="List items and quantities, one per line." />
+                  <Label htmlFor="items">Produk</Label>
+                  <Textarea id="items" placeholder="Tulis produk dan jumlah, satu per baris." />
                 </div>
               </div>
               <SheetFooter>
-                <Button type="submit">Create Order</Button>
+                <Button type="submit">Buat Pesanan</Button>
               </SheetFooter>
             </SheetContent>
           </Sheet>
@@ -83,9 +83,9 @@ export default function OrdersPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="hidden sm:table-cell">Order ID</TableHead>
-              <TableHead>Supplier</TableHead>
-              <TableHead className="hidden sm:table-cell">Date</TableHead>
+              <TableHead className="hidden sm:table-cell">ID Pesanan</TableHead>
+              <TableHead>Pemasok</TableHead>
+              <TableHead className="hidden sm:table-cell">Tanggal</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Total</TableHead>
             </TableRow>
@@ -99,7 +99,7 @@ export default function OrdersPage() {
                 <TableCell>
                   <Badge variant={getStatusVariant(order.status) as any}>{order.status}</Badge>
                 </TableCell>
-                <TableCell className="text-right">${order.total.toFixed(2)}</TableCell>
+                <TableCell className="text-right">Rp{order.total.toFixed(0)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

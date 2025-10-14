@@ -25,7 +25,7 @@ import { renderToString } from 'react-dom/server';
 
 
 type CartItem = typeof inventoryItems[0] & { quantity: number };
-type Payment = { method: 'Cash' | 'Card'; amount: number };
+type Payment = { method: 'Tunai' | 'Kartu'; amount: number };
 
 export default function SalesPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -48,8 +48,8 @@ export default function SalesPage() {
       return [...prevCart, { ...product, quantity: 1 }];
     });
     toast({
-      title: "Item Added",
-      description: `${product.name} has been added to the cart.`,
+      title: "Produk Ditambahkan",
+      description: `${product.name} telah ditambahkan ke keranjang.`,
     });
   };
 
@@ -94,19 +94,19 @@ export default function SalesPage() {
       setDiscount(newDiscount);
       setDiscountDialogOpen(false);
       toast({
-        title: "Discount Applied",
-        description: `${newDiscount}% discount has been applied to the subtotal.`
+        title: "Diskon Diterapkan",
+        description: `Diskon ${newDiscount}% telah diterapkan pada subtotal.`
       })
     } else {
       toast({
         variant: 'destructive',
-        title: "Invalid Discount",
-        description: "Please enter a valid percentage between 0 and 100."
+        title: "Diskon Tidak Valid",
+        description: "Silakan masukkan persentase antara 0 dan 100."
       })
     }
   }
   
-  const handleAddPayment = (method: 'Cash' | 'Card') => {
+  const handleAddPayment = (method: 'Tunai' | 'Kartu') => {
     if (remainingAmount > 0) {
         setPayments([...payments, { method, amount: remainingAmount > 0 ? remainingAmount : 0 }]);
     }
@@ -128,7 +128,7 @@ export default function SalesPage() {
       printWindow.document.write(`
         <html>
           <head>
-            <title>Print Receipt</title>
+            <title>Cetak Struk</title>
             <style>
               @page {
                 size: 58mm auto;
@@ -140,7 +140,7 @@ export default function SalesPage() {
                 line-height: 1.4;
                 margin: 0;
                 padding: 3mm;
-                width: 52mm; /* 58mm - 3mm padding on each side */
+                width: 52mm; /* 58mm - 3mm padding di setiap sisi */
                 color: #000;
               }
               #receipt-print {
@@ -192,9 +192,9 @@ export default function SalesPage() {
     };
     
     toast({
-      title: "Sale Complete!",
-      description: `Total: $${total.toFixed(2)}`,
-      action: <Button variant="outline" size="sm" onClick={() => handlePrint(saleData)}><Printer className="mr-2 h-4 w-4" />Print Receipt</Button>
+      title: "Penjualan Selesai!",
+      description: `Total: Rp${total.toFixed(2)}`,
+      action: <Button variant="outline" size="sm" onClick={() => handlePrint(saleData)}><Printer className="mr-2 h-4 w-4" />Cetak Struk</Button>
     });
 
     setCart([]);
@@ -207,7 +207,7 @@ export default function SalesPage() {
     <>
       <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-5">
         
-        {/* Product Selection Panel */}
+        {/* Panel Pemilihan Produk */}
         <div className="lg:col-span-3">
           <Tabs defaultValue={categories[0] || 'all'}>
             <div className="flex items-center">
@@ -238,7 +238,7 @@ export default function SalesPage() {
                       </CardContent>
                       <CardFooter className="flex flex-col items-start p-3">
                         <h3 className="font-semibold text-sm truncate w-full">{product.name}</h3>
-                        <p className="font-bold text-base">${product.price.toFixed(2)}</p>
+                        <p className="font-bold text-base">Rp{product.price.toFixed(0)}</p>
                       </CardFooter>
                     </Card>
                   ))}
@@ -248,19 +248,19 @@ export default function SalesPage() {
           </Tabs>
         </div>
         
-        {/* Cart Panel */}
+        {/* Panel Keranjang */}
         <div className="lg:col-span-2">
           <Card className="flex flex-col h-full">
             <CardHeader className="flex flex-row items-center justify-between pb-4">
-              <CardTitle>Current Order</CardTitle>
+              <CardTitle>Pesanan Saat Ini</CardTitle>
               <ShoppingCart className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto p-4">
               {cart.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center">
                   <ShoppingCart className="h-16 w-16 text-muted-foreground/30" />
-                  <p className="text-muted-foreground mt-4">Your cart is empty.</p>
-                  <p className="text-sm text-muted-foreground/80">Tap a product to add it to the order.</p>
+                  <p className="text-muted-foreground mt-4">Keranjang Anda kosong.</p>
+                  <p className="text-sm text-muted-foreground/80">Ketuk produk untuk menambahkannya ke pesanan.</p>
                 </div>
               ) : (
                 <div className="flex flex-col gap-4">
@@ -275,14 +275,14 @@ export default function SalesPage() {
                       />
                       <div className="flex-1">
                         <p className="font-medium text-sm">{item.name}</p>
-                        <p className="text-xs text-muted-foreground">${item.price.toFixed(2)}</p>
+                        <p className="text-xs text-muted-foreground">Rp{item.price.toFixed(0)}</p>
                         <div className="flex items-center gap-2 mt-1">
                           <Button size="icon" variant="outline" className="h-6 w-6" onClick={() => updateQuantity(item.sku, -1)}><MinusCircle className="h-3.5 w-3.5" /></Button>
                           <span className="font-bold text-sm w-4 text-center">{item.quantity}</span>
                           <Button size="icon" variant="outline" className="h-6 w-6" onClick={() => updateQuantity(item.sku, 1)}><PlusCircle className="h-3.5 w-3.5" /></Button>
                         </div>
                       </div>
-                      <p className="font-semibold w-16 text-right">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="font-semibold w-16 text-right">Rp{(item.price * item.quantity).toFixed(0)}</p>
                       <Button size="icon" variant="ghost" className="text-muted-foreground hover:text-destructive h-8 w-8" onClick={() => removeFromCart(item.sku)}><X className="h-4 w-4"/></Button>
                     </div>
                   ))}
@@ -293,20 +293,20 @@ export default function SalesPage() {
               <>
                 <Separator />
                 <CardFooter className="flex flex-col gap-2 items-stretch p-4">
-                  <div className="flex justify-between w-full text-muted-foreground"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
+                  <div className="flex justify-between w-full text-muted-foreground"><span>Subtotal</span><span>Rp{subtotal.toFixed(0)}</span></div>
                   <div className="flex justify-between w-full text-muted-foreground">
-                    <span>Discount ({discount}%)</span>
-                    <span>-${totalDiscount.toFixed(2)}</span>
+                    <span>Diskon ({discount}%)</span>
+                    <span>-Rp{totalDiscount.toFixed(0)}</span>
                   </div>
-                  <div className="flex justify-between w-full text-muted-foreground"><span>Tax (11%)</span><span>${tax.toFixed(2)}</span></div>
+                  <div className="flex justify-between w-full text-muted-foreground"><span>Pajak (11%)</span><span>Rp{tax.toFixed(0)}</span></div>
                   <Separator className="my-2" />
-                  <div className="flex justify-between w-full font-semibold text-lg"><span>Total</span><span>${total.toFixed(2)}</span></div>
+                  <div className="flex justify-between w-full font-semibold text-lg"><span>Total</span><span>Rp{total.toFixed(0)}</span></div>
                   <div className="grid grid-cols-2 gap-2 mt-4">
                     <Button variant="outline" size="lg" onClick={() => setDiscountDialogOpen(true)}>
                       <Ticket className="mr-2 h-4 w-4"/>
-                      Discount
+                      Diskon
                     </Button>
-                    <Button size="lg" onClick={() => setPaymentDialogOpen(true)} disabled={cart.length === 0}>Charge</Button>
+                    <Button size="lg" onClick={() => setPaymentDialogOpen(true)} disabled={cart.length === 0}>Bayar</Button>
                   </div>
                 </CardFooter>
               </>
@@ -314,17 +314,17 @@ export default function SalesPage() {
           </Card>
         </div>
 
-        {/* Discount Dialog */}
+        {/* Dialog Diskon */}
         <Dialog open={isDiscountDialogOpen} onOpenChange={setDiscountDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Apply Discount</DialogTitle>
-              <DialogDescription>Enter a discount percentage to apply to the subtotal.</DialogDescription>
+              <DialogTitle>Terapkan Diskon</DialogTitle>
+              <DialogDescription>Masukkan persentase diskon untuk diterapkan pada subtotal.</DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="discount" className="text-right">
-                  Discount (%)
+                  Diskon (%)
                 </Label>
                 <Input
                   id="discount"
@@ -332,38 +332,38 @@ export default function SalesPage() {
                   value={discountInput}
                   onChange={(e) => setDiscountInput(e.target.value)}
                   className="col-span-3"
-                  placeholder="e.g. 10"
+                  placeholder="cth. 10"
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={applyDiscount}>Apply Discount</Button>
+              <Button onClick={applyDiscount}>Terapkan Diskon</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
 
-        {/* Payment Dialog */}
+        {/* Dialog Pembayaran */}
         <Dialog open={isPaymentDialogOpen} onOpenChange={setPaymentDialogOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Complete Payment</DialogTitle>
+              <DialogTitle>Selesaikan Pembayaran</DialogTitle>
               <DialogDescription>
-                Split payment across multiple methods if needed.
+                Bagi pembayaran ke beberapa metode jika diperlukan.
               </DialogDescription>
             </DialogHeader>
             <div className="py-4 space-y-4">
                 <div className="text-center">
-                    <p className="text-sm text-muted-foreground">Total Amount</p>
-                    <p className="text-4xl font-bold">${total.toFixed(2)}</p>
+                    <p className="text-sm text-muted-foreground">Jumlah Total</p>
+                    <p className="text-4xl font-bold">Rp{total.toFixed(0)}</p>
                 </div>
                 <div className="space-y-2">
-                  <p className="font-medium">Payments</p>
+                  <p className="font-medium">Pembayaran</p>
                   {payments.map((payment, index) => (
                     <div key={index} className="flex items-center gap-2 p-2 border rounded-md">
                       <span className="font-semibold flex-1">{payment.method}</span>
                        <Input 
                         type="number"
-                        value={payment.amount.toFixed(2)}
+                        value={payment.amount.toFixed(0)}
                         onChange={(e) => handlePaymentAmountChange(index, parseFloat(e.target.value) || 0)}
                         className="w-32"
                        />
@@ -372,23 +372,23 @@ export default function SalesPage() {
                        </Button>
                     </div>
                   ))}
-                  {payments.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">No payments added yet.</p>}
+                  {payments.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">Belum ada pembayaran.</p>}
                 </div>
 
                 <div className="flex justify-between items-center text-lg font-semibold bg-muted p-3 rounded-md">
-                    <span>Remaining</span>
-                    <span>${remainingAmount > 0 ? remainingAmount.toFixed(2) : '0.00'}</span>
+                    <span>Sisa</span>
+                    <span>Rp{remainingAmount > 0 ? remainingAmount.toFixed(0) : '0'}</span>
                 </div>
 
                 {remainingAmount > 0.001 && (
                     <div className="flex gap-2 justify-center">
-                        <Button variant="secondary" onClick={() => handleAddPayment('Cash')}>
+                        <Button variant="secondary" onClick={() => handleAddPayment('Tunai')}>
                           <Wallet className="mr-2 h-4 w-4" />
-                          Pay with Cash
+                          Bayar Tunai
                         </Button>
-                        <Button variant="secondary" onClick={() => handleAddPayment('Card')}>
+                        <Button variant="secondary" onClick={() => handleAddPayment('Kartu')}>
                           <CreditCard className="mr-2 h-4 w-4" />
-                          Pay with Card
+                          Bayar Kartu
                         </Button>
                     </div>
                 )}
@@ -400,7 +400,7 @@ export default function SalesPage() {
                 onClick={completeSale}
                 disabled={remainingAmount > 0.001 || cart.length === 0}
               >
-                Complete Sale
+                Selesaikan Penjualan
               </Button>
             </DialogFooter>
           </DialogContent>

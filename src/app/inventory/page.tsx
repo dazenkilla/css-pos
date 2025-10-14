@@ -38,9 +38,9 @@ export default function InventoryPage() {
   const { toast } = useToast();
 
   const getStatus = (stock: number) => {
-    if (stock > 20) return { text: "In Stock", variant: "secondary" as const };
-    if (stock > 0) return { text: "Low Stock", variant: "outline" as const };
-    return { text: "Out of Stock", variant: "destructive" as const };
+    if (stock > 20) return { text: "Stok Cukup", variant: "secondary" as const };
+    if (stock > 0) return { text: "Stok Menipis", variant: "outline" as const };
+    return { text: "Stok Habis", variant: "destructive" as const };
   };
 
   const handleOpenTransferDialog = (item: typeof inventoryItems[0]) => {
@@ -50,8 +50,8 @@ export default function InventoryPage() {
 
   const handleTransfer = () => {
     toast({
-      title: "Transfer Initiated",
-      description: `Stock transfer for ${transferItem?.name} has been processed.`,
+      title: "Transfer Dimulai",
+      description: `Transfer stok untuk ${transferItem?.name} telah diproses.`,
     });
     setTransferDialogOpen(false);
   };
@@ -62,17 +62,17 @@ export default function InventoryPage() {
         <CardHeader>
           <div className="flex items-center justify-between gap-4">
             <div>
-              <CardTitle>Inventory</CardTitle>
-              <CardDescription>Manage your products and view their stock levels.</CardDescription>
+              <CardTitle>Inventaris</CardTitle>
+              <CardDescription>Kelola produk dan lihat tingkat stok Anda.</CardDescription>
             </div>
             <div className="flex gap-2">
-              <Button size="sm" variant="outline" className="gap-1" onClick={() => alert('Stock Opname process initiated. (This is a placeholder)')}>
-                Stock Opname
+              <Button size="sm" variant="outline" className="gap-1" onClick={() => alert('Proses stok opname dimulai. (Ini adalah placeholder)')}>
+                Stok Opname
               </Button>
               <Button size="sm" className="gap-1">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                  Add Product
+                  Tambah Produk
                 </span>
               </Button>
             </div>
@@ -82,13 +82,13 @@ export default function InventoryPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Product</TableHead>
-                <TableHead className="hidden md:table-cell">Category</TableHead>
+                <TableHead>Produk</TableHead>
+                <TableHead className="hidden md:table-cell">Kategori</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="hidden md:table-cell">Expiry Date</TableHead>
-                <TableHead className="hidden md:table-cell text-right">Price</TableHead>
-                <TableHead className="text-right">Stock</TableHead>
-                <TableHead className="text-center">Actions</TableHead>
+                <TableHead className="hidden md:table-cell">Tgl. Kedaluwarsa</TableHead>
+                <TableHead className="hidden md:table-cell text-right">Harga</TableHead>
+                <TableHead className="text-right">Stok</TableHead>
+                <TableHead className="text-center">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -110,12 +110,12 @@ export default function InventoryPage() {
                       <Badge variant={status.variant}>{status.text}</Badge>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">{item.expiryDate || 'N/A'}</TableCell>
-                    <TableCell className="hidden md:table-cell text-right">${item.price.toFixed(2)}</TableCell>
+                    <TableCell className="hidden md:table-cell text-right">Rp{item.price.toFixed(0)}</TableCell>
                     <TableCell className="text-right font-medium">{item.stock}</TableCell>
                     <TableCell className="text-center">
                       <Button variant="ghost" size="icon" onClick={() => handleOpenTransferDialog(item)}>
                         <ArrowRightLeft className="h-4 w-4" />
-                        <span className="sr-only">Transfer Stock</span>
+                        <span className="sr-only">Transfer Stok</span>
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -126,19 +126,19 @@ export default function InventoryPage() {
         </CardContent>
       </Card>
 
-      {/* Transfer Stock Dialog */}
+      {/* Dialog Transfer Stok */}
       <Dialog open={isTransferDialogOpen} onOpenChange={setTransferDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Transfer Stock: {transferItem?.name}</DialogTitle>
+            <DialogTitle>Transfer Stok: {transferItem?.name}</DialogTitle>
             <DialogDescription>
-              Simulate transferring stock to another branch. This is a placeholder and does not affect real data.
+              Simulasikan transfer stok ke cabang lain. Ini adalah placeholder dan tidak memengaruhi data nyata.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="quantity" className="text-right">
-                Quantity
+                Jumlah
               </Label>
               <Input
                 id="quantity"
@@ -149,18 +149,18 @@ export default function InventoryPage() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="branch" className="text-right">
-                To Branch
+                Ke Cabang
               </Label>
               <Input
                 id="branch"
-                defaultValue="Main Warehouse"
+                defaultValue="Gudang Utama"
                 className="col-span-3"
-                placeholder="e.g. Branch B"
+                placeholder="cth. Cabang B"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={handleTransfer}>Confirm Transfer</Button>
+            <Button onClick={handleTransfer}>Konfirmasi Transfer</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

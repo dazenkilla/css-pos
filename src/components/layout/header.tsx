@@ -21,7 +21,7 @@ export function Header() {
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           type="search"
-          placeholder="Search..."
+          placeholder="Cari..."
           className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
         />
       </div>
@@ -30,18 +30,18 @@ export function Header() {
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
             <Avatar>
-                <AvatarImage src="https://picsum.photos/seed/user-avatar/40/40" alt="User avatar" />
+                <AvatarImage src="https://picsum.photos/seed/user-avatar/40/40" alt="Avatar Pengguna" />
                 <AvatarFallback>SB</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>Akun Saya</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          <DropdownMenuItem>Pengaturan</DropdownMenuItem>
+          <DropdownMenuItem>Dukungan</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem>Keluar</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
