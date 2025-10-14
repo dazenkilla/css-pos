@@ -15,3 +15,10 @@ export const purchaseOrders = [
     { id: 'PO-00126', supplier: 'Brewing Gear Inc.', date: '2023-11-05', status: 'Fulfilled', total: 875.00 },
     { id: 'PO-00127', supplier: 'Beans & Co.', date: '2023-11-10', status: 'Cancelled', total: 300.00 },
 ];
+
+export const users = [
+    { id: "USR-001", name: "Samantha", email: "samantha@example.com", role: "Admin", lastActive: "2 hours ago" },
+    { id: "USR-002", name: "David", email: "david@example.com", role: "Cashier", lastActive: "15 minutes ago" },
+    { id: "USR-003", name: "Brenda", email: "brenda@example.com", role: "Cashier", lastActive: "8 hours ago" },
+    { id: "USR-004", name: "James", email: "james@example.com", role: "Cashier", lastActive: "Yesterday" },
+];

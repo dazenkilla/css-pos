@@ -16,7 +16,8 @@ import {
   Boxes,
   Truck,
   Settings,
-  History
+  History,
+  Users
 } from 'lucide-react';
 import { NovaPosIcon } from '@/components/icons/nova-pos-icon';
 
@@ -64,7 +65,19 @@ export function Nav() {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              isActive={pathname === '/settings'}
+              isActive={pathname.startsWith('/users')}
+              tooltip="Users"
+            >
+              <Link href="/users">
+                <Users />
+                <span>Users</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={pathname.startsWith('/settings')}
               tooltip="Settings"
             >
               <Link href="/settings">
@@ -78,5 +91,3 @@ export function Nav() {
     </>
   );
 }
-
-    
