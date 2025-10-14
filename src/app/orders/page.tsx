@@ -95,10 +95,10 @@ export default function OrdersPage() {
               <form onSubmit={handleCreateOrder}>
                 <div className="grid gap-4 py-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="supplier">Pemasok</Label>
+                    <Label htmlFor="supplier">Supplier</Label>
                     <Select name="supplier" required>
                       <SelectTrigger>
-                        <SelectValue placeholder="Pilih pemasok" />
+                        <SelectValue placeholder="Pilih supplier" />
                       </SelectTrigger>
                       <SelectContent>
                         {suppliers.map(supplier => (
@@ -120,7 +120,7 @@ export default function OrdersPage() {
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="notes">Catatan</Label>
-                    <Textarea id="notes" placeholder="Tinggalkan catatan untuk pemasok..." />
+                    <Textarea id="notes" placeholder="Tinggalkan catatan untuk supplier..." />
                   </div>
                 </div>
                 <SheetFooter>
@@ -136,7 +136,7 @@ export default function OrdersPage() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">ID Pesanan</TableHead>
-              <TableHead>Pemasok</TableHead>
+              <TableHead>Supplier</TableHead>
               <TableHead className="hidden sm:table-cell">Tanggal</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="hidden sm:table-cell text-right">Jumlah Item</TableHead>

@@ -28,6 +28,7 @@ const menuItems = [
   { href: '/sales', label: 'Penjualan', icon: ShoppingCart },
   { href: '/inventory', label: 'Inventaris', icon: Boxes },
   { href: '/orders', label: 'Pesanan Pembelian', icon: Truck },
+  { href: '/suppliers', label: 'Supplier', icon: Users },
   { href: '/history', label: 'Riwayat', icon: History },
   { href: '/reports', label: 'Laporan', icon: FileBarChart },
   { href: '/accounting', label: 'Akuntansi', icon: BookText },

@@ -11,10 +11,10 @@ export const inventoryItems = [
 ];
 
 export const suppliers = [
-    { id: 'SUP-001', name: 'PT Biji Kopi Nusantara' },
-    { id: 'SUP-002', name: 'CV Roti Jaya Abadi' },
-    { id: 'SUP-003', name: 'Gourmet Imports' },
-    { id: 'SUP-004', name: 'Teh Premium Lestari' },
+    { id: 'SUP-001', name: 'PT Biji Kopi Nusantara', contactName: 'Budi Hartono', phone: '081234567890', email: 'budi@kopinusantara.com' },
+    { id: 'SUP-002', name: 'CV Roti Jaya Abadi', contactName: 'Siti Aminah', phone: '081298765432', email: 'siti@rotijaya.com' },
+    { id: 'SUP-003', name: 'Gourmet Imports', contactName: 'John Doe', phone: '081122334455', email: 'john@gourmetimports.com' },
+    { id: 'SUP-004', name: 'Teh Premium Lestari', contactName: 'Lestari Wibowo', phone: '085611112222', email: 'info@tehpremium.id' },
 ];
 
 export const purchaseOrders = [
