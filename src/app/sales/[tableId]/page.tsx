@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React, { useState } from 'react';
@@ -209,10 +210,12 @@ export default function TransactionPage() {
       tableNumber: tableId,
     };
     
+    // Langsung panggil fungsi print
+    handlePrint(saleData);
+    
     toast({
       title: "Penjualan Selesai!",
       description: `Total: Rp${total.toLocaleString('id-ID')}`,
-      action: <Button variant="outline" size="sm" onClick={() => handlePrint(saleData)}><Printer className="mr-2 h-4 w-4" />Cetak Struk</Button>
     });
 
     // Simulasi jurnal otomatis
