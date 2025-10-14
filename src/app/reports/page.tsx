@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { CustomLink } from '@/components/ui/custom-link';
@@ -51,6 +52,13 @@ export default function ReportsPage() {
             description: `Ini adalah placeholder untuk menampilkan ${reportName}.`,
         });
     };
+    
+    const handleViewPaymentMethodDetails = (methodName: string) => {
+      toast({
+        title: "Fitur Dalam Pengembangan",
+        description: `Halaman detail untuk transaksi via ${methodName} akan segera tersedia.`
+      })
+    }
 
     return (
         <div className="space-y-6">
@@ -185,6 +193,7 @@ export default function ReportsPage() {
                                     <TableHead>Metode</TableHead>
                                     <TableHead className="text-right">Total Transaksi</TableHead>
                                     <TableHead className="text-right">Total Pemasukan</TableHead>
+                                    <TableHead className="text-right">Aksi</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -196,6 +205,11 @@ export default function ReportsPage() {
                                     </TableCell>
                                     <TableCell className="text-right">{method.transactions}</TableCell>
                                     <TableCell className="text-right">Rp{method.total.toLocaleString('id-ID')}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Button variant="outline" size="sm" onClick={() => handleViewPaymentMethodDetails(method.name)}>
+                                            Lihat Detail
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                                 ))}
                             </TableBody>
@@ -265,5 +279,7 @@ export default function ReportsPage() {
 
         </div>
     )
+
+    
 
     
