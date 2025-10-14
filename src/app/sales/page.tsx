@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,6 +32,7 @@ export default function SalesPage() {
   const [discount, setDiscount] = useState(0);
   const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [isDiscountDialogOpen, setDiscountDialogOpen] = useState(false);
+  const [isQrDialogOpen, setQrDialogOpen] = useState(false);
   const [discountInput, setDiscountInput] = useState("");
   const [payments, setPayments] = useState<Payment[]>([]);
 
@@ -107,10 +108,22 @@ export default function SalesPage() {
   }
   
   const handleAddPayment = (method: 'Tunai' | 'Kartu' | 'QR' | 'Transfer Bank') => {
+    if (method === 'QR') {
+        if (remainingAmount > 0) {
+            setQrDialogOpen(true);
+        }
+        return;
+    }
+    
     if (remainingAmount > 0) {
         setPayments([...payments, { method, amount: remainingAmount > 0 ? remainingAmount : 0 }]);
     }
   };
+
+  const confirmQrPayment = () => {
+    setPayments([...payments, { method: 'QR', amount: remainingAmount > 0 ? remainingAmount : 0 }]);
+    setQrDialogOpen(false);
+  }
 
   const handlePaymentAmountChange = (index: number, newAmount: number) => {
     const newPayments = [...payments];
@@ -193,7 +206,7 @@ export default function SalesPage() {
     
     toast({
       title: "Penjualan Selesai!",
-      description: `Total: Rp${total.toFixed(2)}`,
+      description: `Total: Rp${total.toFixed(0)}`,
       action: <Button variant="outline" size="sm" onClick={() => handlePrint(saleData)}><Printer className="mr-2 h-4 w-4" />Cetak Struk</Button>
     });
 
@@ -413,6 +426,36 @@ export default function SalesPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        
+        {/* Dialog QR Code */}
+        <Dialog open={isQrDialogOpen} onOpenChange={setQrDialogOpen}>
+          <DialogContent className="sm:max-w-xs">
+            <DialogHeader>
+              <DialogTitle>Pembayaran QR</DialogTitle>
+              <DialogDescription>
+                Pindai kode QR di bawah ini untuk membayar.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex flex-col items-center justify-center py-4">
+                <Image
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=pay-Rp${(remainingAmount > 0 ? remainingAmount : 0).toFixed(0)}`}
+                    alt="QR Code Pembayaran"
+                    width={200}
+                    height={200}
+                />
+                <div className="mt-4 text-center">
+                    <p className="text-sm text-muted-foreground">Total Tagihan</p>
+                    <p className="text-2xl font-bold">Rp{(remainingAmount > 0 ? remainingAmount : 0).toFixed(0)}</p>
+                </div>
+            </div>
+            <DialogFooter>
+              <Button className="w-full" onClick={confirmQrPayment}>
+                Konfirmasi Pembayaran
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
       </div>
     </>
   );
