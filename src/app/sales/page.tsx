@@ -144,23 +144,27 @@ export default function SalesPage() {
       <div className="hidden">
         {lastSale && <Receipt ref={receiptRef} sale={lastSale} />}
       </div>
-      <div className="grid flex-1 items-start gap-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-        <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-          <div className="flex items-center justify-between">
-              <Tabs defaultValue={categories[0] || 'all'}>
-                <TabsList>
-                  {categories.map(category => (
-                    <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
-          </div>
+      <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-5">
+        
+        {/* Product Selection Panel */}
+        <div className="lg:col-span-3">
           <Tabs defaultValue={categories[0] || 'all'}>
-              {categories.map(category => (
-              <TabsContent key={category} value={category}>
+            <div className="flex items-center">
+              <TabsList>
+                {categories.map(category => (
+                  <TabsTrigger key={category} value={category}>{category}</TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
+            {categories.map(category => (
+              <TabsContent key={category} value={category} className="mt-4">
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {inventoryItems.filter(item => item.category === category).map((product) => (
-                    <Card key={product.sku} className="overflow-hidden">
+                    <Card 
+                      key={product.sku} 
+                      className="overflow-hidden cursor-pointer hover:border-primary transition-colors"
+                      onClick={() => addToCart(product)}
+                    >
                       <CardContent className="p-0">
                         <Image
                           alt={product.name}
@@ -171,12 +175,9 @@ export default function SalesPage() {
                           data-ai-hint={getImageHint(product.sku)}
                         />
                       </CardContent>
-                      <CardFooter className="flex flex-col items-start p-4 gap-2">
-                        <h3 className="font-semibold text-sm">{product.name}</h3>
-                        <p className="font-bold">${product.price.toFixed(2)}</p>
-                        <Button className="w-full" size="sm" onClick={() => addToCart(product)}>
-                          Add to Cart
-                        </Button>
+                      <CardFooter className="flex flex-col items-start p-3">
+                        <h3 className="font-semibold text-sm truncate w-full">{product.name}</h3>
+                        <p className="font-bold text-base">${product.price.toFixed(2)}</p>
                       </CardFooter>
                     </Card>
                   ))}
@@ -186,30 +187,42 @@ export default function SalesPage() {
           </Tabs>
         </div>
         
-        <div className="lg:col-span-1">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle>New Sale</CardTitle>
+        {/* Cart Panel */}
+        <div className="lg:col-span-2">
+          <Card className="flex flex-col h-full">
+            <CardHeader className="flex flex-row items-center justify-between pb-4">
+              <CardTitle>Current Order</CardTitle>
               <ShoppingCart className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex-1 overflow-y-auto p-4">
               {cart.length === 0 ? (
-                <p className="text-muted-foreground text-center py-8">Your cart is empty.</p>
+                <div className="flex flex-col items-center justify-center h-full text-center">
+                  <ShoppingCart className="h-16 w-16 text-muted-foreground/30" />
+                  <p className="text-muted-foreground mt-4">Your cart is empty.</p>
+                  <p className="text-sm text-muted-foreground/80">Tap a product to add it to the order.</p>
+                </div>
               ) : (
                 <div className="flex flex-col gap-4">
                   {cart.map((item) => (
                     <div key={item.sku} className="flex items-center gap-4">
+                      <Image
+                        alt={item.name}
+                        className="aspect-square rounded-md object-cover"
+                        height="64"
+                        src={getImageUrl(item.sku)}
+                        width="64"
+                      />
                       <div className="flex-1">
-                        <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button size="icon" variant="ghost" onClick={() => updateQuantity(item.sku, -1)}><MinusCircle className="h-4 w-4" /></Button>
-                        <span>{item.quantity}</span>
-                        <Button size="icon" variant="ghost" onClick={() => updateQuantity(item.sku, 1)}><PlusCircle className="h-4 w-4" /></Button>
+                        <p className="font-medium text-sm">{item.name}</p>
+                        <p className="text-xs text-muted-foreground">${item.price.toFixed(2)}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Button size="icon" variant="outline" className="h-6 w-6" onClick={() => updateQuantity(item.sku, -1)}><MinusCircle className="h-3.5 w-3.5" /></Button>
+                          <span className="font-bold text-sm w-4 text-center">{item.quantity}</span>
+                          <Button size="icon" variant="outline" className="h-6 w-6" onClick={() => updateQuantity(item.sku, 1)}><PlusCircle className="h-3.5 w-3.5" /></Button>
+                        </div>
                       </div>
                       <p className="font-semibold w-16 text-right">${(item.price * item.quantity).toFixed(2)}</p>
-                      <Button size="icon" variant="ghost" className="text-muted-foreground" onClick={() => removeFromCart(item.sku)}><X className="h-4 w-4"/></Button>
+                      <Button size="icon" variant="ghost" className="text-muted-foreground hover:text-destructive h-8 w-8" onClick={() => removeFromCart(item.sku)}><X className="h-4 w-4"/></Button>
                     </div>
                   ))}
                 </div>
@@ -217,8 +230,8 @@ export default function SalesPage() {
             </CardContent>
             {cart.length > 0 && (
               <>
-                <Separator className="my-4" />
-                <CardFooter className="flex flex-col gap-2 items-stretch">
+                <Separator />
+                <CardFooter className="flex flex-col gap-2 items-stretch p-4">
                   <div className="flex justify-between w-full text-muted-foreground"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
                   <div className="flex justify-between w-full text-muted-foreground">
                     <span>Discount ({discount}%)</span>
@@ -227,12 +240,12 @@ export default function SalesPage() {
                   <div className="flex justify-between w-full text-muted-foreground"><span>Tax (11%)</span><span>${tax.toFixed(2)}</span></div>
                   <Separator className="my-2" />
                   <div className="flex justify-between w-full font-semibold text-lg"><span>Total</span><span>${total.toFixed(2)}</span></div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" className="w-full mt-4" onClick={() => setDiscountDialogOpen(true)}>
+                  <div className="grid grid-cols-2 gap-2 mt-4">
+                    <Button variant="outline" size="lg" onClick={() => setDiscountDialogOpen(true)}>
                       <Ticket className="mr-2 h-4 w-4"/>
-                      Add Discount
+                      Discount
                     </Button>
-                    <Button className="w-full mt-4" onClick={() => setPaymentDialogOpen(true)}>Charge</Button>
+                    <Button size="lg" onClick={() => setPaymentDialogOpen(true)}>Charge</Button>
                   </div>
                 </CardFooter>
               </>
@@ -306,7 +319,7 @@ export default function SalesPage() {
                     <span>${remainingAmount.toFixed(2)}</span>
                 </div>
 
-                {remainingAmount > 0 && (
+                {remainingAmount > 0.001 && (
                     <div className="flex gap-2 justify-center">
                         <Button variant="secondary" onClick={() => handleAddPayment('Cash')}>Pay with Cash</Button>
                         <Button variant="secondary" onClick={() => handleAddPayment('Card')}>Pay with Card</Button>
@@ -329,5 +342,3 @@ export default function SalesPage() {
     </>
   );
 }
-
-    
