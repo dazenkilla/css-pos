@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React, { useState } from 'react';
@@ -281,20 +282,20 @@ export default function DirectSalePage() {
                   <p className="text-sm text-muted-foreground/80">Ketuk produk untuk menambahkannya ke pesanan.</p>
                 </div>
               ) : (
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3">
                   {cart.map((item) => (
-                    <div key={item.sku} className="flex items-center gap-4">
-                      <div className="flex-1">
-                        <p className="font-medium text-sm">{item.name}</p>
-                        <p className="text-xs text-muted-foreground">Rp{item.price.toLocaleString('id-ID')}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Button size="icon" variant="outline" className="h-6 w-6" onClick={() => updateQuantity(item.sku, -1)}><MinusCircle className="h-3.5 w-3.5" /></Button>
-                          <span className="font-bold text-sm w-4 text-center">{item.quantity}</span>
-                          <Button size="icon" variant="outline" className="h-6 w-6" onClick={() => updateQuantity(item.sku, 1)}><PlusCircle className="h-3.5 w-3.5" /></Button>
+                    <div key={item.sku} className="flex items-center gap-2 text-sm">
+                        <div className="flex-1">
+                            <p className="font-medium truncate pr-2">{item.name}</p>
+                            <div className="flex items-center gap-1 text-muted-foreground">
+                                <Button size="icon" variant="ghost" className="h-6 w-6 rounded-full" onClick={() => updateQuantity(item.sku, -1)}><MinusCircle className="h-3.5 w-3.5" /></Button>
+                                <span className="font-bold text-xs w-4 text-center">{item.quantity}</span>
+                                <Button size="icon" variant="ghost" className="h-6 w-6 rounded-full" onClick={() => updateQuantity(item.sku, 1)}><PlusCircle className="h-3.5 w-3.5" /></Button>
+                                <span className="text-xs">x Rp{item.price.toLocaleString('id-ID')}</span>
+                            </div>
                         </div>
-                      </div>
-                      <p className="font-semibold w-24 text-right">Rp{(item.price * item.quantity).toLocaleString('id-ID')}</p>
-                      <Button size="icon" variant="ghost" className="text-muted-foreground hover:text-destructive h-8 w-8" onClick={() => removeFromCart(item.sku)}><X className="h-4 w-4"/></Button>
+                        <p className="font-semibold text-xs w-20 text-right">Rp{(item.price * item.quantity).toLocaleString('id-ID')}</p>
+                        <Button size="icon" variant="ghost" className="text-muted-foreground hover:text-destructive h-6 w-6 rounded-full" onClick={() => removeFromCart(item.sku)}><X className="h-4 w-4"/></Button>
                     </div>
                   ))}
                 </div>
