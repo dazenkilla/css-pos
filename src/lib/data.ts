@@ -38,44 +38,56 @@ export const salesHistory = [
   { 
     id: "SALE-001", 
     date: "2023-11-20", 
-    total: 199990, 
+    total: 67480,
     status: "Selesai", 
-    itemCount: 3,
+    itemCount: 2,
     items: [
       { name: "Biji Kopi Artisan", quantity: 2, price: 18990 },
       { name: "Croissant Almond", quantity: 1, price: 4500 },
-      { name: "Timbangan Kopi Digital", quantity: 1, price: 45000 },
+    ],
+    payments: [
+      { method: 'Tunai', amount: 67480 }
     ]
   },
   { 
     id: "SALE-002", 
     date: "2023-11-21", 
-    total: 39000, 
+    total: 7500,
     status: "Selesai", 
-    itemCount: 1,
+    itemCount: 2,
     items: [
       { name: "Muffin Blueberry", quantity: 2, price: 3750 },
+    ],
+    payments: [
+      { method: 'QR', amount: 7500 }
     ]
   },
   { 
     id: "SALE-003", 
     date: "2023-11-22", 
-    total: 99000, 
+    total: 54000,
     status: "Selesai", 
-    itemCount: 1,
+    itemCount: 2,
     items: [
         { name: "Keramik Pour-Over", quantity: 1, price: 32000 },
         { name: "Espresso Single-Origin", quantity: 1, price: 22000 },
+    ],
+    payments: [
+      { method: 'Kartu', amount: 54000 }
     ]
   },
   { 
     id: "SALE-004", 
     date: "2023-11-23", 
-    total: 299000, 
+    total: 37500,
     status: "Selesai", 
-    itemCount: 2,
+    itemCount: 3,
     items: [
         { name: "Teh Earl Grey Organik", quantity: 3, price: 12500 },
+    ],
+    payments: [
+      { method: 'Tunai', amount: 20000 },
+      { method: 'Kartu', amount: 17500 }
     ]
   },
 ];

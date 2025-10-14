@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -25,11 +26,9 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { FileDown, Eye } from "lucide-react"
-import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { salesHistory as initialSalesHistory } from "@/lib/data";
 
-type SaleItem = { name: string; quantity: number; price: number; };
 type Sale = typeof initialSalesHistory[0];
 
 export default function HistoryPage() {
@@ -59,6 +58,16 @@ export default function HistoryPage() {
     })
   }
 
+  const formatPaymentMethods = (payments: Sale['payments']) => {
+    if (!payments || payments.length === 0) {
+      return 'N/A';
+    }
+    if (payments.length === 1) {
+      return payments[0].method;
+    }
+    return `Split (${payments.map(p => p.method).join(', ')})`;
+  };
+
   const detailSubtotal = selectedSale?.items.reduce((sum, item) => sum + item.price * item.quantity, 0) ?? 0;
 
   return (
@@ -83,6 +92,7 @@ export default function HistoryPage() {
                 <TableHead>ID Penjualan</TableHead>
                 <TableHead>Tanggal</TableHead>
                 <TableHead className="hidden sm:table-cell">Status</TableHead>
+                <TableHead>Metode Pembayaran</TableHead>
                 <TableHead className="hidden md:table-cell text-right">Produk</TableHead>
                 <TableHead className="text-right">Total</TableHead>
                 <TableHead className="text-right">Aksi</TableHead>
@@ -95,6 +105,9 @@ export default function HistoryPage() {
                   <TableCell>{sale.date}</TableCell>
                   <TableCell className="hidden sm:table-cell">
                     <Badge variant={getStatusVariant(sale.status) as any}>{sale.status}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{formatPaymentMethods(sale.payments)}</Badge>
                   </TableCell>
                   <TableCell className="hidden md:table-cell text-right">{sale.itemCount}</TableCell>
                   <TableCell className="text-right">Rp{sale.total.toLocaleString('id-ID')}</TableCell>
