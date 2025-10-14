@@ -232,7 +232,7 @@ export default function DirectSalePage() {
             </div>
             {categories.map(category => (
               <TabsContent key={category} value={category} className="mt-4">
-                <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
                   {inventoryItems.filter(item => item.category === category).map((product) => (
                     <Card 
                       key={product.sku} 
@@ -243,9 +243,9 @@ export default function DirectSalePage() {
                         <Image
                           alt={product.name}
                           className="aspect-square w-full object-cover"
-                          height="150"
+                          height="100"
                           src={getImageUrl(product.sku)}
-                          width="150"
+                          width="100"
                           data-ai-hint={getImageHint(product.sku)}
                         />
                       </CardContent>
