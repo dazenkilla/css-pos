@@ -1,52 +1,142 @@
 {
   "placeholderImages": [
     {
-      "id": "coffee-001",
-      "description": "A bag of artisan coffee beans.",
-      "imageUrl": "https://picsum.photos/seed/coffee-001/300/200",
-      "imageHint": "coffee beans"
+      "id": "prod-001",
+      "description": "Takoyaki with meatball filling.",
+      "imageUrl": "https://picsum.photos/seed/prod-001/300/200",
+      "imageHint": "takoyaki"
     },
     {
-      "id": "pastry-001",
-      "description": "A freshly baked almond croissant.",
-      "imageUrl": "https://picsum.photos/seed/pastry-001/300/200",
-      "imageHint": "croissant"
+      "id": "prod-002",
+      "description": "Takoyaki with sausage filling.",
+      "imageUrl": "https://picsum.photos/seed/prod-002/300/200",
+      "imageHint": "takoyaki sausage"
     },
     {
-      "id": "gadget-001",
-      "description": "A sleek digital coffee scale.",
-      "imageUrl": "https://picsum.photos/seed/gadget-001/300/200",
-      "imageHint": "coffee scale"
+      "id": "prod-003",
+      "description": "Takoyaki with crab stick filling.",
+      "imageUrl": "https://picsum.photos/seed/prod-003/300/200",
+      "imageHint": "takoyaki crab"
     },
     {
-      "id": "tea-001",
-      "description": "A box of organic Earl Grey tea.",
-      "imageUrl": "https://picsum.photos/seed/tea-001/300/200",
-      "imageHint": "tea box"
+      "id": "prod-004",
+      "description": "A light and fluffy souffle cake.",
+      "imageUrl": "https://picsum.photos/seed/prod-004/300/200",
+      "imageHint": "souffle cake"
     },
     {
-      "id": "pastry-002",
-      "description": "A blueberry muffin with a crumble topping.",
-      "imageUrl": "https://picsum.photos/seed/pastry-002/300/200",
-      "imageHint": "muffin"
+      "id": "prod-005",
+      "description": "A classic Japanese dorayaki.",
+      "imageUrl": "https://picsum.photos/seed/prod-005/300/200",
+      "imageHint": "dorayaki"
     },
     {
-      "id": "gadget-002",
-      "description": "A white ceramic pour-over coffee maker.",
-      "imageUrl": "https://picsum.photos/seed/gadget-002/300/200",
-      "imageHint": "pour-over coffee"
+      "id": "prod-006",
+      "description": "A jumbo-sized iced tea.",
+      "imageUrl": "https://picsum.photos/seed/prod-006/300/200",
+      "imageHint": "iced tea"
     },
     {
-      "id": "coffee-002",
-      "description": "A bag of single-origin espresso beans.",
-      "imageUrl": "https://picsum.photos/seed/coffee-002/300/200",
-      "imageHint": "espresso beans"
+      "id": "prod-007",
+      "description": "Iced tea with a slice of orange.",
+      "imageUrl": "https://picsum.photos/seed/prod-007/300/200",
+      "imageHint": "iced tea orange"
     },
     {
-      "id": "pastry-003",
-      "description": "A classic chocolate chip cookie.",
-      "imageUrl": "https://picsum.photos/seed/pastry-003/300/200",
-      "imageHint": "cookie"
+      "id": "prod-008",
+      "description": "Passionfruit flavored iced tea.",
+      "imageUrl": "https://picsum.photos/seed/prod-008/300/200",
+      "imageHint": "iced tea passionfruit"
+    },
+    {
+      "id": "prod-009",
+      "description": "Lychee flavored iced tea.",
+      "imageUrl": "https://picsum.photos/seed/prod-009/300/200",
+      "imageHint": "iced tea lychee"
+    },
+    {
+      "id": "prod-010",
+      "description": "A glass of original iced tea.",
+      "imageUrl": "https://picsum.photos/seed/prod-010/300/200",
+      "imageHint": "iced tea"
+    },
+    {
+      "id": "prod-011",
+      "description": "Blackcurrant flavored iced tea.",
+      "imageUrl": "https://picsum.photos/seed/prod-011/300/200",
+      "imageHint": "iced tea blackcurrant"
+    },
+    {
+      "id": "prod-012",
+      "description": "Lemon flavored iced tea.",
+      "imageUrl": "https://picsum.photos/seed/prod-012/300/200",
+      "imageHint": "iced tea lemon"
+    },
+    {
+      "id": "prod-013",
+      "description": "A bowl of Abura Soba noodles.",
+      "imageUrl": "https://picsum.photos/seed/prod-013/300/200",
+      "imageHint": "abura soba"
+    },
+    {
+      "id": "prod-014",
+      "description": "Sweet milk balls delicacy.",
+      "imageUrl": "https://picsum.photos/seed/prod-014/300/200",
+      "imageHint": "milk balls"
+    },
+    {
+      "id": "prod-015",
+      "description": "A Japanese fruit sandwich (fruit sando).",
+      "imageUrl": "https://picsum.photos/seed/prod-015/300/200",
+      "imageHint": "fruit sandwich"
+    },
+    {
+      "id": "prod-016",
+      "description": "A snack resembling Doraemon's pocket.",
+      "imageUrl": "https://picsum.photos/seed/prod-016/300/200",
+      "imageHint": "snack"
+    },
+    {
+      "id": "prod-017",
+      "description": "A special meal package.",
+      "imageUrl": "https://picsum.photos/seed/prod-017/300/200",
+      "imageHint": "meal package"
+    },
+    {
+      "id": "prod-018",
+      "description": "Another special meal package.",
+      "imageUrl": "https://picsum.photos/seed/prod-018/300/200",
+      "imageHint": "food combo"
+    },
+    {
+      "id": "prod-019",
+      "description": "A third special meal package.",
+      "imageUrl": "https://picsum.photos/seed/prod-019/300/200",
+      "imageHint": "meal set"
+    },
+    {
+      "id": "prod-020",
+      "description": "A fourth special meal package.",
+      "imageUrl": "https://picsum.photos/seed/prod-020/300/200",
+      "imageHint": "combo meal"
+    },
+    {
+      "id": "prod-021",
+      "description": "A bowl of Kaisen Goma.",
+      "imageUrl": "https://picsum.photos/seed/prod-021/300/200",
+      "imageHint": "seafood bowl"
+    },
+    {
+      "id": "prod-022",
+      "description": "A dish of soy chicken.",
+      "imageUrl": "https://picsum.photos/seed/prod-022/300/200",
+      "imageHint": "soy chicken"
+    },
+    {
+      "id": "prod-023",
+      "description": "A cup of coffee latte.",
+      "imageUrl": "https://picsum.photos/seed/prod-023/300/200",
+      "imageHint": "coffee latte"
     }
   ]
 }

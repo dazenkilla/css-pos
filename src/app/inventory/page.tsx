@@ -88,6 +88,8 @@ export default function InventoryPage() {
     });
   }
 
+  const uniqueCategories = [...new Set(initialInventoryItems.map(item => item.category))];
+
   return (
     <>
       <Card>
@@ -147,7 +149,7 @@ export default function InventoryPage() {
                       <Badge variant={status.variant}>{status.text}</Badge>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">{item.expiryDate || 'N/A'}</TableCell>
-                    <TableCell className="hidden md:table-cell text-right">Rp{item.price.toFixed(0)}</TableCell>
+                    <TableCell className="hidden md:table-cell text-right">Rp{item.price.toLocaleString('id-ID')}</TableCell>
                     <TableCell className="text-right font-medium">{item.stock}</TableCell>
                     <TableCell className="text-center">
                       <Button variant="ghost" size="icon" onClick={() => handleOpenTransferDialog(item)}>
@@ -225,9 +227,9 @@ export default function InventoryPage() {
                           <SelectValue placeholder="Pilih kategori" />
                       </SelectTrigger>
                       <SelectContent>
-                          <SelectItem value="Minuman">Minuman</SelectItem>
-                          <SelectItem value="Kue">Kue</SelectItem>
-                          <SelectItem value="Merchandise">Merchandise</SelectItem>
+                          {uniqueCategories.map(category => (
+                            <SelectItem key={category} value={category}>{category}</SelectItem>
+                          ))}
                       </SelectContent>
                   </Select>
                 </div>

@@ -46,33 +46,38 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { inventoryItems } from "@/lib/data";
 
-// Data placeholder untuk kategori
-const initialCategoriesData = [
-    {
-        id: "cat-1",
-        name: "Minuman",
-        subCategories: ["Kopi", "Teh", "Susu"],
-        itemCount: 3,
-    },
-    {
-        id: "cat-2",
-        name: "Kue",
-        subCategories: ["Viennoiserie", "Muffin", "Kue Kering"],
-        itemCount: 3,
-    },
-    {
-        id: "cat-3",
-        name: "Merchandise",
-        subCategories: ["Peralatan"],
-        itemCount: 2,
-    },
-];
 
-type Category = typeof initialCategoriesData[0];
+const generateInitialCategories = () => {
+    const categoriesMap: { [key: string]: { id: string; name: string; subCategories: Set<string>; itemCount: number } } = {};
+
+    inventoryItems.forEach(item => {
+        if (!categoriesMap[item.category]) {
+            categoriesMap[item.category] = {
+                id: `cat-${item.category.toLowerCase().replace(/\s/g, '-')}`,
+                name: item.category,
+                subCategories: new Set(),
+                itemCount: 0,
+            };
+        }
+        categoriesMap[item.category].itemCount++;
+        categoriesMap[item.category].subCategories.add(item.subCategory);
+    });
+
+    return Object.values(categoriesMap).map(cat => ({ ...cat, subCategories: Array.from(cat.subCategories)}));
+}
+
+
+type Category = {
+    id: string;
+    name: string;
+    subCategories: string[];
+    itemCount: number;
+};
 
 export default function CategoriesPage() {
-    const [categories, setCategories] = useState(initialCategoriesData);
+    const [categories, setCategories] = useState<Category[]>(generateInitialCategories());
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState<Category | null>(null);

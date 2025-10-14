@@ -3,29 +3,45 @@
 import { PlaceHolderImages } from './placeholder-images';
 
 export const inventoryItems = [
-    { sku: 'coffee-001', name: 'Biji Kopi Artisan', category: 'Minuman', subCategory: 'Kopi', price: 18990, stock: 120, expiryDate: '2025-12-31' },
-    { sku: 'pastry-001', name: 'Croissant Almond', category: 'Kue', subCategory: 'Viennoiserie', price: 4500, stock: 15, expiryDate: '2024-07-25' },
-    { sku: 'gadget-001', name: 'Timbangan Kopi Digital', category: 'Merchandise', subCategory: 'Peralatan', price: 45000, stock: 30, expiryDate: null },
-    { sku: 'tea-001', name: 'Teh Earl Grey Organik', category: 'Minuman', subCategory: 'Teh', price: 12500, stock: 80, expiryDate: '2026-05-20' },
-    { sku: 'pastry-002', name: 'Muffin Blueberry', category: 'Kue', subCategory: 'Muffin', price: 3750, stock: 55, expiryDate: '2024-07-26' },
-    { sku: 'gadget-002', name: 'Keramik Pour-Over', category: 'Merchandise', subCategory: 'Peralatan', price: 32000, stock: 18, expiryDate: null },
-    { sku: 'coffee-002', name: 'Espresso Single-Origin', category: 'Minuman', subCategory: 'Kopi', price: 22000, stock: 8, expiryDate: '2025-10-15' },
-    { sku: 'pastry-003', name: 'Kue Cokelat Chip', category: 'Kue', subCategory: 'Kue Kering', price: 2500, stock: 0, expiryDate: '2024-08-01' },
+    { sku: 'prod-001', name: 'Takoyaki Baso', category: 'Makanan', subCategory: 'Takoyaki', price: 25000, stock: 50, expiryDate: null },
+    { sku: 'prod-002', name: 'Takoyaki Sosis', category: 'Makanan', subCategory: 'Takoyaki', price: 25000, stock: 50, expiryDate: null },
+    { sku: 'prod-003', name: 'Takoyaki Crab Stik', category: 'Makanan', subCategory: 'Takoyaki', price: 28000, stock: 40, expiryDate: null },
+    { sku: 'prod-004', name: 'Souffle Cake', category: 'Kue', subCategory: 'Dessert', price: 35000, stock: 20, expiryDate: '2024-07-26' },
+    { sku: 'prod-005', name: 'Dorayaki', category: 'Kue', subCategory: 'Dessert', price: 18000, stock: 60, expiryDate: '2024-07-28' },
+    { sku: 'prod-006', name: 'Es Teh Jumbo', category: 'Minuman', subCategory: 'Es Teh', price: 8000, stock: 100, expiryDate: null },
+    { sku: 'prod-007', name: 'Es Teh Kampul', category: 'Minuman', subCategory: 'Es Teh', price: 10000, stock: 100, expiryDate: null },
+    { sku: 'prod-008', name: 'Es Teh Markisa', category: 'Minuman', subCategory: 'Es Teh', price: 12000, stock: 80, expiryDate: null },
+    { sku: 'prod-009', name: 'Es Teh Leci', category: 'Minuman', subCategory: 'Es Teh', price: 12000, stock: 80, expiryDate: null },
+    { sku: 'prod-010', name: 'Es Teh Original', category: 'Minuman', subCategory: 'Es Teh', price: 6000, stock: 150, expiryDate: null },
+    { sku: 'prod-011', name: 'Es Teh Blackcurrant', category: 'Minuman', subCategory: 'Es Teh', price: 12000, stock: 75, expiryDate: null },
+    { sku: 'prod-012', name: 'Es Teh Lemon', category: 'Minuman', subCategory: 'Es Teh', price: 10000, stock: 90, expiryDate: null },
+    { sku: 'prod-013', name: 'Abura Soba', category: 'Makanan', subCategory: 'Mie', price: 45000, stock: 30, expiryDate: null },
+    { sku: 'prod-014', name: 'Bola Susu', category: 'Kue', subCategory: 'Cemilan', price: 15000, stock: 45, expiryDate: '2024-08-01' },
+    { sku: 'prod-015', name: 'Sandwich Buah', category: 'Kue', subCategory: 'Dessert', price: 28000, stock: 15, expiryDate: '2024-07-25' },
+    { sku: 'prod-016', name: 'Poket Doraemon', category: 'Kue', subCategory: 'Dessert', price: 20000, stock: 0, expiryDate: '2024-07-27' },
+    { sku: 'prod-017', name: 'Paket Spesial 1', category: 'Paket', subCategory: 'Promo', price: 65000, stock: 100, expiryDate: null },
+    { sku: 'prod-018', name: 'Paket Spesial 2', category: 'Paket', subCategory: 'Promo', price: 75000, stock: 100, expiryDate: null },
+    { sku: 'prod-019', name: 'Paket Spesial 3', category: 'Paket', subCategory: 'Promo', price: 85000, stock: 100, expiryDate: null },
+    { sku: 'prod-020', name: 'Paket Spesial 4', category: 'Paket', subCategory: 'Promo', price: 95000, stock: 100, expiryDate: null },
+    { sku: 'prod-021', name: 'Kaisen Goma', category: 'Makanan', subCategory: 'Nasi', price: 55000, stock: 25, expiryDate: null },
+    { sku: 'prod-022', name: 'Soy Chicken', category: 'Makanan', subCategory: 'Nasi', price: 48000, stock: 28, expiryDate: null },
+    { sku: 'prod-023', name: 'Coffee Latte', category: 'Minuman', subCategory: 'Kopi', price: 22000, stock: 60, expiryDate: null }
 ];
 
+
 export const suppliers = [
-    { id: 'SUP-001', name: 'PT Biji Kopi Nusantara', contactName: 'Budi Hartono', phone: '081234567890', email: 'budi@kopinusantara.com' },
-    { id: 'SUP-002', name: 'CV Roti Jaya Abadi', contactName: 'Siti Aminah', phone: '081298765432', email: 'siti@rotijaya.com' },
-    { id: 'SUP-003', name: 'Gourmet Imports', contactName: 'John Doe', phone: '081122334455', email: 'john@gourmetimports.com' },
-    { id: 'SUP-004', name: 'Teh Premium Lestari', contactName: 'Lestari Wibowo', phone: '085611112222', email: 'info@tehpremium.id' },
+    { id: 'SUP-001', name: 'PT Makanan Enak', contactName: 'Budi Santoso', phone: '081234567890', email: 'budi@makananenak.com' },
+    { id: 'SUP-002', name: 'CV Minuman Segar', contactName: 'Siti Aminah', phone: '081298765432', email: 'siti@minumansegar.com' },
+    { id: 'SUP-003', name: 'Toko Kue Bahagia', contactName: 'John Doe', phone: '081122334455', email: 'john@kuebahagia.com' },
+    { id: 'SUP-004', name: 'Sumber Bahan Pokok', contactName: 'Lestari Wibowo', phone: '085611112222', email: 'info@sumberpokok.id' },
 ];
 
 export const purchaseOrders = [
-    { id: 'PO-00124', supplier: 'PT Biji Kopi Nusantara', date: '2023-10-25', status: 'Selesai', total: 450000, items: 3 },
-    { id: 'PO-00125', supplier: 'CV Roti Jaya Abadi', date: '2023-11-02', status: 'Tertunda', total: 120500, items: 2 },
-    { id: 'PO-00126', supplier: 'Gourmet Imports', date: '2023-11-05', status: 'Selesai', total: 875000, items: 5 },
-    { id: 'PO-00127', supplier: 'PT Biji Kopi Nusantara', date: '2023-11-10', status: 'Dibatalkan', total: 300000, items: 2 },
-    { id: 'PO-00128', supplier: 'Teh Premium Lestari', date: '2023-11-15', status: 'Tertunda', total: 250000, items: 4 },
+    { id: 'PO-00124', supplier: 'PT Makanan Enak', date: '2023-10-25', status: 'Selesai', total: 450000, items: 3 },
+    { id: 'PO-00125', supplier: 'Toko Kue Bahagia', date: '2023-11-02', status: 'Tertunda', total: 120500, items: 2 },
+    { id: 'PO-00126', supplier: 'CV Minuman Segar', date: '2023-11-05', status: 'Selesai', total: 875000, items: 5 },
+    { id: 'PO-00127', supplier: 'PT Makanan Enak', date: '2023-11-10', status: 'Dibatalkan', total: 300000, items: 2 },
+    { id: 'PO-00128', supplier: 'Sumber Bahan Pokok', date: '2023-11-15', status: 'Tertunda', total: 250000, items: 4 },
 ];
 
 
