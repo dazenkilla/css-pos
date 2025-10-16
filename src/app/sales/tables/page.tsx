@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Armchair, Coffee, DollarSign } from 'lucide-react';
+import { Armchair, Coffee } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -111,7 +111,7 @@ export default function SalesFloorPage() {
                             <span>{table.orderCount} item</span>
                          </div>
                          <div className='flex items-center font-semibold'>
-                             <DollarSign className="h-3 w-3 mr-1" />
+                             <span className="mr-1">Rp</span>
                              <span>{table.totalBill.toLocaleString('id-ID')}</span>
                          </div>
                       </div>
