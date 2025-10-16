@@ -363,7 +363,7 @@ export default function TransactionPage() {
                       <Save className="mr-2 h-4 w-4"/>
                       Simpan & Tutup
                     </Button>
-                    <Button size="lg" onClick={() => setPaymentDialogOpen(true)} disabled={cart.length === 0}>Lanjutkan ke Pembayaran</Button>
+                    <Button size="lg" onClick={() => setPaymentDialogOpen(true)} disabled={cart.length === 0}>Bayar</Button>
                   </div>
                   <Button variant="secondary" className="w-full" onClick={() => setDiscountDialogOpen(true)}>
                     <Ticket className="mr-2 h-4 w-4"/>
