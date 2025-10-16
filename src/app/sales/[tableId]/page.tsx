@@ -367,7 +367,7 @@ export default function TransactionPage() {
                   </div>
                   <Button variant="secondary" className="w-full" onClick={() => setDiscountDialogOpen(true)}>
                     <Ticket className="mr-2 h-4 w-4"/>
-                    Terapkan Diskon
+                    Diskon
                   </Button>
                 </CardFooter>
               </>
@@ -508,3 +508,5 @@ export default function TransactionPage() {
     </>
   );
 }
+
+    
