@@ -1,17 +1,16 @@
 
-
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { inventoryItems } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { PlusCircle, MinusCircle, X, ShoppingCart, Ticket, Printer, Wallet, CreditCard, QrCode, Landmark, Tag, Armchair } from 'lucide-react';
+import { PlusCircle, MinusCircle, X, ShoppingCart, Ticket, Printer, Wallet, CreditCard, QrCode, Landmark, Armchair, Save, ArrowLeft } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -25,6 +24,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Receipt, SaleData } from '@/components/sales/receipt';
 import { renderToString } from 'react-dom/server';
+import { CustomLink } from '@/components/ui/custom-link';
 
 
 type CartItem = typeof inventoryItems[0] & { quantity: number };
@@ -32,6 +32,7 @@ type Payment = { method: 'Tunai' | 'Kartu' | 'QR' | 'Transfer Bank'; amount: num
 
 export default function TransactionPage() {
   const params = useParams();
+  const router = useRouter();
   const tableId = params.tableId as string;
   const [cart, setCart] = useState<CartItem[]>([]);
   const [discount, setDiscount] = useState(0);
@@ -41,6 +42,32 @@ export default function TransactionPage() {
   const [discountInput, setDiscountInput] = useState("");
   const [payments, setPayments] = useState<Payment[]>([]);
   const { toast } = useToast();
+
+  const cartStorageKey = `cart-${tableId}`;
+
+  // Load cart from localStorage on initial render
+  useEffect(() => {
+    const savedCart = localStorage.getItem(cartStorageKey);
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+     const savedDiscount = localStorage.getItem(`discount-${tableId}`);
+    if (savedDiscount) {
+      setDiscount(JSON.parse(savedDiscount));
+    }
+  }, [tableId, cartStorageKey]);
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    if (cart.length > 0) {
+      localStorage.setItem(cartStorageKey, JSON.stringify(cart));
+    } else {
+      // If cart is empty, remove it from storage
+      localStorage.removeItem(cartStorageKey);
+    }
+     localStorage.setItem(`discount-${tableId}`, JSON.stringify(discount));
+  }, [cart, discount, tableId, cartStorageKey]);
+
 
   const addToCart = (product: typeof inventoryItems[0]) => {
     setCart((prevCart) => {
@@ -206,7 +233,6 @@ export default function TransactionPage() {
       tableNumber: tableId,
     };
     
-    // Langsung panggil fungsi print
     handlePrint(saleData);
     
     toast({
@@ -214,10 +240,21 @@ export default function TransactionPage() {
       description: `Total: Rp${total.toLocaleString('id-ID')}`,
     });
 
+    // Clear state and localStorage for this table
     setCart([]);
     setDiscount(0);
     setPayments([]);
+    localStorage.removeItem(cartStorageKey);
+    localStorage.removeItem(`discount-${tableId}`);
     setPaymentDialogOpen(false);
+  }
+  
+  const handleSaveAndClose = () => {
+      toast({
+          title: "Pesanan Disimpan",
+          description: `Pesanan untuk meja ${tableId} telah disimpan.`
+      });
+      router.push('/sales/tables');
   }
 
   return (
@@ -270,12 +307,16 @@ export default function TransactionPage() {
           <Card className="flex flex-col h-full">
             <CardHeader className="flex flex-col gap-4">
               <div className="flex flex-row items-center justify-between">
-                <CardTitle>Pesanan Saat Ini</CardTitle>
-                <ShoppingCart className="h-5 w-5 text-muted-foreground" />
-              </div>
-              <div className="flex items-center gap-2 text-lg font-semibold bg-muted p-2 rounded-md">
-                <Armchair className="h-5 w-5"/>
-                <span>Meja: {tableId}</span>
+                 <Button variant="ghost" size="sm" className="-ml-2" asChild>
+                    <CustomLink href="/sales/tables">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Kembali
+                    </CustomLink>
+                 </Button>
+                <div className="flex items-center gap-2 text-lg font-semibold bg-muted p-2 rounded-md">
+                    <Armchair className="h-5 w-5"/>
+                    <span>Meja: {tableId}</span>
+                </div>
               </div>
             </CardHeader>
             <CardContent className="flex-1 overflow-y-auto p-4">
@@ -318,12 +359,16 @@ export default function TransactionPage() {
                   <Separator className="my-2" />
                   <div className="flex justify-between w-full font-semibold text-lg"><span>Total</span><span>Rp{total.toLocaleString('id-ID')}</span></div>
                   <div className="grid grid-cols-2 gap-2 mt-4">
-                    <Button variant="outline" size="lg" onClick={() => setDiscountDialogOpen(true)}>
-                      <Ticket className="mr-2 h-4 w-4"/>
-                      Diskon
+                    <Button variant="outline" size="lg" onClick={handleSaveAndClose}>
+                      <Save className="mr-2 h-4 w-4"/>
+                      Simpan & Tutup
                     </Button>
-                    <Button size="lg" onClick={() => setPaymentDialogOpen(true)} disabled={cart.length === 0}>Bayar</Button>
+                    <Button size="lg" onClick={() => setPaymentDialogOpen(true)} disabled={cart.length === 0}>Lanjutkan ke Pembayaran</Button>
                   </div>
+                  <Button variant="secondary" className="w-full" onClick={() => setDiscountDialogOpen(true)}>
+                    <Ticket className="mr-2 h-4 w-4"/>
+                    Terapkan Diskon
+                  </Button>
                 </CardFooter>
               </>
             )}

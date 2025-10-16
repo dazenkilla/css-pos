@@ -10,16 +10,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Armchair, Coffee } from 'lucide-react';
+import { Armchair, Coffee, DollarSign } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 
-
+type CartItem = {
+  price: number;
+  quantity: number;
+};
 type TableStatus = 'Terisi' | 'Dipesan' | 'Kosong';
 type Table = {
   id: string;
   status: TableStatus;
   orderCount: number;
+  totalBill: number;
 };
 
 export default function SalesFloorPage() {
@@ -27,26 +31,35 @@ export default function SalesFloorPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // This effect runs only on the client side
     const savedTableCount = localStorage.getItem('tableCount');
     const count = savedTableCount ? parseInt(savedTableCount, 10) : 12;
-    
-    // Using a deterministic way to generate status to avoid hydration issues
+
     const generateTables = (tableCount: number): Table[] => {
       return Array.from({ length: tableCount }, (_, i) => {
+        const tableId = `T${String(i + 1).padStart(2, '0')}`;
+        const savedCart = localStorage.getItem(`cart-${tableId}`);
+        const cart: CartItem[] = savedCart ? JSON.parse(savedCart) : [];
+        const savedDiscount = localStorage.getItem(`discount-${tableId}`);
+        const discount = savedDiscount ? JSON.parse(savedDiscount) : 0;
+        
         let status: TableStatus;
-        if (i % 4 === 0) {
-          status = 'Terisi';
-        } else if (i === 7) {
-          status = 'Dipesan';
+        if (cart.length > 0) {
+            status = 'Terisi';
         } else {
-          status = 'Kosong';
+            status = 'Kosong'
         }
+        
+        const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        const totalDiscount = (subtotal * discount) / 100;
+        const taxableAmount = subtotal - totalDiscount;
+        const tax = taxableAmount * 0.11;
+        const total = taxableAmount + tax;
 
         return {
-          id: `T${String(i + 1).padStart(2, '0')}`,
+          id: tableId,
           status,
-          orderCount: status === 'Terisi' ? (i % 3) + 1 : 0,
+          orderCount: cart.reduce((sum, item) => sum + item.quantity, 0),
+          totalBill: total,
         };
       });
     };
@@ -90,11 +103,17 @@ export default function SalesFloorPage() {
                     </div>
                   </CardHeader>
                   <CardContent className="p-3 flex-1 flex flex-col items-center justify-center">
-                    <Armchair className="h-12 w-12 text-muted-foreground" />
+                    <Armchair className="h-10 w-10 text-muted-foreground" />
                     {table.status === 'Terisi' && (
-                      <div className="flex items-center text-sm text-muted-foreground mt-2">
-                         <Coffee className="h-4 w-4 mr-1" />
-                         <span>{table.orderCount} pesanan</span>
+                      <div className="flex flex-col items-center text-xs text-muted-foreground mt-1">
+                         <div className='flex items-center'>
+                            <Coffee className="h-3 w-3 mr-1" />
+                            <span>{table.orderCount} item</span>
+                         </div>
+                         <div className='flex items-center font-semibold'>
+                             <DollarSign className="h-3 w-3 mr-1" />
+                             <span>{table.totalBill.toLocaleString('id-ID')}</span>
+                         </div>
                       </div>
                     )}
                   </CardContent>
