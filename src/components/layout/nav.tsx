@@ -46,25 +46,31 @@ const productManagementSubItems = [
     { href: '/suppliers', label: 'Supplier', icon: Users },
 ];
 
+const accountingSubItems = [
+    { href: '/accounting', label: 'Dasbor Akuntansi', icon: LayoutDashboard },
+    { href: '/accounting/chart-of-accounts', label: 'Bagan Akun', icon: BookText },
+    { href: '/accounting/journal-entries', label: 'Entri Jurnal', icon: BookText },
+    { href: '/accounting/general-ledger', label: 'Buku Besar', icon: BookText },
+];
+
 const analyticsSubItems = [
     { href: '/history', label: 'Riwayat Penjualan', icon: History },
     { href: '/reports', label: 'Laporan', icon: FileBarChart },
-    { href: '/accounting', label: 'Akuntansi', icon: BookText },
 ];
 
-const SubMenu = ({ title, icon: Icon, items }: { title: string; icon: React.ElementType; items: typeof productManagementSubItems }) => {
+const SubMenu = ({ title, icon: Icon, items }: { title: string; icon: React.ElementType; items: {href: string, label: string, icon: React.ElementType}[] }) => {
     const pathname = usePathname();
     const { state } = useSidebar();
-    const isAnyChildActive = items.some(item => pathname.startsWith(item.href) && item.href !== '/');
-    const isRootActive = items.some(item => item.href === pathname);
     
-    // For nested routes, we want to keep the collapsible open.
-    const [isOpen, setIsOpen] = React.useState(isAnyChildActive || isRootActive);
+    // Check if any child item's href is a prefix of the current pathname
+    const isAnyChildActive = items.some(item => pathname.startsWith(item.href) && (pathname === item.href || pathname[item.href.length] === '/'));
+
+    const [isOpen, setIsOpen] = React.useState(isAnyChildActive);
     
     // Update open state when path changes
     React.useEffect(() => {
-        setIsOpen(isAnyChildActive || isRootActive);
-    }, [pathname, isAnyChildActive, isRootActive]);
+        setIsOpen(isAnyChildActive);
+    }, [pathname, isAnyChildActive]);
 
     return (
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -81,7 +87,7 @@ const SubMenu = ({ title, icon: Icon, items }: { title: string; icon: React.Elem
                     <SidebarMenuItem key={item.label}>
                     <SidebarMenuButton
                         asChild
-                        isActive={pathname.startsWith(item.href)}
+                        isActive={pathname.startsWith(item.href) && (pathname === item.href || pathname[item.href.length] === '/')}
                         tooltip={item.label}
                         size="sm"
                         className="w-full justify-start h-8"
@@ -133,6 +139,7 @@ export function Nav() {
           ))}
           <SidebarSeparator className="my-1" />
            <SubMenu title="Manajemen Produk" icon={Boxes} items={productManagementSubItems} />
+           <SubMenu title="Akuntansi" icon={BookText} items={accountingSubItems} />
            <SubMenu title="Laporan" icon={FileBarChart} items={analyticsSubItems} />
         </SidebarMenu>
       </SidebarContent>
