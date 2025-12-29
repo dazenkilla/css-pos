@@ -1,3 +1,4 @@
+
 "use client";
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
@@ -22,7 +23,8 @@ import {
   BookText,
   ChevronDown,
   Tags,
-  Home
+  Home,
+  ClipboardList
 } from 'lucide-react';
 import { CustomLink } from '@/components/ui/custom-link';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -38,6 +40,7 @@ const menuItems = [
 
 const productManagementSubItems = [
     { href: '/inventory', label: 'Inventaris', icon: Boxes },
+    { href: '/inventory/stock-opname', label: 'Stok Opname', icon: ClipboardList },
     { href: '/inventory/categories', label: 'Kategori Produk', icon: Tags },
     { href: '/orders', label: 'Pesanan Pembelian', icon: Truck },
     { href: '/suppliers', label: 'Supplier', icon: Users },
