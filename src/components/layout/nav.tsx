@@ -23,8 +23,9 @@ import {
   BookText,
   ChevronDown,
   Tags,
-  Home,
-  ClipboardList
+  ClipboardList,
+  Armchair,
+  ShoppingBag
 } from 'lucide-react';
 import { CustomLink } from '@/components/ui/custom-link';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -33,29 +34,38 @@ import { Button } from '../ui/button';
 import React from 'react';
 
 
-const menuItems = [
+const mainMenuItems = [
   { href: '/', label: 'Dasbor', icon: LayoutDashboard },
-  { href: '/sales', label: 'Penjualan', icon: ShoppingCart },
 ];
 
-const productManagementSubItems = [
-    { href: '/inventory', label: 'Inventaris', icon: Boxes },
+const salesSubItems = [
+    { href: '/sales/direct', label: 'Penjualan Langsung', icon: ShoppingBag },
+    { href: '/sales/tables', label: 'Denah Meja', icon: Armchair },
+    { href: '/history', label: 'Riwayat Penjualan', icon: History },
+];
+
+const inventorySubItems = [
+    { href: '/inventory', label: 'Daftar Produk', icon: Boxes },
     { href: '/inventory/stock-opname', label: 'Stok Opname', icon: ClipboardList },
-    { href: '/inventory/categories', label: 'Kategori Produk', icon: Tags },
+    { href: '/inventory/categories', label: 'Kategori', icon: Tags },
+];
+
+const purchasingSubItems = [
     { href: '/orders', label: 'Pesanan Pembelian', icon: Truck },
     { href: '/suppliers', label: 'Supplier', icon: Users },
 ];
 
 const accountingSubItems = [
-    { href: '/accounting', label: 'Dasbor Akuntansi', icon: LayoutDashboard },
+    { href: '/accounting', label: 'Dasbor Akuntansi', icon: BookText },
     { href: '/accounting/chart-of-accounts', label: 'Bagan Akun', icon: BookText },
     { href: '/accounting/journal-entries', label: 'Entri Jurnal', icon: BookText },
     { href: '/accounting/general-ledger', label: 'Buku Besar', icon: BookText },
 ];
 
-const analyticsSubItems = [
-    { href: '/history', label: 'Riwayat Penjualan', icon: History },
+const reportsAndSettingsSubItems = [
     { href: '/reports', label: 'Laporan', icon: FileBarChart },
+    { href: '/users', label: 'Pengguna', icon: Users },
+    { href: '/settings', label: 'Pengaturan', icon: Settings },
 ];
 
 const SubMenu = ({ title, icon: Icon, items }: { title: string; icon: React.ElementType; items: {href: string, label: string, icon: React.ElementType}[] }) => {
@@ -123,7 +133,7 @@ export function Nav() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          {menuItems.map((item) => (
+          {mainMenuItems.map((item) => (
             <SidebarMenuItem key={item.label}>
               <SidebarMenuButton
                 asChild
@@ -138,9 +148,11 @@ export function Nav() {
             </SidebarMenuItem>
           ))}
           <SidebarSeparator className="my-1" />
-           <SubMenu title="Manajemen Produk" icon={Boxes} items={productManagementSubItems} />
+           <SubMenu title="Penjualan" icon={ShoppingCart} items={salesSubItems} />
+           <SubMenu title="Inventaris" icon={Boxes} items={inventorySubItems} />
+           <SubMenu title="Pembelian" icon={Truck} items={purchasingSubItems} />
            <SubMenu title="Akuntansi" icon={BookText} items={accountingSubItems} />
-           <SubMenu title="Laporan" icon={FileBarChart} items={analyticsSubItems} />
+           <SubMenu title="Laporan & Pengaturan" icon={FileBarChart} items={reportsAndSettingsSubItems} />
         </SidebarMenu>
       </SidebarContent>
     </>

@@ -9,8 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Armchair, ShoppingBag, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Armchair, ShoppingBag } from 'lucide-react';
 
 export default function SalesModeSelectionPage() {
 
